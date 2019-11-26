@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="newCricketPane" alignment="CENTER" prefHeight="520.0" prefWidth="1000.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.CricketController">
+   <children>
+      <VBox alignment="CENTER" maxWidth="300.0">
+         <children>
+            <Label text="Cricket" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TitledPane fx:id="roundsCricketPane" animated="false" collapsible="false" prefHeight="85.0" prefWidth="300.0" text="Rounds">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Spinner fx:id="cricketRoundsBox" disable="true" layoutX="71.0" layoutY="25.0" prefHeight="25.0" prefWidth="70.0" />
+                        <VBox prefHeight="56.0" prefWidth="71.0">
+                           <children>
+                              <RadioButton fx:id="cricketRadioRounds25" mnemonicParsing="false" selected="true" text="25">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="group01_22" />
+                                 </toggleGroup>
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="5.0" />
+                                 </VBox.margin>
+                              </RadioButton>
+                              <RadioButton fx:id="cricketRadioRoundsOther" mnemonicParsing="false" text="Other" toggleGroup="$group01_22">
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="5.0" />
+                                 </VBox.margin>
+                              </RadioButton>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+            <TitledPane fx:id="playersCricketPane" animated="false" collapsible="false" text="Players">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="300.0">
+                           <children>
+                              <RadioButton fx:id="cricketRadioPlayers1" mnemonicParsing="false" selected="true" text="1">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="group01_32" />
+                                 </toggleGroup>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </RadioButton>
+                              <RadioButton fx:id="cricketRadioPlayers2" mnemonicParsing="false" text="2" toggleGroup="$group01_32">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </RadioButton>
+                              <RadioButton fx:id="cricketRadioPlayers3" mnemonicParsing="false" text="3" toggleGroup="$group01_32">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </RadioButton>
+                              <RadioButton fx:id="cricketRadioPlayers4" mnemonicParsing="false" text="4" toggleGroup="$group01_32">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </RadioButton>
+                              <CheckBox fx:id="cricketDoubleOut" mnemonicParsing="false" selected="true" text=" Double out">
+                                 <HBox.margin>
+                                    <Insets left="30.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                           </children>
+                        </HBox>
+                        <VBox layoutY="30.0" prefHeight="150.0" prefWidth="150.0">
+                           <children>
+                              <TextField fx:id="cricketNamePlayer1" promptText="Enter player name">
+                                 <VBox.margin>
+                                    <Insets top="3.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <TextField fx:id="cricketNamePlayer2" disable="true" promptText="Enter player name">
+                                 <VBox.margin>
+                                    <Insets top="3.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <TextField fx:id="cricketNamePlayer3" disable="true" promptText="Enter player name">
+                                 <VBox.margin>
+                                    <Insets top="3.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <TextField fx:id="cricketNamePlayer4" disable="true" promptText="Enter player name">
+                                 <VBox.margin>
+                                    <Insets top="3.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+            <TitledPane fx:id="fieldsCricketPane" animated="false" collapsible="false" prefHeight="100.0" text="Fields">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <FlowPane layoutX="-1.0" layoutY="-3.0" prefHeight="100.0" prefWidth="300.0">
+                           <children>
+                              <Spinner fx:id="cricketBoxField1" prefWidth="55.0">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </FlowPane.margin>
+                              </Spinner>
+                              <Spinner fx:id="cricketBoxField2" prefWidth="55.0">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </FlowPane.margin>
+                              </Spinner>
+                              <Spinner fx:id="cricketBoxField3" prefWidth="55.0">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </FlowPane.margin>
+                              </Spinner>
+                              <Spinner fx:id="cricketBoxField4" prefWidth="55.0">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </FlowPane.margin>
+                              </Spinner>
+                              <Spinner fx:id="cricketBoxField5" prefWidth="55.0">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" top="5.0" />
+                                 </FlowPane.margin>
+                              </Spinner>
+                              <Spinner fx:id="cricketBoxField6" prefWidth="55.0">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" top="5.0" />
+                                 </FlowPane.margin>
+                              </Spinner>
+                              <CheckBox fx:id="cricketCheckBoxField7" mnemonicParsing="false" onAction="#criketField7Toggle" scaleX="1.25" scaleY="1.25" scaleZ="1.25" selected="true" text="25">
+                                 <FlowPane.margin>
+                                    <Insets left="15.0" top="3.0" />
+                                 </FlowPane.margin>
+                              </CheckBox>
+                              <Spinner fx:id="cricketBoxField7" disable="true" prefWidth="55.0">
+                                 <FlowPane.margin>
+                                    <Insets left="26.0" top="5.0" />
+                                 </FlowPane.margin>
+                              </Spinner>
+                           </children>
+                        </FlowPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" maxWidth="334.0" prefHeight="60.0" prefWidth="300.0">
+         <children>
+            <Button fx:id="cricketBackButton" focusTraversable="false" mnemonicParsing="false" onAction="#backButton" prefHeight="35.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Back">
+               <HBox.margin>
+                  <Insets right="100.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button fx:id="cricketLetsButton" focusTraversable="false" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Let's play!">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>

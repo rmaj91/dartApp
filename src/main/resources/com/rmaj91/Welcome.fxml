@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="mainStackPane" prefHeight="520.0" prefWidth="1000.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.WelcomeController">
+   <children>
+      <VBox fx:id="aboutPane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #333333;">
+         <children>
+            <Label text=" Created by Maju :D" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label text="Contact: rmaj91@gmail.com" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <HBox maxWidth="300.0" prefHeight="32.0" prefWidth="280.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/github.png" />
+                     </image>
+                  </ImageView>
+                  <Hyperlink text="github.com/rmaj91/dartApp" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="2.0" />
+                     </padding>
+                  </Hyperlink>
+               </children>
+            </HBox>
+            <Button fx:id="aboutButton1" focusTraversable="false" mnemonicParsing="false" onAction="#backToWelcome" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Back">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <VBox.margin>
+                  <Insets top="60.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <VBox fx:id="chooseGamePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #333333;">
+         <children>
+            <VBox fx:id="chooseGameFrame" alignment="CENTER" maxHeight="280.0" maxWidth="250.0" prefHeight="280.0" prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+               <children>
+                  <Label text="Choose Game">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ComboBox fx:id="chooseGameComboBox" prefHeight="35.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets bottom="50.0" />
+                     </VBox.margin>
+                  </ComboBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="chooseGameBackButton" focusTraversable="false" mnemonicParsing="false" onAction="#backToWelcome" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 15px;" text="Back">
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Button fx:id="chooseGameLetsButton" focusTraversable="false" mnemonicParsing="false" onAction="#letsPlayButton" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 15px;" text="Let's Play!">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox fx:id="welcomePane" alignment="CENTER" style="-fx-background-color: #333333;" StackPane.alignment="CENTER">
+         <children>
+            <AnchorPane maxHeight="150.0" maxWidth="502.0" prefHeight="150.0" prefWidth="502.0">
+               <children>
+                  <ImageView fx:id="bigLogo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/dartBoard.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="welcomeLabel" layoutX="137.0" layoutY="19.0" text="Welcome" textFill="WHITE">
+                     <font>
+                        <Font size="78.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </AnchorPane>
+            <Button fx:id="createNewGameButton" focusTraversable="false" mnemonicParsing="false" onAction="#createNewGame" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Create New Game">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="loadGameButton" focusTraversable="false" mnemonicParsing="false" onAction="#loadExistingGame" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Load Existing Game">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="aboutButton" focusTraversable="false" mnemonicParsing="false" onAction="#about" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="About">
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="exitButton" focusTraversable="false" mnemonicParsing="false" onAction="#exit" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Exit">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</StackPane>
