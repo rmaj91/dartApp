@@ -127,16 +127,78 @@ public class Game01Controller implements Initializable{
 	}
 
 	public void letsPlayButton() {
+		System.out.println("to ja");
 		boardController.toFront();
 		// initializing games repository
 		Main.gamesRepositoty.createNew(GameFactory.getGame("'01 Game"));
-//		int subrounds = 
-//		int playersQuantity =
-		Game01.setPlayersQuantity(3);
-		Game01.setSubrounds(2);
+		// initializing game variables
+		Game01.setRounds(getRounds());
+		Game01.setPlayersQuantity(getPlayersQuantity());
+		Game01.setDoubleOut(isDoubleOut());
+		String[] players = getPlayersNames(getPlayersQuantity());
+		// initializing players
+		for (String playerName : players) {
+			((Game01) Main.gamesRepositoty.getGameSubround(0)).addPlayer(new Game01.Player(playerName,getStartingPoints()));
+		}
+
 
 	}
+	/*
+	* Returns number of rounds defined by player
+	* */
+	public int getRounds(){
+		if(game01RadioRoundsOther.isSelected())
+			return game01RoundsBox.getValue();
+		else
+			return 25;
+	}
+	/*
+	* Returns number of starting points defined by player
+	* */
+	public int getStartingPoints(){
+		if(game01RadioPointsOther.isSelected())
+			return game01PointsBox.getValue();
+		else if(game01RadioPoints501.isSelected())
+			return 501;
+		else
+			return 701;
+	}
+	/*
+	* Returns number of players defined by player
+	* */
+	public int getPlayersQuantity(){
+		if(game01RadioPlayers1.isSelected())
+			return 1;
+		else if(game01RadioPlayers2.isSelected())
+			return 2;
+		else if(game01RadioPlayers3.isSelected())
+			return 3;
+		else
+			return 4;
+	}
+	/*
+	* Returns players names defines by player
+	* */
+	public String[] getPlayersNames(int playersQuantity){
+		String[] playersNames = new String[playersQuantity];
+		// TODO Add limit size of textField and defaultValues or emptyProtection
+		if(playersQuantity >= 1)
+			playersNames[0] = game01NamePlayer1.getText();
+		else if(playersQuantity >= 2)
+			playersNames[1] = game01NamePlayer2.getText();
+		else if(playersQuantity >= 3)
+			playersNames[2] = game01NamePlayer3.getText();
+		else if(playersQuantity == 4)
+			playersNames[3] = game01NamePlayer4.getText();
+		return playersNames;
+	}
 
+	public boolean isDoubleOut(){
+		if(game01DoubleOut.isSelected())
+			return true;
+		else
+			return false;
+	}
 
 	public void backButton() {
     	welcomeController.toFront();

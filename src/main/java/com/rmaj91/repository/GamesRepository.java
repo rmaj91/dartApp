@@ -7,19 +7,16 @@ import java.util.List;
 
 public class GamesRepository {
 	
-	private List<Playable> roundsList;
-	
-	public void addGameRound() {
-		
+	private List<Playable> gamesList = new LinkedList<>();
+
+	public Playable getGameSubround(int index){
+		return gamesList.get(index);
 	}
-	
 
 	public void createNew(Playable game) {
-		roundsList = new LinkedList<>();
-		roundsList.add(game);
+		this.gamesList.clear();
+		gamesList.add(game);
 	}
-	public void deleteAll() {
-		roundsList = null;
-	}
+
 
 }
