@@ -1,5 +1,6 @@
 package com.rmaj91.controller;
 
+import com.rmaj91.domain.Throw;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,6 +32,12 @@ public class BoardController {
 
     @FXML
     private TextField throwField1;
+
+    @FXML
+    private TextField throwField2;
+
+    @FXML
+    private TextField throwField3;
 
     @FXML
     private Button nextRoundButton;
@@ -72,10 +79,58 @@ public class BoardController {
     private Label doubleOut;
 
     @FXML
-    private HBox cricketsScoreTable1;
+    private HBox game01PlayersTable;
+
+
     
     public void toFront() {
     	mainStackPane.toFront();
     }
 
+
+    public Label getDoubleOut() {
+        return doubleOut;
+    }
+
+    public Label getRoundsLabel() {
+        return roundsLabel;
+    }
+
+    public TextField getThrowField1() {
+        return throwField1;
+    }
+
+    public TextField getThrowField2() {
+        return throwField2;
+    }
+
+    public TextField getThrowField3() {
+        return throwField3;
+    }
+
+    public AnchorPane getGame01ScoreTable() {
+        return game01ScoreTable;
+    }
+
+    public Label getPlayerNameLabel() {
+        return playerNameLabel;
+    }
+
+    public Label getPlayerPointsLabel() {
+        return playerPointsLabel;
+    }
+
+    public HBox getGame01PlayersTable() {
+        return game01PlayersTable;
+    }
+
+    public VBox getStatusPlayer1() {
+        return statusPlayer1;
+    }
+
+    // OnClick Board
+    public Throw boardClicked(int x, int y){
+
+        return new Throw(1,1);
+    }
 }

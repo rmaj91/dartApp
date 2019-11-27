@@ -35,7 +35,7 @@
                   </Label>
                   <HBox fx:id="throwsPoints" alignment="CENTER_LEFT" layoutY="401.0" prefHeight="70.0" prefWidth="520.0">
                      <children>
-                        <TextField fx:id="throwField1" alignment="CENTER" prefHeight="40.0" prefWidth="110.0" text="Tripple 20">
+                        <TextField fx:id="throwField1" alignment="CENTER" prefHeight="40.0" prefWidth="110.0">
                            <HBox.margin>
                               <Insets left="20.0" right="10.0" />
                            </HBox.margin>
@@ -46,7 +46,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </TextField>
-                        <TextField fx:id="throwField1" alignment="CENTER" prefHeight="40.0" prefWidth="110.0" text="Single 25">
+                        <TextField fx:id="throwField2" alignment="CENTER" prefHeight="40.0" prefWidth="110.0">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
@@ -57,7 +57,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </TextField>
-                        <TextField fx:id="throwField1" alignment="CENTER" prefHeight="40.0" prefWidth="110.0" text="Double 25">
+                        <TextField fx:id="throwField3" alignment="CENTER" prefHeight="40.0" prefWidth="110.0">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
@@ -347,12 +347,12 @@
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="playerNameLabel" alignment="CENTER" layoutX="173.0" layoutY="82.0" text="Player1" textFill="WHITE">
+                              <Label fx:id="playerNameLabel" alignment="CENTER" layoutX="173.0" layoutY="82.0" text="Player1" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font size="48.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="playerPointsLabel" alignment="CENTER" layoutX="198.0" layoutY="152.0" text="501" textFill="WHITE">
+                              <Label fx:id="playerPointsLabel" alignment="CENTER" layoutX="198.0" layoutY="152.0" text="501" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="64.0" />
                                  </font>
@@ -362,66 +362,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <HBox fx:id="cricketsScoreTable1" alignment="BOTTOM_CENTER" minHeight="300.0" prefHeight="369.0" prefWidth="500.0">
-                                 <children>
-                                    <VBox fx:id="statusPlayer1" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <Label text="Player1" textFill="WHITE">
-                                             <font>
-                                                <Font size="22.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="501" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="22.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <VBox fx:id="statusPlayer2" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <Label text="Player2" textFill="WHITE">
-                                             <font>
-                                                <Font size="22.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="501" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="22.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <VBox fx:id="statusPlayer3" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <Label text="Player3" textFill="WHITE">
-                                             <font>
-                                                <Font size="22.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="501" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="22.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <VBox fx:id="statusPlayer4" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <Label text="Player54" textFill="WHITE">
-                                             <font>
-                                                <Font size="22.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="501" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="22.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
+                              <HBox fx:id="game01PlayersTable" alignment="BOTTOM_CENTER" minHeight="300.0" prefHeight="369.0" prefWidth="500.0" />
                            </children>
                         </AnchorPane>
                      </children>

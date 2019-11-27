@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 
 import com.rmaj91.Main;
+import com.rmaj91.domain.Game01;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -81,6 +82,8 @@ public class MainController implements Initializable {
 		cricketController.setWelcomeController(welcomeController);
 		masterCricketController.setWelcomeController(welcomeController);
 		game01Controller.setBoardController(boardController);
+		Game01.setGame01Controller(game01Controller);
+		Game01.setBoardController(boardController);
 	}
 
 	private void makePaneDragable() {

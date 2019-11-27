@@ -11,16 +11,11 @@ import javafx.beans.value.ObservableValue;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TitledPane;
-import javafx.scene.control.ToggleGroup;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 
 public class Game01Controller implements Initializable{
@@ -127,8 +122,7 @@ public class Game01Controller implements Initializable{
 	}
 
 	public void letsPlayButton() {
-		System.out.println("to ja");
-		boardController.toFront();
+
 		// initializing games repository
 		Main.gamesRepositoty.createNew(GameFactory.getGame("'01 Game"));
 		// initializing game variables
@@ -138,8 +132,48 @@ public class Game01Controller implements Initializable{
 		String[] players = getPlayersNames(getPlayersQuantity());
 		// initializing players
 		for (String playerName : players) {
-			((Game01) Main.gamesRepositoty.getGameSubround(0)).addPlayer(new Game01.Player(playerName,getStartingPoints()));
+			((Game01) Main.gamesRepositoty.getGameRound(0)).addPlayer(new Game01.Player(playerName,getStartingPoints()));
 		}
+
+		initGUI();
+
+		// TODO move to Game01
+		Main.gamesRepositoty.getGameRound(0).displayGameRound(1);
+		// creating players name and points fields //
+
+        // copyig status
+        // TODO move to Game01
+        System.out.println(getPlayersQuantity());
+        for(int i=0;i<getPlayersQuantity();i++){
+            System.out.println(i);
+            VBox vBox = new VBox();
+            vBox.setAlignment(Pos.BOTTOM_CENTER);
+            vBox.setMinHeight(200);
+            vBox.setMinWidth(100);
+            // player name label
+            Label playerNameLabel = new Label();
+            playerNameLabel.setText(players[i]);
+            playerNameLabel.setStyle("-fx-text-inner-color: red;");
+            playerNameLabel.setFont(new Font("System",22));
+            // TODO zamiast id,  get children i iterowac
+            playerNameLabel.setId("game01NameLabelPlayer"+(i+1));
+            playerNameLabel.setTextFill(Color.WHITE);
+            // points label
+
+            Label playerPointsLabel = new Label();
+            playerPointsLabel.setText(String.valueOf(getStartingPoints()));
+            playerPointsLabel.setFont(new Font("System",22));
+            playerPointsLabel.setStyle("-fx-font-weight: bold");
+            playerPointsLabel.setId("game01PointsLabelPlayer"+(i+1));
+            playerPointsLabel.setTextFill(Color.WHITE);
+            // adding labels
+            vBox.getChildren().addAll(playerNameLabel,playerPointsLabel);
+            boardController.getGame01PlayersTable().getChildren().add(vBox);
+
+        }
+
+        boardController.toFront();
+
 
 
 	}
@@ -183,15 +217,23 @@ public class Game01Controller implements Initializable{
 		String[] playersNames = new String[playersQuantity];
 		// TODO Add limit size of textField and defaultValues or emptyProtection
 		if(playersQuantity >= 1)
-			playersNames[0] = game01NamePlayer1.getText();
-		else if(playersQuantity >= 2)
-			playersNames[1] = game01NamePlayer2.getText();
-		else if(playersQuantity >= 3)
-			playersNames[2] = game01NamePlayer3.getText();
-		else if(playersQuantity == 4)
-			playersNames[3] = game01NamePlayer4.getText();
+			playersNames[0] = getPlayerName(game01NamePlayer1);
+		if(playersQuantity >= 2)
+			playersNames[1] = getPlayerName(game01NamePlayer2);
+		if(playersQuantity >= 3)
+			playersNames[2] = getPlayerName(game01NamePlayer3);
+		if(playersQuantity == 4)
+			playersNames[3] = getPlayerName(game01NamePlayer4);
 		return playersNames;
 	}
+
+	public String getPlayerName(TextField textField){
+	    if(textField.getText().trim().equals("")){
+            return "Player"+textField.getId().substring(textField.getId().length()-1);
+        }
+	    else
+	        return textField.getText();
+    }
 
 	public boolean isDoubleOut(){
 		if(game01DoubleOut.isSelected())
@@ -352,5 +394,12 @@ public class Game01Controller implements Initializable{
 		
 		
 	}
+
+    public void initGUI(){
+	    boardController.getGame01ScoreTable().toFront();
+    }
+
+
+
 
 }
