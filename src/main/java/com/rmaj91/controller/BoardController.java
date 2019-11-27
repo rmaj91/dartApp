@@ -148,7 +148,7 @@ public class BoardController implements Initializable {
     public void boardClicked(MouseEvent event) {
 
         // wywolanie metody game, rzut
-        System.out.println((event.getX() - 248) + " " + (event.getY() - 248.5));
+        System.out.println("Pressed: x="+(event.getX() - 248) + "  y=" + (event.getY() - 248.5));
     }
 
     public void boardHover(MouseEvent event) {
@@ -157,18 +157,21 @@ public class BoardController implements Initializable {
 
         double x = event.getX() - 248;
         double y = -(event.getY() - 248.5);
+
+
+        printCircles(x,y,0,8);
+        printCircles(x,y,8,19);
+        printCircles(x,y,19,117);
+        printCircles(x,y,117,127);
+        printCircles(x,y,127,193);
+        printCircles(x,y,193,205);
+        printCircles(x,y,205,249);
+
+
         int z = (int) Math.sqrt(x * x + y * y);
-
-        printCircles(z,0,8);
-        printCircles(z,8,19);
-        printCircles(z,19,117);
-        printCircles(z,117,127);
-        printCircles(z,127,193);
-        printCircles(z,193,205);
-        printCircles(z,205,249);
-
         System.out.print(z + "\t");
-        System.out.println(x + " " + y);
+        System.out.print(x + " " + y+"\t");
+        System.out.println("Angle alpha = "+getAngle(x,y));
 
     }
 
@@ -176,20 +179,55 @@ public class BoardController implements Initializable {
         graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
-    public void printCircles(int z,int smallRadius,int BigRadius) {
+    public void printCircles(double x,double y,int smallRadius,int BigRadius) {
+        int z = (int) Math.sqrt(x * x + y * y);
 
         if (z < BigRadius && z >= smallRadius) {
+
             for (int i = 0; i < dartBoard.getFitWidth(); i++) {
                 for (int j = 0; j < dartBoard.getFitHeight(); j++) {
+
                     int jj = j - 248;
-                    double ii = i - 248.5;
+                    double ii = -(i - 248.5);
                     int zz = (int) Math.sqrt(ii * ii + jj * jj);
-                    if (zz < BigRadius && zz >= smallRadius) {
-                        pixelWriter.setColor(j, i, Color.rgb(66, 135, 245));
-                    }
+
+                    if (zz < BigRadius && zz >= smallRadius)
+                            if( zz < 19 || zz > 205)
+                                pixelWriter.setColor(j, i, Color.rgb(66, 135, 245));
+                            else{
+                                for(int k=0;k<19;k++){
+                                    checkAngleAndDrawPiece(x,y,jj,ii,j,i,7.2+18*k,26.2+18*k);
+                                    //brakuje jednego przypadku gdy kąt się zeruje
+                                }
+                                if(getAngle(x,y) >= 0 && getAngle(x,y) < 7.2
+                                || getAngle(x,y) > 349.2){
+                                    if(getAngle(jj,ii) >= 0 && getAngle(jj,ii) < 7.2
+                                    || getAngle(jj,ii) > 349.2)
+                                        pixelWriter.setColor(j, i, Color.rgb(66, 135, 245));
+                                }
+                            }
                 }
             }
+
         }
+    }
+
+
+
+    public void checkAngleAndDrawPiece(double x,double y,double jj, double ii,int j,int i, double firstAngle,double secondAngle){
+
+        if(getAngle(x,y) > firstAngle && getAngle(x,y) < secondAngle){
+            if(getAngle(jj,ii) > firstAngle && getAngle(jj,ii) < secondAngle)
+                pixelWriter.setColor(j, i, Color.rgb(66, 135, 245));
+        }
+    }
+
+    public double getAngle(double x, double y){
+        double angle=Math.atan2(y,x);
+        angle = Math.toDegrees(angle);
+        if(angle<0)
+            angle+=360;
+        return angle;
     }
 
     @Override
