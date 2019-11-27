@@ -2,15 +2,25 @@ package com.rmaj91.controller;
 
 import com.rmaj91.domain.Throw;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
-public class BoardController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class BoardController implements Initializable {
 
     @FXML
     private StackPane mainStackPane;
@@ -81,10 +91,15 @@ public class BoardController {
     @FXML
     private HBox game01PlayersTable;
 
+    @FXML
+    private ImageView dartBoard;
 
-    
+    @FXML
+    private Canvas canvas;
+
+
     public void toFront() {
-    	mainStackPane.toFront();
+        mainStackPane.toFront();
     }
 
 
@@ -128,9 +143,62 @@ public class BoardController {
         return statusPlayer1;
     }
 
-    // OnClick Board
-    public Throw boardClicked(int x, int y){
 
-        return new Throw(1,1);
+    // OnClick Board
+    public void boardClicked(MouseEvent event) {
+
+        // wywolanie metody game, rzut
+        System.out.println((event.getX() - 248) + " " + (event.getY() - 248.5));
     }
+
+    public void boardHover(MouseEvent event) {
+
+        graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        double x = event.getX() - 248;
+        double y = -(event.getY() - 248.5);
+        int z = (int) Math.sqrt(x * x + y * y);
+
+        printCircles(z,0,8);
+        printCircles(z,8,19);
+        printCircles(z,19,117);
+        printCircles(z,117,127);
+        printCircles(z,127,193);
+        printCircles(z,193,205);
+        printCircles(z,205,249);
+
+        System.out.print(z + "\t");
+        System.out.println(x + " " + y);
+
+    }
+
+    public void boardHoverOff() {
+        graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    public void printCircles(int z,int smallRadius,int BigRadius) {
+
+        if (z < BigRadius && z >= smallRadius) {
+            for (int i = 0; i < dartBoard.getFitWidth(); i++) {
+                for (int j = 0; j < dartBoard.getFitHeight(); j++) {
+                    int jj = j - 248;
+                    double ii = i - 248.5;
+                    int zz = (int) Math.sqrt(ii * ii + jj * jj);
+                    if (zz < BigRadius && zz >= smallRadius) {
+                        pixelWriter.setColor(j, i, Color.rgb(66, 135, 245));
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        canvas.setOpacity(0.8);
+        this.graphicsContext2D = canvas.getGraphicsContext2D();
+        this.pixelWriter = graphicsContext2D.getPixelWriter();
+    }
+
+    private GraphicsContext graphicsContext2D;
+    private PixelWriter pixelWriter;
 }
