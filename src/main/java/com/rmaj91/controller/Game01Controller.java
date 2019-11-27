@@ -254,7 +254,25 @@ public class Game01Controller implements Initializable{
 				game01NamePlayer4.setDisable(true);
 			}
 		});
-		
+		// Textfields listener //
+		/////////////////////////
+		game01NamePlayer1.textProperty().addListener((observable,oldValue,newValue) ->{
+			if(newValue.length() > 8)
+				game01NamePlayer1.setText(newValue.substring(0, 8));
+		});
+		game01NamePlayer2.textProperty().addListener((observable,oldValue,newValue) ->{
+			if(newValue.length() > 8)
+				game01NamePlayer2.setText(newValue.substring(0, 8));
+		});
+		game01NamePlayer3.textProperty().addListener((observable,oldValue,newValue) ->{
+			if(newValue.length() > 8)
+				game01NamePlayer3.setText(newValue.substring(0, 8));
+		});
+		game01NamePlayer4.textProperty().addListener((observable,oldValue,newValue) ->{
+			if(newValue.length() > 8)
+				game01NamePlayer4.setText(newValue.substring(0, 8));
+		});
+
 		//////////////////////////////
 		// game points spinner
 		//////////////////////////////
