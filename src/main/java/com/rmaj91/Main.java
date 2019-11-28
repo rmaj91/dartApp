@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -35,6 +36,8 @@ public class Main extends Application {
             //scene.getStylesheets().add(getClass().getResource("css/main.css").toExternalForm());
             stage = primaryStage;
 
+            primaryStage.getIcons().add(new Image("images/dartBoard.png"));
+            primaryStage.setTitle("Dart Maju v.1.0.");
             primaryStage.setScene(scene);
             primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.setOnCloseRequest((e)->{closeApplication(e);});

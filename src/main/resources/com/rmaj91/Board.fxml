@@ -20,7 +20,7 @@
          <children>
             <StackPane fx:id="boardPane" prefHeight="500.0" prefWidth="500.0">
                <children>
-                  <ImageView fx:id="dartBoard" fitHeight="500.0" fitWidth="500.0" onMouseMoved="#boardHover" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="dartBoard" fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/dartBoardNew.png" />
                      </image>
@@ -43,40 +43,40 @@
                   </Label>
                   <HBox fx:id="throwsPoints" alignment="CENTER_LEFT" layoutY="401.0" prefHeight="70.0" prefWidth="520.0">
                      <children>
-                        <TextField fx:id="throwField1" alignment="CENTER" onMouseClicked="#onClickThrowField1" prefHeight="40.0" prefWidth="110.0">
+                        <TextField fx:id="throwField1" alignment="CENTER" onMouseClicked="#onClickThrowField1" prefHeight="40.0" prefWidth="110.0" promptText="Enter Value">
                            <HBox.margin>
                               <Insets left="20.0" right="10.0" />
                            </HBox.margin>
                            <font>
-                              <Font name="Berlin Sans FB" size="18.0" />
+                              <Font name="Arial Bold" size="16.0" />
                            </font>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </TextField>
-                        <TextField fx:id="throwField2" alignment="CENTER" onMouseClicked="#onClickThrowField2" prefHeight="40.0" prefWidth="110.0">
+                        <TextField fx:id="throwField2" alignment="CENTER" onMouseClicked="#onClickThrowField2" prefHeight="40.0" prefWidth="110.0" promptText="Enter Value">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
                            <font>
-                              <Font name="Berlin Sans FB" size="18.0" />
+                              <Font name="Arial Bold" size="16.0" />
                            </font>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </TextField>
-                        <TextField fx:id="throwField3" alignment="CENTER" onMouseClicked="#onClickThrowField2" prefHeight="40.0" prefWidth="110.0">
+                        <TextField fx:id="throwField3" alignment="CENTER" onMouseClicked="#onClickThrowField3" prefHeight="40.0" prefWidth="110.0" promptText="Enter Value">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
                            <font>
-                              <Font name="Berlin Sans FB" size="18.0" />
+                              <Font name="Arial Bold" size="16.0" />
                            </font>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </TextField>
-                        <Button fx:id="nextRoundButton" focusTraversable="false" maxWidth="0.0" minWidth="100.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Next">
+                        <Button fx:id="nextRoundButton" focusTraversable="false" maxWidth="0.0" minWidth="100.0" mnemonicParsing="false" onAction="#nextButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Next">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -89,7 +89,7 @@
                         </Button>
                      </children>
                   </HBox>
-                  <Button fx:id="backRoundButton" focusTraversable="false" layoutX="396.0" layoutY="471.0" minWidth="100.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Back">
+                  <Button fx:id="backRoundButton" focusTraversable="false" layoutX="396.0" layoutY="471.0" minWidth="100.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Back">
                      <font>
                         <Font size="18.0" />
                      </font>

@@ -1,35 +1,27 @@
 package com.rmaj91.domain;
 
+import javafx.scene.input.MouseEvent;
+
 public class MasterCricket implements Playable{
 
 
     @Override
-    public void nextRound() {
+    public void next() {
 
     }
 
     @Override
-    public void previousRound() {
+    public void back() {
 
     }
 
     @Override
-    public void calculatePoints() {
+    public void throwDart(MouseEvent event) {
 
     }
 
     @Override
-    public void initPlayers() {
+    public void display(int index) {
 
-    }
-
-    @Override
-    public void displayGameRound(int round) {
-
-    }
-
-    @Override
-    public Playable clone() {
-        return null;
     }
 }

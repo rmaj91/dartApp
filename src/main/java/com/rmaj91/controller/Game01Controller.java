@@ -138,7 +138,7 @@ public class Game01Controller implements Initializable{
 		initGUI();
 
 		// TODO move to Game01
-		Main.gamesRepositoty.getGameRound(0).displayGameRound(1);
+		Main.gamesRepositoty.getGameRound(0).display(1);
 		// creating players name and points fields //
 
         // copyig status

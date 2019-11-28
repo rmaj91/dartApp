@@ -9,19 +9,20 @@ public class Filters {
     List<RadiusScope> radiusList = new ArrayList<>();
 
     public class AngleScope{
-        private double lowAngle;
-        private double hightAngle;
+        private double firstAngle;
+        private double secondAngle;
 
-        public AngleScope(double lowAngle, double hightAngle) {
-            this.lowAngle = lowAngle;
-            this.hightAngle = hightAngle;
+        public AngleScope(double firstAngle, double secondAngle) {
+            this.firstAngle = firstAngle;
+            this.secondAngle = secondAngle;
         }
 
         public boolean isInRange(double angle) {
-            if(angle > lowAngle && angle < hightAngle)
+            if((angle > firstAngle && angle < secondAngle)||(firstAngle > secondAngle && (angle > firstAngle || angle < secondAngle)))
                 return true;
             else
-                return  false;
+                return false;
+
         }
     }
     public class RadiusScope{
@@ -63,7 +64,7 @@ public class Filters {
         angleList.add(new AngleScope(313.2, 331.2));
         angleList.add(new AngleScope(331.2, 349.2));
         angleList.add(new AngleScope(349.2, 7.2));
-        angleList.add(new AngleScope(360, 0));
+        angleList.add(new AngleScope(0, 0));
         // Radius
         radiusList.add(new RadiusScope(0,8));
         radiusList.add(new RadiusScope(9,19));

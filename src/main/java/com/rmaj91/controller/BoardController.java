@@ -1,7 +1,7 @@
 package com.rmaj91.controller;
 
+import com.rmaj91.Main;
 import com.rmaj91.domain.Filters;
-import com.rmaj91.domain.Throw;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -19,7 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 
-import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,42 +150,39 @@ public class BoardController implements Initializable {
 
     // OnClick Board
     public void boardClicked(MouseEvent event) {
-
-        // wywolanie metody game, rzut
-        System.out.println("Pressed: x="+(event.getX() - 248) + "  y=" + (event.getY() - 248.5));
+        Main.gamesRepositoty.getCurrentGame().throwDart(event);
+    }
+    // Onclick button next
+    public void nextButtonClicked(){
+        Main.gamesRepositoty.getCurrentGame().next();
+    }
+    //Onclick Button back
+    public void backButtonClicked(){
+        Main.gamesRepositoty.getCurrentGame().back();
     }
 
-    ////////////////////////////////////////////
-    ////////////////////////////////////////////
     ////////////////////////////////////////////
     // TEST ALGORITHM //////////////////////////
     ////////////////////////////////////////////
     List<Point> pointList = new ArrayList<>();
+    // TODO przniesc do Main
     Filters filters = new Filters();
 
     public void boardHover2(MouseEvent event){
         graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        pointList.stream().filter(point -> {
-            int indexRangeScope = filters.getRadiusScope(getRadius(getX(event),getY(event)));
-            return filters.getRadiusList().get(indexRangeScope).isInRange(getRadius(getCenterX(point.getX()), getCenterY(point.getY())));
-        }).filter(point -> {
-            int indexAngleScope = filters.getAngleScope(getAngle(getX(event),getY(event)));
-            return filters.getAngleList().get(indexAngleScope).isInRange(getAngle(getCenterX(point.getX()), getCenterY(point.getY())));
-
-        }).forEach(point -> {
-            displayPixel(point.getX(),point.getY());
-        });
-
-        int indexAngleScope = filters.getAngleScope(getAngle(getX(event),getY(event)));
-        filters.getAngleList().get(indexAngleScope).isInRange(getAngle(getX(event), getY(event)));
-        System.out.println(indexAngleScope);
-//        //System.out.println(getRadius(getX(event),getY(event)));
-//        System.out.println(indexOfRadiusScope);
-//        pointList.stream().filter(point -> {
-//            int indexOfRadiusScope = filters.getRadiusScope(getRadius(getX(event),getY(event)));
-//
-//        })
+        pointList.stream()
+                .filter(point -> {
+                    int indexRangeScope = filters.getRadiusScope(getRadius(getX(event),getY(event)));
+                    return filters.getRadiusList().get(indexRangeScope).isInRange(getRadius(getCenterX(point.getX()), getCenterY(point.getY()))); })
+                .filter(point -> {
+                    if(getRadius(getX(event),getY(event)) < 19 || getRadius(getX(event),getY(event)) > 205)
+                        return true;
+                    else{
+                        int indexAngleScope = filters.getAngleScope(getAngle(getX(event),getY(event)));
+                        return filters.getAngleList().get(indexAngleScope).isInRange(getAngle(getCenterX(point.getX()), getCenterY(point.getY()))); } })
+                .forEach(point -> {
+                    displayPixel(point.getX(),point.getY()); });
     }
 
     public int getRadius(double x, double y){
@@ -220,80 +216,10 @@ public class BoardController implements Initializable {
         return angle;
     }
 
-    ////////////////////////////////////////////
-    ////////////////////////////////////////////
-    ////////////////////////////////////////////
-    public void boardHover(MouseEvent event) {
-
-        graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        double x = event.getX() - 248;
-        double y = -(event.getY() - 248.5);
-
-
-        printCircles(x,y,0,8);
-        printCircles(x,y,8,19);
-        printCircles(x,y,19,117);
-        printCircles(x,y,117,127);
-        printCircles(x,y,127,193);
-        printCircles(x,y,193,205);
-        printCircles(x,y,205,249);
-
-
-        int z = (int) Math.sqrt(x * x + y * y);
-        System.out.print(z + "\t");
-        System.out.print(x + " " + y+"\t");
-        System.out.println("Angle alpha = "+getAngle(x,y));
-
-    }
 
     public void boardHoverOff() {
         graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
-
-    public void printCircles(double x,double y,int smallRadius,int BigRadius) {
-        int z = (int) Math.sqrt(x * x + y * y);
-
-        if (z < BigRadius && z >= smallRadius) {
-
-            for (int i = 0; i < dartBoard.getFitWidth(); i++) {
-                for (int j = 0; j < dartBoard.getFitHeight(); j++) {
-
-                    int jj = j - 248;
-                    double ii = -(i - 248.5);
-                    int zz = (int) Math.sqrt(ii * ii + jj * jj);
-
-                    if (zz < BigRadius && zz >= smallRadius)
-                            if( zz < 19 || zz > 205)
-                                pixelWriter.setColor(j, i, Color.rgb(66, 135, 245));
-                            else{
-                                for(int k=0;k<19;k++){
-                                    checkAngleAndDrawPiece(x,y,jj,ii,j,i,7.2+18*k,26.2+18*k);
-                                    //brakuje jednego przypadku gdy kąt się zeruje
-                                }
-                                if(getAngle(x,y) >= 0 && getAngle(x,y) < 7.2
-                                || getAngle(x,y) > 349.2){
-                                    if(getAngle(jj,ii) >= 0 && getAngle(jj,ii) < 7.2
-                                    || getAngle(jj,ii) > 349.2)
-                                        pixelWriter.setColor(j, i, Color.rgb(66, 135, 245));
-                                }
-                            }
-                }
-            }
-
-        }
-    }
-
-
-
-    public void checkAngleAndDrawPiece(double x,double y,double jj, double ii,int j,int i, double firstAngle,double secondAngle){
-
-        if(getAngle(x,y) > firstAngle && getAngle(x,y) < secondAngle){
-            if(getAngle(jj,ii) > firstAngle && getAngle(jj,ii) < secondAngle)
-                pixelWriter.setColor(j, i, Color.rgb(66, 135, 245));
-        }
-    }
-
 
 
     @Override
@@ -306,11 +232,21 @@ public class BoardController implements Initializable {
             for(int x=0;x<canvas.getWidth();x++)
                 pointList.add(new Point(x,y));
         }
-
-
-
-
-
+        // adding textField validation
+        throwField1.textProperty().addListener((observable,oldValue,newValue) ->{
+            if(newValue.length() > 10)
+                throwField1.setText(newValue.substring(0, 10));
+        });
+        // adding textField validation
+        throwField2.textProperty().addListener((observable,oldValue,newValue) ->{
+            if(newValue.length() > 10)
+                throwField2.setText(newValue.substring(0, 10));
+        });
+        // adding textField validation
+        throwField3.textProperty().addListener((observable,oldValue,newValue) ->{
+            if(newValue.length() > 10)
+                throwField3.setText(newValue.substring(0, 10));
+        });
     }
 
     private GraphicsContext graphicsContext2D;
@@ -318,12 +254,15 @@ public class BoardController implements Initializable {
 
     public void onClickThrowField1(){
         throwField1.selectAll();
+        System.out.println("TextField1 Marked!");
     }
     public void onClickThrowField2(){
         throwField2.selectAll();
+        System.out.println("TextField2 Marked!");
     }
     public void onClickThrowField3(){
         throwField3.selectAll();
+        System.out.println("TextField3 Marked!");
     }
 
 }

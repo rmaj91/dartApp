@@ -1,13 +1,11 @@
 package com.rmaj91.domain;
 
+
+import javafx.scene.input.MouseEvent;
+
 public interface Playable {
-	void nextRound();
-	void previousRound();
-	void calculatePoints();
-    void initPlayers();
-
-
-    void displayGameRound(int currentPlayer);
-
-    Playable clone();
+	void next();
+	void back();
+    void throwDart(MouseEvent event);
+    void display(int index);
 }
