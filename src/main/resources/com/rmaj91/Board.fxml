@@ -28,7 +28,7 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </ImageView>
-                  <Canvas fx:id="canvas" height="500.0" onMouseClicked="#boardClicked" onMouseExited="#boardHoverOff" onMouseMoved="#boardHover" width="500.0">
+                  <Canvas fx:id="canvas" height="500.0" onMouseClicked="#boardClicked" onMouseExited="#boardHoverOff" onMouseMoved="#boardHover2" width="500.0">
                      <cursor>
                         <Cursor fx:constant="CROSSHAIR" />
                      </cursor></Canvas>
@@ -43,7 +43,7 @@
                   </Label>
                   <HBox fx:id="throwsPoints" alignment="CENTER_LEFT" layoutY="401.0" prefHeight="70.0" prefWidth="520.0">
                      <children>
-                        <TextField fx:id="throwField1" alignment="CENTER" prefHeight="40.0" prefWidth="110.0">
+                        <TextField fx:id="throwField1" alignment="CENTER" onMouseClicked="#onClickThrowField1" prefHeight="40.0" prefWidth="110.0">
                            <HBox.margin>
                               <Insets left="20.0" right="10.0" />
                            </HBox.margin>
@@ -54,7 +54,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </TextField>
-                        <TextField fx:id="throwField2" alignment="CENTER" prefHeight="40.0" prefWidth="110.0">
+                        <TextField fx:id="throwField2" alignment="CENTER" onMouseClicked="#onClickThrowField2" prefHeight="40.0" prefWidth="110.0">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
@@ -65,7 +65,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </TextField>
-                        <TextField fx:id="throwField3" alignment="CENTER" prefHeight="40.0" prefWidth="110.0">
+                        <TextField fx:id="throwField3" alignment="CENTER" onMouseClicked="#onClickThrowField2" prefHeight="40.0" prefWidth="110.0">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>

@@ -1,5 +1,6 @@
 package com.rmaj91.controller;
 
+import com.rmaj91.domain.Filters;
 import com.rmaj91.domain.Throw;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,7 +18,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+
+import java.awt.event.WindowEvent;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class BoardController implements Initializable {
@@ -151,6 +156,73 @@ public class BoardController implements Initializable {
         System.out.println("Pressed: x="+(event.getX() - 248) + "  y=" + (event.getY() - 248.5));
     }
 
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    // TEST ALGORITHM //////////////////////////
+    ////////////////////////////////////////////
+    List<Point> pointList = new ArrayList<>();
+    Filters filters = new Filters();
+
+    public void boardHover2(MouseEvent event){
+        graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        pointList.stream().filter(point -> {
+            int indexRangeScope = filters.getRadiusScope(getRadius(getX(event),getY(event)));
+            return filters.getRadiusList().get(indexRangeScope).isInRange(getRadius(getCenterX(point.getX()), getCenterY(point.getY())));
+        }).filter(point -> {
+            int indexAngleScope = filters.getAngleScope(getAngle(getX(event),getY(event)));
+            return filters.getAngleList().get(indexAngleScope).isInRange(getAngle(getCenterX(point.getX()), getCenterY(point.getY())));
+
+        }).forEach(point -> {
+            displayPixel(point.getX(),point.getY());
+        });
+
+        int indexAngleScope = filters.getAngleScope(getAngle(getX(event),getY(event)));
+        filters.getAngleList().get(indexAngleScope).isInRange(getAngle(getX(event), getY(event)));
+        System.out.println(indexAngleScope);
+//        //System.out.println(getRadius(getX(event),getY(event)));
+//        System.out.println(indexOfRadiusScope);
+//        pointList.stream().filter(point -> {
+//            int indexOfRadiusScope = filters.getRadiusScope(getRadius(getX(event),getY(event)));
+//
+//        })
+    }
+
+    public int getRadius(double x, double y){
+        return (int)Math.sqrt(x*x+y*y);
+    }
+    public void displayPixel(int x,int y){
+        pixelWriter.setColor(x, y, Color.rgb(66, 135, 245));
+    }
+
+    public int getCenterX(int x){
+        return x-248;
+    }
+
+    public int getCenterY(int y){
+        return -(y-248);
+    }
+
+    public double getX(MouseEvent event){
+        return event.getX() - 248;
+    }
+
+    public  double getY(MouseEvent event){
+        return -(event.getY() - 248.5);
+    }
+
+    public double getAngle(double x, double y){
+        double angle=Math.atan2(y,x);
+        angle = Math.toDegrees(angle);
+        if(angle<0)
+            angle+=360;
+        return angle;
+    }
+
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
     public void boardHover(MouseEvent event) {
 
         graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -222,21 +294,36 @@ public class BoardController implements Initializable {
         }
     }
 
-    public double getAngle(double x, double y){
-        double angle=Math.atan2(y,x);
-        angle = Math.toDegrees(angle);
-        if(angle<0)
-            angle+=360;
-        return angle;
-    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         canvas.setOpacity(0.8);
         this.graphicsContext2D = canvas.getGraphicsContext2D();
         this.pixelWriter = graphicsContext2D.getPixelWriter();
+        // points list init
+        for(int y=0;y<canvas.getHeight();y++){
+            for(int x=0;x<canvas.getWidth();x++)
+                pointList.add(new Point(x,y));
+        }
+
+
+
+
+
     }
 
     private GraphicsContext graphicsContext2D;
     private PixelWriter pixelWriter;
+
+    public void onClickThrowField1(){
+        throwField1.selectAll();
+    }
+    public void onClickThrowField2(){
+        throwField2.selectAll();
+    }
+    public void onClickThrowField3(){
+        throwField3.selectAll();
+    }
+
 }
