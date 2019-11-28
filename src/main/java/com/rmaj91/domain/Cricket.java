@@ -24,4 +24,19 @@ public class Cricket implements Playable{
     public void display(int index) {
 
     }
+
+    @Override
+    public void setCurrentThrow(int throwNumber) {
+
+    }
+
+    @Override
+    public void initGUI() {
+
+    }
+
+    @Override
+    public Playable cloneGame() {
+        return null;
+    }
 }

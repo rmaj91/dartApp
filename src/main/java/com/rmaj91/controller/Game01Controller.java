@@ -102,7 +102,14 @@ public class Game01Controller implements Initializable{
 
     @FXML
     private Button game01LetsButton;
-    
+
+    ///////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////
+
+
     public void toFront() {
     	newGame01Pane.toFront();
     }
@@ -115,37 +122,36 @@ public class Game01Controller implements Initializable{
 
 
 	private BoardController boardController;
-	
-	
+
+    public void backButton() {
+        welcomeController.toFront();
+    }
+
 	public void setBoardController(BoardController boardController) {
 		this.boardController = boardController;
 	}
 
+
+
 	public void letsPlayButton() {
 
-		// initializing games repository
-		Main.gamesRepositoty.createNew(GameFactory.getGame("'01 Game"));
-		// initializing game variables
+        boardController.toFront();
+        Main.gamesRepositoty.createNew(GameFactory.getGame("'01 Game"));
+		// initializing Game01 static  variables
 		Game01.setRounds(getRounds());
 		Game01.setPlayersQuantity(getPlayersQuantity());
 		Game01.setDoubleOut(isDoubleOut());
+        // initializing players
 		String[] players = getPlayersNames(getPlayersQuantity());
-		// initializing players
 		for (String playerName : players) {
 			((Game01) Main.gamesRepositoty.getGameRound(0)).addPlayer(new Game01.Player(playerName,getStartingPoints()));
 		}
 
-		initGUI();
+		/////////////////////////////
+		// Creating players HBoxes //
 
-		// TODO move to Game01
-		Main.gamesRepositoty.getGameRound(0).display(1);
-		// creating players name and points fields //
+        for(int i=0;i<Game01.getPlayersQuantity();i++) {
 
-        // copyig status
-        // TODO move to Game01
-        System.out.println(getPlayersQuantity());
-        for(int i=0;i<getPlayersQuantity();i++){
-            System.out.println(i);
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.BOTTOM_CENTER);
             vBox.setMinHeight(200);
@@ -169,84 +175,24 @@ public class Game01Controller implements Initializable{
             // adding labels
             vBox.getChildren().addAll(playerNameLabel,playerPointsLabel);
             boardController.getGame01PlayersTable().getChildren().add(vBox);
-
         }
+        initGame01GUI();
 
-        boardController.toFront();
+
+//		// TODO move to Game01
+		Main.gamesRepositoty.getGameRound(0).display(0);
 
 
 
 	}
-	/*
-	* Returns number of rounds defined by player
-	* */
-	public int getRounds(){
-		if(game01RadioRoundsOther.isSelected())
-			return game01RoundsBox.getValue();
-		else
-			return 25;
-	}
-	/*
-	* Returns number of starting points defined by player
-	* */
-	public int getStartingPoints(){
-		if(game01RadioPointsOther.isSelected())
-			return game01PointsBox.getValue();
-		else if(game01RadioPoints501.isSelected())
-			return 501;
-		else
-			return 701;
-	}
-	/*
-	* Returns number of players defined by player
-	* */
-	public int getPlayersQuantity(){
-		if(game01RadioPlayers1.isSelected())
-			return 1;
-		else if(game01RadioPlayers2.isSelected())
-			return 2;
-		else if(game01RadioPlayers3.isSelected())
-			return 3;
-		else
-			return 4;
-	}
-	/*
-	* Returns players names defines by player
-	* */
-	public String[] getPlayersNames(int playersQuantity){
-		String[] playersNames = new String[playersQuantity];
-		// TODO Add limit size of textField and defaultValues or emptyProtection
-		if(playersQuantity >= 1)
-			playersNames[0] = getPlayerName(game01NamePlayer1);
-		if(playersQuantity >= 2)
-			playersNames[1] = getPlayerName(game01NamePlayer2);
-		if(playersQuantity >= 3)
-			playersNames[2] = getPlayerName(game01NamePlayer3);
-		if(playersQuantity == 4)
-			playersNames[3] = getPlayerName(game01NamePlayer4);
-		return playersNames;
-	}
 
-	public String getPlayerName(TextField textField){
-	    if(textField.getText().trim().equals("")){
-            return "Player"+textField.getId().substring(textField.getId().length()-1);
-        }
-	    else
-	        return textField.getText();
-    }
-
-	public boolean isDoubleOut(){
-		if(game01DoubleOut.isSelected())
-			return true;
-		else
-			return false;
-	}
-
-	public void backButton() {
-    	welcomeController.toFront();
-    }
 	
-	
+	///////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////
+    //                      INITIALIZING!
+	///////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// points box
@@ -395,11 +341,85 @@ public class Game01Controller implements Initializable{
 		
 	}
 
-    public void initGUI(){
-	    boardController.getGame01ScoreTable().toFront();
+
+
+
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    //                       PRIVATE METHODS
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+
+    /*
+     * Returns number of rounds defined by player
+     * */
+    private int getRounds(){
+        if(game01RadioRoundsOther.isSelected())
+            return game01RoundsBox.getValue();
+        else
+            return 25;
     }
 
+    /*
+     * Returns number of starting points defined by player
+     * */
+    private int getStartingPoints(){
+        if(game01RadioPointsOther.isSelected())
+            return game01PointsBox.getValue();
+        else if(game01RadioPoints501.isSelected())
+            return 501;
+        else
+            return 701;
+    }
 
+    /*
+     * Returns number of players defined by player
+     * */
+    private int getPlayersQuantity(){
+        if(game01RadioPlayers1.isSelected())
+            return 1;
+        else if(game01RadioPlayers2.isSelected())
+            return 2;
+        else if(game01RadioPlayers3.isSelected())
+            return 3;
+        else
+            return 4;
+    }
 
+    /*
+     * Returns players names defines by player
+     * */
+    private String[] getPlayersNames(int playersQuantity){
+        String[] playersNames = new String[playersQuantity];
+        // TODO Add limit size of textField and defaultValues or emptyProtection
+        if(playersQuantity >= 1)
+            playersNames[0] = getPlayerName(game01NamePlayer1);
+        if(playersQuantity >= 2)
+            playersNames[1] = getPlayerName(game01NamePlayer2);
+        if(playersQuantity >= 3)
+            playersNames[2] = getPlayerName(game01NamePlayer3);
+        if(playersQuantity == 4)
+            playersNames[3] = getPlayerName(game01NamePlayer4);
+        return playersNames;
+    }
+
+    private String getPlayerName(TextField textField){
+        if(textField.getText().trim().equals("")){
+            return "Player"+textField.getId().substring(textField.getId().length()-1);
+        }
+        else
+            return textField.getText();
+    }
+
+    private boolean isDoubleOut(){
+        if(game01DoubleOut.isSelected())
+            return true;
+        else
+            return false;
+    }
+
+    private void initGame01GUI(){
+        boardController.getGame01ScoreTable().toFront();
+    }
 
 }

@@ -16,4 +16,12 @@ public class ThrowValues {
     public int getMulitplier() {
         return mulitplier;
     }
+
+    @Override
+    public String toString() {
+        return "ThrowValues{" +
+                "value=" + value +
+                ", mulitplier=" + mulitplier +
+                '}';
+    }
 }

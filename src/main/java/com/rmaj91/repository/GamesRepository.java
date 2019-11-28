@@ -25,5 +25,10 @@ public class GamesRepository {
 		currentRound = 1;
 	}
 
+	public void addRound(Playable game){
+		gamesList.add(game);
+		currentRound++;
+	}
+
 
 }

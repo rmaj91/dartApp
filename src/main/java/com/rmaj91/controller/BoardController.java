@@ -255,14 +255,17 @@ public class BoardController implements Initializable {
     public void onClickThrowField1(){
         throwField1.selectAll();
         System.out.println("TextField1 Marked!");
+        Main.gamesRepositoty.getCurrentGame().setCurrentThrow(1);
     }
     public void onClickThrowField2(){
         throwField2.selectAll();
         System.out.println("TextField2 Marked!");
+        Main.gamesRepositoty.getCurrentGame().setCurrentThrow(2);
     }
     public void onClickThrowField3(){
         throwField3.selectAll();
         System.out.println("TextField3 Marked!");
+        Main.gamesRepositoty.getCurrentGame().setCurrentThrow(3);
     }
 
 }
