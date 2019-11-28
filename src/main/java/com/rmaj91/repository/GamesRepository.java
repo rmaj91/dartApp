@@ -10,7 +10,7 @@ public class GamesRepository {
 	private List<Playable> gamesList = new LinkedList<>();
 	private int currentRound;
 
-	public Playable getGameRound(int index){
+	public Playable getGame(int index){
 		return gamesList.get(index);
 	}
 	public Playable getCurrentGame(){

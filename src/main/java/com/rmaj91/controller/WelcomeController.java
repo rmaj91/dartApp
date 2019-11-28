@@ -94,20 +94,19 @@ public class WelcomeController implements Initializable {
     }
     
     private Game01Controller game01Controller;	
-	private CricketController cricketController;	 
-	private MasterCricketController masterCricketController;
+	//private CricketController cricketController;
+	//private MasterCricketController masterCricketController;
 
 	public void setGame01Controller(Game01Controller game01Controller) {
 		this.game01Controller = game01Controller;
 	}
 
-	public void setCricketController(CricketController cricketController) {
-		this.cricketController = cricketController;
-	}
-
-	public void setMasterCricketController(MasterCricketController masterCricketController) {
-		this.masterCricketController = masterCricketController;
-	}
+//	public void setCricketController(CricketController cricketController) {
+//		this.cricketController = cricketController;
+//	}
+//	public void setMasterCricketController(MasterCricketController masterCricketController) {
+//		this.masterCricketController = masterCricketController;
+//	}
 	
 	
 	@FXML
@@ -115,10 +114,10 @@ public class WelcomeController implements Initializable {
     	if(chooseGameComboBox.getValue() == "'01 Game") {
     		game01Controller.toFront();
     	}    		
-    	else if(chooseGameComboBox.getValue() == "Cricket")
-    		cricketController.toFront(); 	
-    	else if(chooseGameComboBox.getValue() == "Master Cricket")
-    		masterCricketController.toFront();
+//    	else if(chooseGameComboBox.getValue() == "Cricket")
+//    		cricketController.toFront();
+//    	else if(chooseGameComboBox.getValue() == "Master Cricket")
+//    		masterCricketController.toFront();
     	
     }
 	

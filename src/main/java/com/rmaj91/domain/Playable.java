@@ -8,7 +8,7 @@ public interface Playable {
 	void next();
 	void back();
     void throwDart(MouseEvent event);
-    void display(int gameIndex);
+    void display();
     void setCurrentThrow(int throwNumber);
     void initGUI();
     Playable cloneGame();

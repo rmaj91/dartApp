@@ -1,6 +1,7 @@
 package com.rmaj91.controller;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
@@ -132,66 +133,30 @@ public class Game01Controller implements Initializable{
 	}
 
 
-
-	public void letsPlayButton() {
-
+	public void letsPlayButtonClicked() {
         boardController.toFront();
+        boardController.getGame01ScoreTable().toFront();
+        displayDoubleOutLabel();
+
         Main.gamesRepositoty.createNew(GameFactory.getGame("'01 Game"));
-		// initializing Game01 static  variables
-		Game01.setRounds(getRounds());
-		Game01.setPlayersQuantity(getPlayersQuantity());
-		Game01.setDoubleOut(isDoubleOut());
-        // initializing players
-		String[] players = getPlayersNames(getPlayersQuantity());
-		for (String playerName : players) {
-			((Game01) Main.gamesRepositoty.getGameRound(0)).addPlayer(new Game01.Player(playerName,getStartingPoints()));
-		}
-
-		/////////////////////////////
-		// Creating players HBoxes //
-
-        for(int i=0;i<Game01.getPlayersQuantity();i++) {
-
-            VBox vBox = new VBox();
-            vBox.setAlignment(Pos.BOTTOM_CENTER);
-            vBox.setMinHeight(200);
-            vBox.setMinWidth(100);
-            // player name label
-            Label playerNameLabel = new Label();
-            playerNameLabel.setText(players[i]);
-            playerNameLabel.setStyle("-fx-text-inner-color: red;");
-            playerNameLabel.setFont(new Font("System",22));
-            // TODO zamiast id,  get children i iterowac
-            playerNameLabel.setId("game01NameLabelPlayer"+(i+1));
-            playerNameLabel.setTextFill(Color.WHITE);
-            // points label
-
-            Label playerPointsLabel = new Label();
-            playerPointsLabel.setText(String.valueOf(getStartingPoints()));
-            playerPointsLabel.setFont(new Font("System",22));
-            playerPointsLabel.setStyle("-fx-font-weight: bold");
-            playerPointsLabel.setId("game01PointsLabelPlayer"+(i+1));
-            playerPointsLabel.setTextFill(Color.WHITE);
-            // adding labels
-            vBox.getChildren().addAll(playerNameLabel,playerPointsLabel);
-            boardController.getGame01PlayersTable().getChildren().add(vBox);
-        }
-        initGame01GUI();
-
-
-//		// TODO move to Game01
-		Main.gamesRepositoty.getGameRound(0).display(0);
+        initializeStaticGame01Variables();
+        initializeGame01Variables();
+        // dodac zmienne //
+        initializeGame01Variables();
+        createPlayersHBoxes(getPlayersQuantity());
 
 
 
+		Main.gamesRepositoty.getCurrentGame().display();
 	}
 
-	
-	///////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////
+
+
+
+    ///////////////////////////////////////////////////////////////////
     //                      INITIALIZING!
 	///////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////
+
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -418,8 +383,57 @@ public class Game01Controller implements Initializable{
             return false;
     }
 
-    private void initGame01GUI(){
-        boardController.getGame01ScoreTable().toFront();
+    private void initializeStaticGame01Variables(){
+        Game01.setSubrounds(getRounds()*getPlayersQuantity());
+        Game01.setPlayersQuantity(getPlayersQuantity());
+        Game01.setDoubleOut(isDoubleOut());
     }
 
+
+    private void createPlayersHBoxes(int playersQuantity){
+
+        // initializing player Names
+        String[] playersNames = initializeGame01PlayersNames();
+
+        for(int i=0;i<playersQuantity;i++){
+            VBox vBox = new VBox();
+            vBox.setAlignment(Pos.BOTTOM_CENTER);
+            vBox.setMinWidth(100);
+
+            vBox.getChildren().addAll(createPlayerLabel(playersNames[i],false),
+                    createPlayerLabel(String.valueOf(getStartingPoints()),true));
+            boardController.getGame01PlayersTable().getChildren().add(vBox);
+        }
+    }
+
+    private String[] initializeGame01PlayersNames(){
+        String[] players = getPlayersNames(getPlayersQuantity());
+        ((Game01) Main.gamesRepositoty.getGame(0)).setPlayersNames(players);
+        return players;
+    }
+
+    private Label createPlayerLabel(String text,boolean ifBold){
+        Label playerLabel = new Label();
+        playerLabel.setText(text);
+        playerLabel.setFont(new Font("System",22));
+        playerLabel.setTextFill(Color.WHITE);
+        if(ifBold)
+            playerLabel.setStyle("-fx-font-weight: bold");
+        return playerLabel;
+    }
+
+    private void displayDoubleOutLabel(){
+        if(isDoubleOut())
+            boardController.getDoubleOut().setVisible(true);
+        else
+            boardController.getDoubleOut().setVisible(false);
+    }
+
+    private void initializeGame01Variables() {
+        // adding starting points //
+        int[] playersPoints = new int[getPlayersQuantity()];
+        Arrays.fill(playersPoints,getStartingPoints());
+        ((Game01)Main.gamesRepositoty.getCurrentGame()).setPlayerPoints(playersPoints);
+        //
+    }
 }

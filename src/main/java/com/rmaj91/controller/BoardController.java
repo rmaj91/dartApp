@@ -101,6 +101,9 @@ public class BoardController implements Initializable {
     @FXML
     private Canvas canvas;
 
+    public Label getAverageLabel() {
+        return averageLabel;
+    }
 
     public void toFront() {
         mainStackPane.toFront();
@@ -162,7 +165,7 @@ public class BoardController implements Initializable {
     }
 
     ////////////////////////////////////////////
-    // TEST ALGORITHM //////////////////////////
+    // dart fields ALGORITHM ///////////////////
     ////////////////////////////////////////////
     List<Point> pointList = new ArrayList<>();
     // TODO przniesc do Main

@@ -64,10 +64,10 @@ public class MainController implements Initializable {
 	private WelcomeController welcomeController;
 	@FXML
 	private Game01Controller game01Controller;
-	@FXML 
-	private CricketController cricketController;
-	@FXML 
-	private MasterCricketController masterCricketController;
+	//@FXML
+	//private CricketController cricketController;
+	//@FXML
+	//private MasterCricketController masterCricketController;
 	@FXML
 	private BoardController boardController;
 
@@ -76,11 +76,11 @@ public class MainController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		makePaneDragable();
 		welcomeController.setGame01Controller(game01Controller);
-		welcomeController.setCricketController(cricketController);
-		welcomeController.setMasterCricketController(masterCricketController);
+		//welcomeController.setCricketController(cricketController);
+		//welcomeController.setMasterCricketController(masterCricketController);
 		game01Controller.setWelcomeController(welcomeController);
-		cricketController.setWelcomeController(welcomeController);
-		masterCricketController.setWelcomeController(welcomeController);
+		//cricketController.setWelcomeController(welcomeController);
+		//masterCricketController.setWelcomeController(welcomeController);
 		game01Controller.setBoardController(boardController);
 		Game01.setGame01Controller(game01Controller);
 		Game01.setBoardController(boardController);

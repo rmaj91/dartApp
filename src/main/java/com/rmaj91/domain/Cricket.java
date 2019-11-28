@@ -21,9 +21,10 @@ public class Cricket implements Playable{
     }
 
     @Override
-    public void display(int index) {
+    public void display() {
 
     }
+
 
     @Override
     public void setCurrentThrow(int throwNumber) {
