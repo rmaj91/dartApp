@@ -7,6 +7,7 @@ import java.util.function.UnaryOperator;
 
 import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
+import com.rmaj91.domain.Player;
 import com.rmaj91.repository.GameFactory;
 import javafx.beans.value.ObservableValue;
 
@@ -138,12 +139,11 @@ public class Game01Controller implements Initializable{
         boardController.getGame01ScoreTable().toFront();
         displayDoubleOutLabel();
 
-        Main.gamesRepositoty.createNew(GameFactory.getGame("'01 Game"));
+        Main.gamesRepositotyImpl.createNewGame(GameFactory.getGame("'01 Game"));
         initializeStaticGame01Variables();
-        initializeGame01Variables();
         createPlayersHBoxes(getPlayersQuantity());
 
-		Main.gamesRepositoty.getfirstRound().display();
+		Main.gamesRepositotyImpl.getCurrentRound().display();
 	}
 
 
@@ -227,7 +227,7 @@ public class Game01Controller implements Initializable{
     private void createPlayersHBoxes(int playersQuantity){
 
         // initializing player Names
-        String[] playersNames = initializeGame01PlayersNames();
+        String[] playersNames = initializeGame01Players();
 
         for(int i=0;i<playersQuantity;i++){
             VBox vBox = new VBox();
@@ -241,15 +241,29 @@ public class Game01Controller implements Initializable{
     }
 
     private void initializeStaticGame01Variables(){
-        Game01.setSubrounds(getRounds()*getPlayersQuantity());
-        Game01.setPlayersQuantity(getPlayersQuantity());
         Game01.setDoubleOut(isDoubleOut());
+        Game01.setPlayersQuantity(getPlayersQuantity());
+        Game01.setRoundsMaxNumber(getRounds());
+        Game01.setStartingPoints(getStartingPoints());
     }
 
-    private String[] initializeGame01PlayersNames(){
-        String[] players = getPlayersNames(getPlayersQuantity());
-        ((Game01) Main.gamesRepositoty.getGame(0)).setPlayersNames(players);
-        return players;
+    private String[] initializeGame01Players(){
+        // get names //
+        String[] playersNames = getPlayersNames(getPlayersQuantity());
+        // get blank players array//
+        Player[] playersArray = new Player[getPlayersQuantity()];
+        Arrays.fill(playersArray,new Player());
+        ((Game01)Main.gamesRepositotyImpl.getCurrentRound()).setPlayers(playersArray);
+        //Player[] playersArray = ((Game01) Main.gamesRepositotyImpl.getCurrentRound()).getPlayers();
+        // init players Names //
+        for(int i=0;i<getPlayersQuantity();i++){
+            playersArray[i].setName(playersNames[i]);
+        }
+        // init players points //
+        for (Player player : playersArray) {
+            player.setPoints(getStartingPoints());
+        }
+        return playersNames;
     }
 
     private Label createPlayerLabel(String text,boolean ifBold){
@@ -269,20 +283,13 @@ public class Game01Controller implements Initializable{
             boardController.getDoubleOut().setVisible(false);
     }
 
-    private void initializeGame01Variables() {
-        // adding starting points //
-        int[] playersPoints = new int[getPlayersQuantity()];
-        Arrays.fill(playersPoints,getStartingPoints());
-        ((Game01)Main.gamesRepositoty.getfirstRound()).setPlayerPoints(playersPoints);
-        // adding averages //
-        int[] playersAverages = new int[getPlayersQuantity()];
-        Arrays.fill(playersAverages,0);
-        ((Game01)Main.gamesRepositoty.getfirstRound()).setPlayersAverages(playersAverages);
-    }
+
+
     ///////////////////////////////////////////////////////////////////
     //                      INITIALIZING!
     ///////////////////////////////////////////////////////////////////
-
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -427,8 +434,5 @@ public class Game01Controller implements Initializable{
         game01PointsBox.getEditor().setTextFormatter(new TextFormatter<>(pointsConverter,DEFAULT_POINTS,pointsFilter));
         svfRounds.setConverter(roundsConverter);
         game01RoundsBox.getEditor().setTextFormatter(new TextFormatter<>(roundsConverter,DEFAULT_ROUNDS,roundsFilter));
-
-
-
     }
 }

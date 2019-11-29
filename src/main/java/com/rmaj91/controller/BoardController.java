@@ -153,15 +153,15 @@ public class BoardController implements Initializable {
 
     // OnClick Board
     public void boardClicked(MouseEvent event) {
-        Main.gamesRepositoty.getCurrentRound().throwDart(event);
+        Main.gamesRepositotyImpl.getCurrentRound().throwDart(event);
     }
     // Onclick button next
     public void nextButtonClicked(){
-        Main.gamesRepositoty.getCurrentRound().next();
+        Main.gamesRepositotyImpl.getCurrentRound().next();
     }
     //Onclick Button back
     public void backButtonClicked(){
-        Main.gamesRepositoty.getCurrentRound().back();
+        Main.gamesRepositotyImpl.getCurrentRound().back();
     }
 
     ////////////////////////////////////////////
@@ -258,17 +258,17 @@ public class BoardController implements Initializable {
     public void onClickThrowField1(){
         throwField1.selectAll();
         System.out.println("TextField1 Marked!");
-        Main.gamesRepositoty.getCurrentRound().setCurrentThrow(1);
+        Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(1);
     }
     public void onClickThrowField2(){
         throwField2.selectAll();
         System.out.println("TextField2 Marked!");
-        Main.gamesRepositoty.getCurrentRound().setCurrentThrow(2);
+        Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(2);
     }
     public void onClickThrowField3(){
         throwField3.selectAll();
         System.out.println("TextField3 Marked!");
-        Main.gamesRepositoty.getCurrentRound().setCurrentThrow(3);
+        Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(3);
     }
 
 }

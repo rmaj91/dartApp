@@ -5,7 +5,7 @@ import com.rmaj91.domain.ThrowValues;
 
 public class Utility {
 
-    Filters filters = new Filters();
+    public static final Filters filters = new Filters();
 
     // statyczne metody
     public static ThrowValues readValues(String string){

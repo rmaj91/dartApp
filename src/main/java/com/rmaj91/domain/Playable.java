@@ -10,8 +10,7 @@ public interface Playable {
     void throwDart(MouseEvent event);
     void display();
     void setCurrentThrow(int throwNumber);
-    void initGUI();
-    Playable cloneGame();
+    Playable cloneRound();
 //    boolean ifWin();
 
 }

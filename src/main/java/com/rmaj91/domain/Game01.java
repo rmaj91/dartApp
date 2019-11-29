@@ -1,8 +1,9 @@
 package com.rmaj91.domain;
 
-import com.rmaj91.Main;
 import com.rmaj91.controller.BoardController;
 import com.rmaj91.controller.Game01Controller;
+import com.rmaj91.repository.GameFactory;
+import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.Utility;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -17,176 +18,173 @@ public class Game01 implements Playable {
 	// dependencies //
 	private static BoardController boardController;
 	private static Game01Controller game01Controller;
+	private static GamesRepositoryImpl gamesRepositoryImpl;
 	// static variables //
-	private static int subrounds;
+	private static int roundsMaxNumber;
 	private static int playersQuantity;
 	private static boolean doubleOut;
-	private static String[] playersNames;
-
-
-
-
+	private static int startingPoints;
 	// variables //
-	private int[] playerPoints;
-	private int[] playersAverages;
-	private String[] throwFieldsContent = new String[3];
-	private int currentThrow;
-	private int currentSubround;
+	Player[] players;
+	private int currentPlayer;
 
-	// Injection setters //
+	// SETTERS //
+	/////////////
+
+
+	public void setPlayers(Player[] players) {
+		this.players = players;
+	}
+
 	public static void setBoardController(BoardController boardController) {
 		Game01.boardController = boardController;
 	}
+
 	public static void setGame01Controller(Game01Controller game01Controller) {
 		Game01.game01Controller = game01Controller;
 	}
 
-	// SETTERS/GETTERS //
-	public int getCurrentSubround() {
-		return currentSubround;
-	}
-	public void setThrowFieldsContent(String[] throwFieldsContent) {
-		this.throwFieldsContent = throwFieldsContent;
-	}
-	public void setPlayersAverages(int[] playersAverages) {
-		this.playersAverages = playersAverages;
-	}
-	public void setPlayerPoints(int[] playerPoints) {
-		this.playerPoints = playerPoints;
-	}
-	public void setCurrentThrow(int currentThrow) {
-		this.currentThrow = currentThrow;
-	}
-	public int getCurrentThrow() {
-		return this.currentThrow;
+	public static void setGamesRepositoryImpl(GamesRepositoryImpl gamesRepositoryImpl) {
+		Game01.gamesRepositoryImpl = gamesRepositoryImpl;
 	}
 
-	public static void setPlayersNames(String[] playersNames) {
-		Game01.playersNames = playersNames;
+	public static void setRoundsMaxNumber(int roundsMaxNumber) {
+		Game01.roundsMaxNumber = roundsMaxNumber;
 	}
-	public static void setSubrounds(int subrounds) {
-		Game01.subrounds = subrounds;
-	}
+
 	public static void setPlayersQuantity(int playersQuantity) {
 		Game01.playersQuantity = playersQuantity;
 	}
+
 	public static void setDoubleOut(boolean doubleOut) {
 		Game01.doubleOut = doubleOut;
 	}
-	public void setCurrentSubround(int currentSubround) {
-		this.currentSubround = currentSubround;
-	}
-	public static int getPlayersQuantity() {
-		return playersQuantity;
+
+	public static void setStartingPoints(int startingPoints) {
+		Game01.startingPoints = startingPoints;
 	}
 
+	// GETTERS //
+	/////////////
 
-	public Game01(){
-		Arrays.fill(throwFieldsContent,"");
-		currentThrow = 1;
-		currentSubround = 1;
+	public Player[] getPlayers() {
+		return players;
 	}
+
+	// Player Class //
+	//////////////////
+	// TODO maybe static class? what with player clone then?
+
+	////////////////////////////////////////
+	////////////////////////////////////////
+	////////////////////////////////////////
+
+
+	// Constructor //
+	public Game01() {
+		currentPlayer=1;
+	}
+
 
 	///////////////////////////
 	// METHODS FROM PLAYABLE //
 	///////////////////////////
 
 	@Override
-	public void initGUI() {
+	public Playable cloneRound() {
+		Game01 game01 = new Game01();
+		//game01.players
 
-	}
+		System.out.println(game01.players[0]);
+		System.out.println(this.players[0]);
 
-	@Override
-	public Game01 cloneGame(){
-		Game01 newGame = new Game01();
-		newGame.setCurrentSubround(this.currentSubround+1);
+//		Player[] playersArray = new Player[getPlayersQuantity()];
+//		Arrays.fill(playersArray,new Player());
 
-		// deep copy of averages //
-		int[] newPlayersAverages= new int[playersAverages.length];
-		for(int i = 0; i< playersAverages.length; i++){
-			// TODO sprawdzic jak z glebokimi kopiami //
-			newPlayersAverages[i] = playersAverages[i];
+
+		// todo inicjalizowac players czy cus xd
+		for(int i=0;i<this.players.length;i++){
+			System.out.println(game01.players[i]);
+			System.out.println(this.players[i]);
+			game01.players[i] = this.players[i].clonePlayer();
 		}
-		newGame.setPlayersAverages(newPlayersAverages);
-
-		// depp copy of players points //
-		int[] newPlayersPoints= new int[playerPoints.length];
-		for(int i=0;i<playerPoints.length;i++){
-			// TODO sprawdzic jak z glebokimi kopiami //
-			newPlayersPoints[i] = playerPoints[i];
-		}
-		newGame.setPlayerPoints(newPlayersPoints);
-
-		// deep copy of throwfields //
-		String[] newFieldsContent = new String[3];
-		for(int i=0;i<3;i++){
-			newFieldsContent[i] = new String(throwFieldsContent[i]);
-		}
-		newGame.setThrowFieldsContent(newFieldsContent);
-
-		return newGame;
+		return game01;
 	}
 
 	@Override
 	public void next() {
 
+		if(gamesRepositoryImpl.getIndexOfRound(this)+1 <= Game01.roundsMaxNumber){
 
-		System.out.println("Next Button clicked!");
-		if(currentSubround <= Game01.subrounds){
-			// TODO do poprawy ->ustawia rzut zeby po cofnieciu w dobre miejsce wskoczyl)
-			currentThrow = 1;
+			System.out.println("Next Button action!");
 
-			Main.gamesRepositoty.getForwardRound(currentSubround-1).display();
+			if(currentPlayer +1> Game01.playersQuantity)
+			{
+				gamesRepositoryImpl.pushRound(this.cloneRound());
+			}
+			else{
+				currentPlayer++;
+			}
 
-			boardController.getThrowField1().requestFocus();
-
-
+			gamesRepositoryImpl.getCurrentRound().display();
 		}
-
 	}
 
 	@Override
 	public void back() {
-//		System.out.println("Back Button clicked!");
-//		this.currentThrow = 1;
+		System.out.println("Back Button clicked!");
+		if(currentPlayer == 1){
+			gamesRepositoryImpl.pullRound();
+		}
+		else
+			currentPlayer--;
+
+		gamesRepositoryImpl.getCurrentRound().display();
 	}
 
 	@Override
 	public void throwDart(MouseEvent event) {
-		if(currentThrow == 4)
+		int currentThrow = players[currentPlayer - 1].getCurrentThrow();
+
+		if (currentThrow == 3)
 			return;
-		double x = event.getX()-248;
-		double y = -(event.getY()-248.5);
-		System.out.print("Pressed: x="+x + "  y=" +y+"\t");
-		// tODO do main
-		Filters filters = new Filters();
-		int radiusIndex = Utility.getRadiusIndex(x,y);
-		int angleIndex = Utility.getAngleIndex(x,y);
-		String key="";
-		for (Filters.IndexMapper indexMapper : filters.getIndexMapperList()) {
-			if(indexMapper.hasKey(radiusIndex,angleIndex)){
-				key=indexMapper.getKey();
-				System.out.print(key+"\t");
-				break;
+		else {
+
+			double xCartesian = event.getX() - 248;
+			double yCartesian = -(event.getY() - 248.5);
+			int radiusIndex = Utility.getRadiusIndex(xCartesian, yCartesian);
+			int angleIndex = Utility.getAngleIndex(xCartesian, yCartesian);
+
+			String key = "";
+			for (Filters.IndexMapper indexMapper : Utility.filters.getIndexMapperList()) {
+				if (indexMapper.hasKey(radiusIndex, angleIndex)) {
+					key = indexMapper.getKey();
+//				System.out.print(key+"\t");
+					break;
+				}
 			}
+
+			////////////////////////////////////////////
+			System.out.print("Rzut nr: " + currentThrow + "Pressed: x=" + xCartesian + "  y=" + yCartesian + "\t");
+			System.out.print(key + "\t");
+			System.out.println(Utility.readValues(key));
+			//////////////////////////////////////////////////
+
+			if (currentThrow == 1) {
+				boardController.getThrowField1().setText(key);
+				boardController.getThrowField2().requestFocus();
+			} else if (currentThrow == 2) {
+				boardController.getThrowField2().setText(key);
+				boardController.getThrowField3().requestFocus();
+			} else if (currentThrow == 3)
+				boardController.getThrowField3().setText(key);
+
+			System.out.println(currentThrow);
+			players[currentPlayer - 1].setCurrentThrow(currentThrow++);
+			System.out.println(currentThrow);
+			// get current hrow
+			System.out.println(players[currentPlayer - 1].getCurrentThrow());
 		}
-
-
-		if(currentThrow == 1){
-			boardController.getThrowField1().setText(key);
-			boardController.getThrowField2().requestFocus();
-		}
-
-		else if(currentThrow == 2){
-			boardController.getThrowField2().setText(key);
-			boardController.getThrowField3().requestFocus();
-		}
-
-		else if(currentThrow == 3)
-			boardController.getThrowField3().setText(key);
-		currentThrow++;
-
-		System.out.println(Utility.readValues(key));
 
 	}
 
@@ -194,37 +192,110 @@ public class Game01 implements Playable {
 	@Override
 	public void display() {
 		// Rounds //
-		boardController.getRoundsLabel().setText("Round: "+ (1+currentSubround/playersQuantity) +"/"+Game01.subrounds /Game01.playersQuantity);
+		int currentRound = gamesRepositoryImpl.getIndexOfRound(this)+1;
+		boardController.getRoundsLabel().setText("Round: "+ currentRound +"/"+Game01.roundsMaxNumber);
 
 		// TextFields //
-		boardController.getThrowField1().setText(throwFieldsContent[0]);
-		boardController.getThrowField2().setText(throwFieldsContent[1]);
-		boardController.getThrowField3().setText(throwFieldsContent[2]);
+		boardController.getThrowField1().setText(players[currentPlayer-1].getThrowFields()[0]);
+		boardController.getThrowField2().setText(players[currentPlayer-1].getThrowFields()[1]);
+		boardController.getThrowField3().setText(players[currentPlayer-1].getThrowFields()[2]);
 
 		// Big Player name,points,average //
-		boardController.getPlayerNameLabel().setText(playersNames[(currentSubround-1)%playersQuantity]);
-		boardController.getPlayerPointsLabel().setText(String.valueOf(playerPoints[(currentSubround-1)%playersQuantity]));
-		boardController.getAverageLabel().setText("Average: "+ playersAverages[(currentSubround-1)%playersQuantity]);
+		boardController.getPlayerNameLabel().setText(players[currentPlayer-1].getName());
+		boardController.getPlayerPointsLabel().setText(String.valueOf(players[currentPlayer-1].getPoints()));
+		boardController.getAverageLabel().setText("Average: "+ players[currentPlayer-1].getAverage());
 
-		// turn off highlighting in previous subround
-		if(currentSubround >1){
-			Node node2 = boardController.getGame01PlayersTable().getChildren().get((currentSubround-2)%playersQuantity);;
-			((VBox)node2).getChildren().get(0).getStyleClass().removeIf(style -> style.equals("-fx-background-color: #0388fc;"));
+		// reset player name highlight //
+		for(int i=0;i<Game01.playersQuantity;i++){
+			Node node = boardController.getGame01PlayersTable().getChildren().get(i);
+			((VBox)node).getChildren().get(0).setStyle(null);
 		}
 
-		//highlight player
-		Node node = boardController.getGame01PlayersTable().getChildren().get((currentSubround-1)%playersQuantity);
+		// highlight player name //
+		Node node = boardController.getGame01PlayersTable().getChildren().get(currentPlayer-1);
 		((VBox)node).getChildren().get(0).setStyle("-fx-background-color: #0388fc;");
-
-
-
-
-
 
 	}
 
-	///////////////////////////////////////
-	// PRIVATE METHODS
-	///////////////////////////////////////
+	@Override
+	public void setCurrentThrow(int throwNumber) {
+		players[currentPlayer-1].setCurrentThrow(throwNumber);
+	}
+
+	//	@Override
+//	public void throwDart(MouseEvent event) {
+//		if(currentThrow == 4)
+//			return;
+//		double x = event.getX()-248;
+//		double y = -(event.getY()-248.5);
+//		System.out.print("Pressed: x="+x + "  y=" +y+"\t");
+//		// tODO do main
+//		Filters filters = new Filters();
+//		int radiusIndex = Utility.getRadiusIndex(x,y);
+//		int angleIndex = Utility.getAngleIndex(x,y);
+//		String key="";
+//		for (Filters.IndexMapper indexMapper : filters.getIndexMapperList()) {
+//			if(indexMapper.hasKey(radiusIndex,angleIndex)){
+//				key=indexMapper.getKey();
+//				System.out.print(key+"\t");
+//				break;
+//			}
+//		}
+//
+//
+//		if(currentThrow == 1){
+//			boardController.getThrowField1().setText(key);
+//			boardController.getThrowField2().requestFocus();
+//		}
+//
+//		else if(currentThrow == 2){
+//			boardController.getThrowField2().setText(key);
+//			boardController.getThrowField3().requestFocus();
+//		}
+//
+//		else if(currentThrow == 3)
+//			boardController.getThrowField3().setText(key);
+//		currentThrow++;
+//
+//		System.out.println(Utility.readValues(key));
+//
+//	}
+
+
+//	@Override
+//	public void display() {
+//		// Rounds //
+//		boardController.getRoundsLabel().setText("Round: "+ (1+currentSubround/playersQuantity) +"/"+Game01.subrounds /Game01.playersQuantity);
+//
+//		// TextFields //
+//		boardController.getThrowField1().setText(throwFieldsContent[0]);
+//		boardController.getThrowField2().setText(throwFieldsContent[1]);
+//		boardController.getThrowField3().setText(throwFieldsContent[2]);
+//
+//		// Big Player name,points,average //
+//		boardController.getPlayerNameLabel().setText(playersNames[(currentSubround-1)%playersQuantity]);
+//		boardController.getPlayerPointsLabel().setText(String.valueOf(playerPoints[(currentSubround-1)%playersQuantity]));
+//		boardController.getAverageLabel().setText("Average: "+ playersAverages[(currentSubround-1)%playersQuantity]);
+//
+//		// turn off highlighting in previous subround
+//		if(currentSubround >1){
+//			Node node2 = boardController.getGame01PlayersTable().getChildren().get((currentSubround-2)%playersQuantity);;
+//			((VBox)node2).getChildren().get(0).getStyleClass().removeIf(style -> style.equals("-fx-background-color: #0388fc;"));
+//		}
+//
+//		//highlight player
+//		Node node = boardController.getGame01PlayersTable().getChildren().get((currentSubround-1)%playersQuantity);
+//		((VBox)node).getChildren().get(0).setStyle("-fx-background-color: #0388fc;");
+//
+//
+//boardController.getThrowField1().requestFocus();
+//
+//
+//
+//	}
+//
+//	///////////////////////////////////////
+//	// PRIVATE METHODS
+//	///////////////////////////////////////
 
 }

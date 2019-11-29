@@ -32,12 +32,9 @@ public class Cricket implements Playable{
     }
 
     @Override
-    public void initGUI() {
-
-    }
-
-    @Override
-    public Playable cloneGame() {
+    public Playable cloneRound() {
         return null;
     }
+
+
 }
