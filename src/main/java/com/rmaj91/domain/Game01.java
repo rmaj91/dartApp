@@ -93,19 +93,12 @@ public class Game01 implements Playable {
 	@Override
 	public Playable cloneRound() {
 		Game01 game01 = new Game01();
-		//game01.players
 
-		System.out.println(game01.players[0]);
-		System.out.println(this.players[0]);
-
-//		Player[] playersArray = new Player[getPlayersQuantity()];
-//		Arrays.fill(playersArray,new Player());
-
-
-		// todo inicjalizowac players czy cus xd
+		Player[] playersArray = new Player[playersQuantity];
+		Arrays.fill(playersArray,new Player());
+		game01.players = playersArray;
+		
 		for(int i=0;i<this.players.length;i++){
-			System.out.println(game01.players[i]);
-			System.out.println(this.players[i]);
 			game01.players[i] = this.players[i].clonePlayer();
 		}
 		return game01;
