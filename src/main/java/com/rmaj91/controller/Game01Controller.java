@@ -141,172 +141,10 @@ public class Game01Controller implements Initializable{
         Main.gamesRepositoty.createNew(GameFactory.getGame("'01 Game"));
         initializeStaticGame01Variables();
         initializeGame01Variables();
-        // dodac zmienne //
-        initializeGame01Variables();
         createPlayersHBoxes(getPlayersQuantity());
 
-
-
-		Main.gamesRepositoty.getCurrentGame().display();
+		Main.gamesRepositoty.getfirstRound().display();
 	}
-
-
-
-
-    ///////////////////////////////////////////////////////////////////
-    //                      INITIALIZING!
-	///////////////////////////////////////////////////////////////////
-
-
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// points box
-		game01RadioPointsOther.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
-			if(isNowSelected) {
-				game01PointsBox.setDisable(false);
-			}else {
-				game01PointsBox.setDisable(true);
-			}
-		});
-		// rounds box
-		game01RadioRoundsOther.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
-			if(isNowSelected) {
-				game01RoundsBox.setDisable(false);
-			}else {
-				game01RoundsBox.setDisable(true);
-			}
-		});
-		
-		// player boxes 2
-		game01RadioPlayers2.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
-			if(isNowSelected) {
-				game01NamePlayer2.setDisable(false);
-			}else {
-				game01NamePlayer2.setDisable(true);
-			}
-		});
-		// player boxes 3
-		game01RadioPlayers3.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
-			if(isNowSelected) {
-				game01NamePlayer2.setDisable(false);
-				game01NamePlayer3.setDisable(false);
-			}else {
-				game01NamePlayer2.setDisable(false);
-				game01NamePlayer3.setDisable(true);
-			}
-		});
-		// player boxes 4
-		game01RadioPlayers4.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
-			if(isNowSelected) {
-				game01NamePlayer2.setDisable(false);
-				game01NamePlayer3.setDisable(false);
-				game01NamePlayer4.setDisable(false);
-			}else {
-				game01NamePlayer2.setDisable(true);
-				game01NamePlayer3.setDisable(true);
-				game01NamePlayer4.setDisable(true);
-			}
-		});
-		// Textfields listener //
-		/////////////////////////
-		game01NamePlayer1.textProperty().addListener((observable,oldValue,newValue) ->{
-			if(newValue.length() > 8)
-				game01NamePlayer1.setText(newValue.substring(0, 8));
-		});
-		game01NamePlayer2.textProperty().addListener((observable,oldValue,newValue) ->{
-			if(newValue.length() > 8)
-				game01NamePlayer2.setText(newValue.substring(0, 8));
-		});
-		game01NamePlayer3.textProperty().addListener((observable,oldValue,newValue) ->{
-			if(newValue.length() > 8)
-				game01NamePlayer3.setText(newValue.substring(0, 8));
-		});
-		game01NamePlayer4.textProperty().addListener((observable,oldValue,newValue) ->{
-			if(newValue.length() > 8)
-				game01NamePlayer4.setText(newValue.substring(0, 8));
-		});
-
-		//////////////////////////////
-		// game points spinner
-		//////////////////////////////
-
-		SpinnerValueFactory<Integer> svfPoints = new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_POINTS, MAX_POINTS, DEFAULT_POINTS);
-		SpinnerValueFactory<Integer> svfRounds = new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_ROUNDS,MAX_ROUNDS, DEFAULT_ROUNDS);
-		game01PointsBox.setValueFactory(svfPoints);
-		game01RoundsBox.setValueFactory(svfRounds);
-		
-		// POINTS VALIDATION //
-		StringConverter<Integer> pointsConverter = new StringConverter<>() {
-
-			@Override
-			public Integer fromString(String string) {
-				if(string.isEmpty())
-					return DEFAULT_POINTS;
-				else
-					return Integer.parseInt(string);
-			}
-
-			@Override
-			public String toString(Integer object) {
-				return object.toString();
-			}
-			
-		};
-		
-	    UnaryOperator<TextFormatter.Change> pointsFilter = new UnaryOperator<TextFormatter.Change>() {
-
-	        @Override
-	        public TextFormatter.Change apply(TextFormatter.Change t) {
-
-	            String newText = t.getControlNewText() ;
-	            if (newText.matches("[0-9]*")) {
-	                return t ;
-	            }
-	            return null ;
-	        }
-	    };
-	    
-		// ROUnds VALIDATION //
-		StringConverter<Integer> roundsConverter = new StringConverter<>() {
-
-			@Override
-			public Integer fromString(String string) {
-				if(string.isEmpty())
-					return DEFAULT_ROUNDS;
-				else
-					return Integer.parseInt(string);
-			}
-
-			@Override
-			public String toString(Integer object) {
-				return object.toString();
-			}
-			
-		};
-		
-	    UnaryOperator<TextFormatter.Change> roundsFilter = new UnaryOperator<TextFormatter.Change>() {
-
-	        @Override
-	        public TextFormatter.Change apply(TextFormatter.Change t) {
-
-	            String newText = t.getControlNewText() ;
-	            if (newText.matches("[0-9]*")) {
-	                return t ;
-	            }
-	            return null ;
-	        }
-	    };
-		
-	    svfPoints.setConverter(pointsConverter);
-	    game01PointsBox.getEditor().setTextFormatter(new TextFormatter<>(pointsConverter,DEFAULT_POINTS,pointsFilter));
-	    svfRounds.setConverter(roundsConverter);
-	    game01RoundsBox.getEditor().setTextFormatter(new TextFormatter<>(roundsConverter,DEFAULT_ROUNDS,roundsFilter));
-		
-		
-		
-	}
-
-
 
 
     ////////////////////////////////////////////////////////////////
@@ -383,11 +221,7 @@ public class Game01Controller implements Initializable{
             return false;
     }
 
-    private void initializeStaticGame01Variables(){
-        Game01.setSubrounds(getRounds()*getPlayersQuantity());
-        Game01.setPlayersQuantity(getPlayersQuantity());
-        Game01.setDoubleOut(isDoubleOut());
-    }
+
 
 
     private void createPlayersHBoxes(int playersQuantity){
@@ -404,6 +238,12 @@ public class Game01Controller implements Initializable{
                     createPlayerLabel(String.valueOf(getStartingPoints()),true));
             boardController.getGame01PlayersTable().getChildren().add(vBox);
         }
+    }
+
+    private void initializeStaticGame01Variables(){
+        Game01.setSubrounds(getRounds()*getPlayersQuantity());
+        Game01.setPlayersQuantity(getPlayersQuantity());
+        Game01.setDoubleOut(isDoubleOut());
     }
 
     private String[] initializeGame01PlayersNames(){
@@ -433,7 +273,162 @@ public class Game01Controller implements Initializable{
         // adding starting points //
         int[] playersPoints = new int[getPlayersQuantity()];
         Arrays.fill(playersPoints,getStartingPoints());
-        ((Game01)Main.gamesRepositoty.getCurrentGame()).setPlayerPoints(playersPoints);
-        //
+        ((Game01)Main.gamesRepositoty.getfirstRound()).setPlayerPoints(playersPoints);
+        // adding averages //
+        int[] playersAverages = new int[getPlayersQuantity()];
+        Arrays.fill(playersAverages,0);
+        ((Game01)Main.gamesRepositoty.getfirstRound()).setPlayersAverages(playersAverages);
+    }
+    ///////////////////////////////////////////////////////////////////
+    //                      INITIALIZING!
+    ///////////////////////////////////////////////////////////////////
+
+
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        // points box
+        game01RadioPointsOther.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
+            if(isNowSelected) {
+                game01PointsBox.setDisable(false);
+            }else {
+                game01PointsBox.setDisable(true);
+            }
+        });
+        // rounds box
+        game01RadioRoundsOther.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
+            if(isNowSelected) {
+                game01RoundsBox.setDisable(false);
+            }else {
+                game01RoundsBox.setDisable(true);
+            }
+        });
+
+        // player boxes 2
+        game01RadioPlayers2.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
+            if(isNowSelected) {
+                game01NamePlayer2.setDisable(false);
+            }else {
+                game01NamePlayer2.setDisable(true);
+            }
+        });
+        // player boxes 3
+        game01RadioPlayers3.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
+            if(isNowSelected) {
+                game01NamePlayer2.setDisable(false);
+                game01NamePlayer3.setDisable(false);
+            }else {
+                game01NamePlayer2.setDisable(false);
+                game01NamePlayer3.setDisable(true);
+            }
+        });
+        // player boxes 4
+        game01RadioPlayers4.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
+            if(isNowSelected) {
+                game01NamePlayer2.setDisable(false);
+                game01NamePlayer3.setDisable(false);
+                game01NamePlayer4.setDisable(false);
+            }else {
+                game01NamePlayer2.setDisable(true);
+                game01NamePlayer3.setDisable(true);
+                game01NamePlayer4.setDisable(true);
+            }
+        });
+        // Textfields listener //
+        /////////////////////////
+        game01NamePlayer1.textProperty().addListener((observable,oldValue,newValue) ->{
+            if(newValue.length() > 8)
+                game01NamePlayer1.setText(newValue.substring(0, 8));
+        });
+        game01NamePlayer2.textProperty().addListener((observable,oldValue,newValue) ->{
+            if(newValue.length() > 8)
+                game01NamePlayer2.setText(newValue.substring(0, 8));
+        });
+        game01NamePlayer3.textProperty().addListener((observable,oldValue,newValue) ->{
+            if(newValue.length() > 8)
+                game01NamePlayer3.setText(newValue.substring(0, 8));
+        });
+        game01NamePlayer4.textProperty().addListener((observable,oldValue,newValue) ->{
+            if(newValue.length() > 8)
+                game01NamePlayer4.setText(newValue.substring(0, 8));
+        });
+
+        //////////////////////////////
+        // game points spinner
+        //////////////////////////////
+
+        SpinnerValueFactory<Integer> svfPoints = new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_POINTS, MAX_POINTS, DEFAULT_POINTS);
+        SpinnerValueFactory<Integer> svfRounds = new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_ROUNDS,MAX_ROUNDS, DEFAULT_ROUNDS);
+        game01PointsBox.setValueFactory(svfPoints);
+        game01RoundsBox.setValueFactory(svfRounds);
+
+        // POINTS VALIDATION //
+        StringConverter<Integer> pointsConverter = new StringConverter<>() {
+
+            @Override
+            public Integer fromString(String string) {
+                if(string.isEmpty())
+                    return DEFAULT_POINTS;
+                else
+                    return Integer.parseInt(string);
+            }
+
+            @Override
+            public String toString(Integer object) {
+                return object.toString();
+            }
+
+        };
+
+        UnaryOperator<TextFormatter.Change> pointsFilter = new UnaryOperator<TextFormatter.Change>() {
+
+            @Override
+            public TextFormatter.Change apply(TextFormatter.Change t) {
+
+                String newText = t.getControlNewText() ;
+                if (newText.matches("[0-9]*")) {
+                    return t ;
+                }
+                return null ;
+            }
+        };
+
+        // ROUnds VALIDATION //
+        StringConverter<Integer> roundsConverter = new StringConverter<>() {
+
+            @Override
+            public Integer fromString(String string) {
+                if(string.isEmpty())
+                    return DEFAULT_ROUNDS;
+                else
+                    return Integer.parseInt(string);
+            }
+
+            @Override
+            public String toString(Integer object) {
+                return object.toString();
+            }
+
+        };
+
+        UnaryOperator<TextFormatter.Change> roundsFilter = new UnaryOperator<TextFormatter.Change>() {
+
+            @Override
+            public TextFormatter.Change apply(TextFormatter.Change t) {
+
+                String newText = t.getControlNewText() ;
+                if (newText.matches("[0-9]*")) {
+                    return t ;
+                }
+                return null ;
+            }
+        };
+
+        svfPoints.setConverter(pointsConverter);
+        game01PointsBox.getEditor().setTextFormatter(new TextFormatter<>(pointsConverter,DEFAULT_POINTS,pointsFilter));
+        svfRounds.setConverter(roundsConverter);
+        game01RoundsBox.getEditor().setTextFormatter(new TextFormatter<>(roundsConverter,DEFAULT_ROUNDS,roundsFilter));
+
+
+
     }
 }

@@ -1,5 +1,6 @@
 package com.rmaj91.domain;
 
+import com.rmaj91.Main;
 import com.rmaj91.controller.BoardController;
 import com.rmaj91.controller.Game01Controller;
 import com.rmaj91.utility.Utility;
@@ -8,10 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
 
 
 public class Game01 implements Playable {
@@ -23,14 +21,17 @@ public class Game01 implements Playable {
 	private static int subrounds;
 	private static int playersQuantity;
 	private static boolean doubleOut;
+	private static String[] playersNames;
+
+
+
 
 	// variables //
 	private int[] playerPoints;
-	private String[] playersNames;
+	private int[] playersAverages;
 	private String[] throwFieldsContent = new String[3];
-	private int average=0;
-	private int currentThrow=1;
-	private int currentSubround =1;
+	private int currentThrow;
+	private int currentSubround;
 
 	// Injection setters //
 	public static void setBoardController(BoardController boardController) {
@@ -39,9 +40,19 @@ public class Game01 implements Playable {
 	public static void setGame01Controller(Game01Controller game01Controller) {
 		Game01.game01Controller = game01Controller;
 	}
+
 	// SETTERS/GETTERS //
-	public static int getPlayersQuantity() {
-		return playersQuantity;
+	public int getCurrentSubround() {
+		return currentSubround;
+	}
+	public void setThrowFieldsContent(String[] throwFieldsContent) {
+		this.throwFieldsContent = throwFieldsContent;
+	}
+	public void setPlayersAverages(int[] playersAverages) {
+		this.playersAverages = playersAverages;
+	}
+	public void setPlayerPoints(int[] playerPoints) {
+		this.playerPoints = playerPoints;
 	}
 	public void setCurrentThrow(int currentThrow) {
 		this.currentThrow = currentThrow;
@@ -49,26 +60,10 @@ public class Game01 implements Playable {
 	public int getCurrentThrow() {
 		return this.currentThrow;
 	}
-	public int getCurrentSubround() {
-		return currentSubround;
-	}
-	public void setCurrentSubround(int currentSubround) {
-		this.currentSubround = currentSubround;
-	}
-	public void setPlayersNames(String[] playersNames) {
-		this.playersNames = playersNames;
-	}
-	public void setThrowFieldsContent(String[] throwFieldsContent) {
-		this.throwFieldsContent = throwFieldsContent;
-	}
-	public void setAverage(int average) {
-		this.average = average;
-	}
 
-	public void setPlayerPoints(int[] playerPoints) {
-		this.playerPoints = playerPoints;
+	public static void setPlayersNames(String[] playersNames) {
+		Game01.playersNames = playersNames;
 	}
-
 	public static void setSubrounds(int subrounds) {
 		Game01.subrounds = subrounds;
 	}
@@ -78,10 +73,18 @@ public class Game01 implements Playable {
 	public static void setDoubleOut(boolean doubleOut) {
 		Game01.doubleOut = doubleOut;
 	}
+	public void setCurrentSubround(int currentSubround) {
+		this.currentSubround = currentSubround;
+	}
+	public static int getPlayersQuantity() {
+		return playersQuantity;
+	}
 
 
 	public Game01(){
 		Arrays.fill(throwFieldsContent,"");
+		currentThrow = 1;
+		currentSubround = 1;
 	}
 
 	///////////////////////////
@@ -96,31 +99,49 @@ public class Game01 implements Playable {
 	@Override
 	public Game01 cloneGame(){
 		Game01 newGame = new Game01();
-//		newGame.setCurrentPlayer(this.currentPlayer);
-//		newGame.setCurrentThrow(this.currentThrow);
-//		newGame.setCurrentSubround(this.currentSubround);
-//
-//		for (Player player : playerList) {
-//			Player newPlayer = player.clonePlayer();
-//			newGame.getPlayerList().add(newPlayer);
-//		}
-//
+		newGame.setCurrentSubround(this.currentSubround+1);
+
+		// deep copy of averages //
+		int[] newPlayersAverages= new int[playersAverages.length];
+		for(int i = 0; i< playersAverages.length; i++){
+			// TODO sprawdzic jak z glebokimi kopiami //
+			newPlayersAverages[i] = playersAverages[i];
+		}
+		newGame.setPlayersAverages(newPlayersAverages);
+
+		// depp copy of players points //
+		int[] newPlayersPoints= new int[playerPoints.length];
+		for(int i=0;i<playerPoints.length;i++){
+			// TODO sprawdzic jak z glebokimi kopiami //
+			newPlayersPoints[i] = playerPoints[i];
+		}
+		newGame.setPlayerPoints(newPlayersPoints);
+
+		// deep copy of throwfields //
+		String[] newFieldsContent = new String[3];
+		for(int i=0;i<3;i++){
+			newFieldsContent[i] = new String(throwFieldsContent[i]);
+		}
+		newGame.setThrowFieldsContent(newFieldsContent);
+
 		return newGame;
 	}
 
 	@Override
 	public void next() {
-//		System.out.println("Next Button clicked!");
-//		if(currentRound < Game01.rounds){
-//			currentThrow = 1;
-//			if(currentPlayer == playersQuantity){
-//				currentPlayer = 1;
-//				currentRound ++;
-//			}
-//			Main.gamesRepositoty.addRound(this.cloneGame());
-//			display();
-//			boardController.getThrowField1().requestFocus();
-//		}
+
+
+		System.out.println("Next Button clicked!");
+		if(currentSubround <= Game01.subrounds){
+			// TODO do poprawy ->ustawia rzut zeby po cofnieciu w dobre miejsce wskoczyl)
+			currentThrow = 1;
+
+			Main.gamesRepositoty.getForwardRound(currentSubround-1).display();
+
+			boardController.getThrowField1().requestFocus();
+
+
+		}
 
 	}
 
@@ -145,7 +166,7 @@ public class Game01 implements Playable {
 		for (Filters.IndexMapper indexMapper : filters.getIndexMapperList()) {
 			if(indexMapper.hasKey(radiusIndex,angleIndex)){
 				key=indexMapper.getKey();
-				System.out.println(key);
+				System.out.print(key+"\t");
 				break;
 			}
 		}
@@ -173,7 +194,7 @@ public class Game01 implements Playable {
 	@Override
 	public void display() {
 		// Rounds //
-		boardController.getRoundsLabel().setText("Round: "+ (1+currentSubround/playersQuantity) +"/"+Game01.subrounds/Game01.playersQuantity);
+		boardController.getRoundsLabel().setText("Round: "+ (1+currentSubround/playersQuantity) +"/"+Game01.subrounds /Game01.playersQuantity);
 
 		// TextFields //
 		boardController.getThrowField1().setText(throwFieldsContent[0]);
@@ -181,13 +202,24 @@ public class Game01 implements Playable {
 		boardController.getThrowField3().setText(throwFieldsContent[2]);
 
 		// Big Player name,points,average //
-		boardController.getPlayerNameLabel().setText(playersNames[currentSubround%playersQuantity-1]);
-		boardController.getPlayerPointsLabel().setText(String.valueOf(playerPoints[currentSubround%playersQuantity-1]));
-		boardController.getAverageLabel().setText("Average: "+ average);
+		boardController.getPlayerNameLabel().setText(playersNames[(currentSubround-1)%playersQuantity]);
+		boardController.getPlayerPointsLabel().setText(String.valueOf(playerPoints[(currentSubround-1)%playersQuantity]));
+		boardController.getAverageLabel().setText("Average: "+ playersAverages[(currentSubround-1)%playersQuantity]);
+
+		// turn off highlighting in previous subround
+		if(currentSubround >1){
+			Node node2 = boardController.getGame01PlayersTable().getChildren().get((currentSubround-2)%playersQuantity);;
+			((VBox)node2).getChildren().get(0).getStyleClass().removeIf(style -> style.equals("-fx-background-color: #0388fc;"));
+		}
 
 		//highlight player
-		Node node = boardController.getGame01PlayersTable().getChildren().get(currentSubround%playersQuantity-1);
+		Node node = boardController.getGame01PlayersTable().getChildren().get((currentSubround-1)%playersQuantity);
 		((VBox)node).getChildren().get(0).setStyle("-fx-background-color: #0388fc;");
+
+
+
+
+
 
 	}
 

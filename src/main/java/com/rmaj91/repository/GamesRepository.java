@@ -8,27 +8,45 @@ import java.util.List;
 public class GamesRepository {
 	
 	private List<Playable> gamesList = new LinkedList<>();
-	private int currentRound;
+	Playable currentRound;
 
 	public Playable getGame(int index){
 		return gamesList.get(index);
 	}
-	public Playable getCurrentGame(){
-		return gamesList.get(currentRound-1);
+	public Playable getfirstRound(){
+		return gamesList.get(0);
 	}
 
-
+	public  Playable getCurrentRound(){ return currentRound;}
 
 	public void createNew(Playable game) {
 		this.gamesList.clear();
 		gamesList.add(game);
-		currentRound = 1;
+		currentRound = game;
+		System.out.println("Game created, index: 0");
 	}
 
-	public void addRound(Playable game){
-		gamesList.add(game);
-		currentRound++;
+	public Playable getForwardRound(int index){
+
+		Playable clone = gamesList.get(index).cloneGame();
+		currentRound = clone;
+
+		if(gamesList.size() < index+2) {
+			gamesList.add(clone);
+			System.out.println("Game added, index: "+(index+1));
+			// lub return clone
+			return gamesList.get(index+1);
+		}
+		else{
+			gamesList.set(index,clone);
+			System.out.println("Game setted, index: "+(index+1));
+			// lub return clone
+			return gamesList.get(index+1);
+		}
 	}
+
+
+// jak istnieje to nie robic i orzesuwac po istniejacyh do tylu
 
 
 }
