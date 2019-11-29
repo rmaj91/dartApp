@@ -144,6 +144,7 @@ public class Game01Controller implements Initializable{
         createPlayersHBoxes(getPlayersQuantity());
 
 		Main.gamesRepositotyImpl.getCurrentRound().display();
+        boardController.getThrowField1().requestFocus();
 	}
 
 
@@ -252,9 +253,10 @@ public class Game01Controller implements Initializable{
         String[] playersNames = getPlayersNames(getPlayersQuantity());
         // get blank players array//
         Player[] playersArray = new Player[getPlayersQuantity()];
-        Arrays.fill(playersArray,new Player());
+        for(int i=0;i<getPlayersQuantity();i++){
+            playersArray[i] = new Player();
+        }
         ((Game01)Main.gamesRepositotyImpl.getCurrentRound()).setPlayers(playersArray);
-        //Player[] playersArray = ((Game01) Main.gamesRepositotyImpl.getCurrentRound()).getPlayers();
         // init players Names //
         for(int i=0;i<getPlayersQuantity();i++){
             playersArray[i].setName(playersNames[i]);

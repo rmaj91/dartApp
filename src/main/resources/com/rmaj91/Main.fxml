@@ -57,6 +57,22 @@
                   <Font size="24.0" />
                </font>
             </Label>
+            <ImageView fx:id="newGameIcon" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#newGameIconClicked" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/newGameIcon.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="saveGameIcon" fitHeight="32.0" fitWidth="32.0" layoutX="40.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/save.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
          </children>
       </AnchorPane>
       <HBox fx:id="mainBottomPane" alignment="CENTER_RIGHT" layoutY="560.0" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #8f2f28;">

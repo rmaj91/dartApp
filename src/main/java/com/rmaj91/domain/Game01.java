@@ -71,14 +71,6 @@ public class Game01 implements Playable {
 		return players;
 	}
 
-	// Player Class //
-	//////////////////
-	// TODO maybe static class? what with player clone then?
-
-	////////////////////////////////////////
-	////////////////////////////////////////
-	////////////////////////////////////////
-
 
 	// Constructor //
 	public Game01() {
@@ -97,7 +89,7 @@ public class Game01 implements Playable {
 		Player[] playersArray = new Player[playersQuantity];
 		Arrays.fill(playersArray,new Player());
 		game01.players = playersArray;
-		
+
 		for(int i=0;i<this.players.length;i++){
 			game01.players[i] = this.players[i].clonePlayer();
 		}
@@ -107,31 +99,32 @@ public class Game01 implements Playable {
 	@Override
 	public void next() {
 
-		if(gamesRepositoryImpl.getIndexOfRound(this)+1 <= Game01.roundsMaxNumber){
-
-			System.out.println("Next Button action!");
-
-			if(currentPlayer +1> Game01.playersQuantity)
-			{
+		if(gamesRepositoryImpl.getIndexOfRound(this)+1 < Game01.roundsMaxNumber || currentPlayer != playersQuantity){
+			if(currentPlayer  == Game01.playersQuantity){
+				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayers()[currentPlayer-1].setCurrentThrow(1);
 				gamesRepositoryImpl.pushRound(this.cloneRound());
 			}
 			else{
+				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayers()[currentPlayer-1].setCurrentThrow(1);
 				currentPlayer++;
 			}
-
 			gamesRepositoryImpl.getCurrentRound().display();
 		}
+		else
+			return;
 	}
 
 	@Override
 	public void back() {
-		System.out.println("Back Button clicked!");
-		if(currentPlayer == 1){
-			gamesRepositoryImpl.pullRound();
+
+		if(gamesRepositoryImpl.getIndexOfRound(this) > 0 || currentPlayer != 1){
+			if(currentPlayer == 1)
+				gamesRepositoryImpl.pullRound();
+			else
+				currentPlayer--;
 		}
 		else
-			currentPlayer--;
-
+			return;
 		gamesRepositoryImpl.getCurrentRound().display();
 	}
 
@@ -139,7 +132,7 @@ public class Game01 implements Playable {
 	public void throwDart(MouseEvent event) {
 		int currentThrow = players[currentPlayer - 1].getCurrentThrow();
 
-		if (currentThrow == 3)
+		if (currentThrow == 4)
 			return;
 		else {
 
@@ -152,7 +145,6 @@ public class Game01 implements Playable {
 			for (Filters.IndexMapper indexMapper : Utility.filters.getIndexMapperList()) {
 				if (indexMapper.hasKey(radiusIndex, angleIndex)) {
 					key = indexMapper.getKey();
-//				System.out.print(key+"\t");
 					break;
 				}
 			}
@@ -172,11 +164,8 @@ public class Game01 implements Playable {
 			} else if (currentThrow == 3)
 				boardController.getThrowField3().setText(key);
 
-			System.out.println(currentThrow);
-			players[currentPlayer - 1].setCurrentThrow(currentThrow++);
-			System.out.println(currentThrow);
-			// get current hrow
-			System.out.println(players[currentPlayer - 1].getCurrentThrow());
+			players[currentPlayer - 1].setCurrentThrow(currentThrow+1);
+
 		}
 
 	}
@@ -184,6 +173,7 @@ public class Game01 implements Playable {
 
 	@Override
 	public void display() {
+		boardController.getThrowField1().requestFocus();
 		// Rounds //
 		int currentRound = gamesRepositoryImpl.getIndexOfRound(this)+1;
 		boardController.getRoundsLabel().setText("Round: "+ currentRound +"/"+Game01.roundsMaxNumber);
@@ -195,6 +185,9 @@ public class Game01 implements Playable {
 
 		// Big Player name,points,average //
 		boardController.getPlayerNameLabel().setText(players[currentPlayer-1].getName());
+//		for (Player player : players) {
+//			System.out.println(player.getName());
+//		}
 		boardController.getPlayerPointsLabel().setText(String.valueOf(players[currentPlayer-1].getPoints()));
 		boardController.getAverageLabel().setText("Average: "+ players[currentPlayer-1].getAverage());
 

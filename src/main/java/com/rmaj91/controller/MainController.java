@@ -56,6 +56,12 @@ public class MainController implements Initializable {
 	@FXML
 	private Slider volumeSlider;
 
+	@FXML
+	private ImageView newGameIcon;
+
+	@FXML
+	private ImageView saveGameIcon;
+
 	private double xOffSet = 0;
 	private double yOffSet = 0;
 	
@@ -110,6 +116,11 @@ public class MainController implements Initializable {
 	@FXML
 	public void closeApplication() {
 		Main.closeApplication(null);
+	}
+
+	public void newGameIconClicked(){
+		boardController.getGame01PlayersTable().getChildren().clear();
+		welcomeController.toFront();
 	}
 	
 }	

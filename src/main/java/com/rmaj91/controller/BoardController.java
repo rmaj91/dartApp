@@ -17,6 +17,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 
 
 import java.net.URL;
@@ -105,6 +107,7 @@ public class BoardController implements Initializable {
         return averageLabel;
     }
 
+
     public void toFront() {
         mainStackPane.toFront();
     }
@@ -145,6 +148,8 @@ public class BoardController implements Initializable {
     public HBox getGame01PlayersTable() {
         return game01PlayersTable;
     }
+
+
 
     public VBox getStatusPlayer1() {
         return statusPlayer1;
