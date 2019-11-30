@@ -37,5 +37,15 @@ public class Cricket implements Playable {
         return null;
     }
 
+    @Override
+    public void saveThrowFields() {
+
+    }
+
+    @Override
+    public void calculatePoints() {
+
+    }
+
 
 }

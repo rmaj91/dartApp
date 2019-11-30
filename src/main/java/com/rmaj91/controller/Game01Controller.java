@@ -135,6 +135,8 @@ public class Game01Controller implements Initializable{
 
 
 	public void letsPlayButtonClicked() {
+
+
         boardController.toFront();
         boardController.getGame01ScoreTable().toFront();
         displayDoubleOutLabel();
@@ -145,8 +147,9 @@ public class Game01Controller implements Initializable{
 
 		Main.gamesRepositotyImpl.getCurrentRound().display();
         boardController.getThrowField1().requestFocus();
-	}
+        boardController.getMainStackPane().setDisable(false);
 
+	}
 
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
@@ -255,6 +258,8 @@ public class Game01Controller implements Initializable{
         Player[] playersArray = new Player[getPlayersQuantity()];
         for(int i=0;i<getPlayersQuantity();i++){
             playersArray[i] = new Player();
+//            for(int j=0;j<3;j++)
+//                playersArray[i].setThrowFieldsByIndex(j,new String());
         }
         ((Game01)Main.gamesRepositotyImpl.getCurrentRound()).setPlayers(playersArray);
         // init players Names //

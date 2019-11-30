@@ -102,6 +102,16 @@ public class BoardController implements Initializable {
     @FXML
     private Canvas canvas;
 
+    TextField[] throwTextFieldArray;
+
+    public TextField[] getThrowTextFieldArray() {
+        return throwTextFieldArray;
+    }
+
+    public StackPane getMainStackPane() {
+        return mainStackPane;
+    }
+
     public Label getAverageLabel() {
         return averageLabel;
     }
@@ -239,21 +249,39 @@ public class BoardController implements Initializable {
             for(int x=0;x<canvas.getWidth();x++)
                 pointList.add(new Point(x,y));
         }
-        // adding textField validation
+
+        throwTextFieldArray = new TextField[3];
+        throwTextFieldArray[0] = throwField1;
+        throwTextFieldArray[1] = throwField2;
+        throwTextFieldArray[2] = throwField3;
+
+        // adding textField validation and save()
         throwField1.textProperty().addListener((observable,oldValue,newValue) ->{
             if(newValue.length() > 10)
                 throwField1.setText(newValue.substring(0, 10));
+            // todo ogarnac zapis i przeliczenie to zmianie wartosci bo w tym przypadku zapisywalo 2x, za 2gim razem dla nast gracza
+            // liczy
+            //Main.gamesRepositotyImpl.getCurrentRound().saveThrowFields();
+            //test
+            Main.gamesRepositotyImpl.getCurrentRound().calculatePoints();
         });
-        // adding textField validation
+        // adding textField validation and save()
         throwField2.textProperty().addListener((observable,oldValue,newValue) ->{
             if(newValue.length() > 10)
                 throwField2.setText(newValue.substring(0, 10));
+            //Main.gamesRepositotyImpl.getCurrentRound().saveThrowFields();
+            //test
+            Main.gamesRepositotyImpl.getCurrentRound().calculatePoints();
         });
-        // adding textField validation
+        // adding textField validation and save()
         throwField3.textProperty().addListener((observable,oldValue,newValue) ->{
             if(newValue.length() > 10)
                 throwField3.setText(newValue.substring(0, 10));
+            //Main.gamesRepositotyImpl.getCurrentRound().saveThrowFields();
+            //test
+            Main.gamesRepositotyImpl.getCurrentRound().calculatePoints();
         });
+
     }
 
     private GraphicsContext graphicsContext2D;
@@ -261,17 +289,17 @@ public class BoardController implements Initializable {
 
     public void onClickThrowField1(){
         throwField1.selectAll();
-        System.out.println("TextField1 Marked!");
+        System.out.println("TextField 1 Marked!");
         Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(1);
     }
     public void onClickThrowField2(){
         throwField2.selectAll();
-        System.out.println("TextField2 Marked!");
+        System.out.println("TextField 2 Marked!");
         Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(2);
     }
     public void onClickThrowField3(){
         throwField3.selectAll();
-        System.out.println("TextField3 Marked!");
+        System.out.println("TextField 3 Marked!");
         Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(3);
     }
 

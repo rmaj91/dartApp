@@ -11,8 +11,16 @@ public class Player{
 
     public Player() {
         average=0;
+
         throwFields = new String[3];
-        Arrays.fill(throwFields,"");
+        throwFields[0] = new String();
+        throwFields[1] = new String();
+        throwFields[2] = new String();
+
+//        throwFields = new String[3];
+//        for (String throwField : throwFields) {
+//            throwField = new String();
+//        }
         currentThrow=1;
     }
 
@@ -25,6 +33,10 @@ public class Player{
     }
 
     // Getters //
+
+    public String[] getThrowFields() {
+        return throwFields;
+    }
 
     public int getPoints() {
         return points;
@@ -42,10 +54,12 @@ public class Player{
         return currentThrow;
     }
 
-    public String[] getThrowFields() {
-        return throwFields;
-    }
+
     // Setters //
+
+    public void setThrowFieldsByIndex(int index,String string) {
+        this.throwFields[index] = string;
+    }
 
     public void setCurrentThrow(int currentThrow) {
         this.currentThrow = currentThrow;

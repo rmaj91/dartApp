@@ -1,5 +1,6 @@
 package com.rmaj91.repository;
 
+import com.rmaj91.domain.Player;
 import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.interfaces.Playable;
 
@@ -55,5 +56,13 @@ public class GamesRepositoryImpl implements GamesRepository {
 	@Override
 	public int getIndexOfRound(Playable round) {
 		return gamesList.indexOf(round);
+	}
+
+	@Override
+	public Playable getPreviousRound() {
+		if(gamesList.size() == 1)
+			return null;
+		else
+			return gamesList.get(gamesList.size()-2);
 	}
 }
