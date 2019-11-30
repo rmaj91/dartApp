@@ -3,7 +3,7 @@ package com.rmaj91.repository;
 import com.rmaj91.domain.Cricket;
 import com.rmaj91.domain.Game01;
 //import com.rmaj91.domain.MasterCricket;
-import com.rmaj91.domain.Playable;
+import com.rmaj91.interfaces.Playable;
 
 public class GameFactory {
 	

@@ -1,8 +1,9 @@
 package com.rmaj91.domain;
 
+import com.rmaj91.interfaces.Playable;
 import javafx.scene.input.MouseEvent;
 
-public class Cricket implements Playable{
+public class Cricket implements Playable {
 
 
     @Override

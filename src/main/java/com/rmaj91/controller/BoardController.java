@@ -1,7 +1,8 @@
 package com.rmaj91.controller;
 
 import com.rmaj91.Main;
-import com.rmaj91.domain.Filters;
+import com.rmaj91.domain.Point;
+import com.rmaj91.utility.Filters;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -17,8 +18,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
 
 
 import java.net.URL;

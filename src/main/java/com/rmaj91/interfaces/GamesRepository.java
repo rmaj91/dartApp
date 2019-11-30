@@ -1,6 +1,6 @@
-package com.rmaj91.repository;
+package com.rmaj91.interfaces;
 
-import com.rmaj91.domain.Playable;
+import com.rmaj91.interfaces.Playable;
 
 public interface GamesRepository {
     void pushRound(Playable round);

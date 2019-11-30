@@ -1,4 +1,4 @@
-package com.rmaj91.controller;
+package com.rmaj91.domain;
 
 public class Point {
     private int x;

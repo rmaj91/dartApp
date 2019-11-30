@@ -1,4 +1,4 @@
-package com.rmaj91.domain;
+package com.rmaj91.interfaces;
 
 
 import javafx.scene.input.MouseEvent;

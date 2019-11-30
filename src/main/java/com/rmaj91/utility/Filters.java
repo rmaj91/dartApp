@@ -1,4 +1,4 @@
-package com.rmaj91.domain;
+package com.rmaj91.utility;
 
 import java.util.ArrayList;
 import java.util.List;

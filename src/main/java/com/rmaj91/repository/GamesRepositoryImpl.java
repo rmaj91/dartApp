@@ -1,12 +1,12 @@
 package com.rmaj91.repository;
 
-import com.rmaj91.domain.Game01;
-import com.rmaj91.domain.Playable;
+import com.rmaj91.interfaces.GamesRepository;
+import com.rmaj91.interfaces.Playable;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class GamesRepositoryImpl implements GamesRepository{
+public class GamesRepositoryImpl implements GamesRepository {
 	
 	private List<Playable> gamesList;
 

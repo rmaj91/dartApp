@@ -1,11 +1,12 @@
 package com.rmaj91.utility;
 
-import com.rmaj91.domain.Filters;
 import com.rmaj91.domain.ThrowValues;
 
 public class Utility {
 
     public static final Filters filters = new Filters();
+
+    private Utility() {}
 
     // statyczne metody
     public static ThrowValues readValues(String string){
