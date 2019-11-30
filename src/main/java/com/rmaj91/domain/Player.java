@@ -1,11 +1,14 @@
 package com.rmaj91.domain;
 
-import java.util.Arrays;
+import com.rmaj91.repository.GamesRepositoryImpl;
 
 public class Player{
+
+    public static GamesRepositoryImpl gamesRepositoryImpl;
+
     private String name;
     private int points;
-    private int average;
+    private double average;
     private String[] throwFields;
     private int currentThrow;
 
@@ -28,7 +31,8 @@ public class Player{
         Player player = new Player();
         player.name = this.name;
         player.points = this.points;
-        //player.average = (Game01.startingPoints - this.points)/ (gamesRepositoryImpl.getIndexOfRound(Game01.this)+1);
+        // calculating average
+        player.average = (Game01.getStartingPoints() - player.points) / (gamesRepositoryImpl.getIndexOfRound(gamesRepositoryImpl.getCurrentRound())+1);
         return player;
     }
 
@@ -42,7 +46,7 @@ public class Player{
         return points;
     }
 
-    public int getAverage() {
+    public double getAverage() {
         return average;
     }
 
@@ -57,7 +61,12 @@ public class Player{
 
     // Setters //
 
-    public void setThrowFieldsByIndex(int index,String string) {
+
+    public void setAverage(double average) {
+        this.average = average;
+    }
+
+    public void setThrowFieldsByIndex(int index, String string) {
         this.throwFields[index] = string;
     }
 

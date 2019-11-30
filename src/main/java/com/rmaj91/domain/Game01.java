@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 
+import javax.swing.*;
 import java.util.Arrays;
 
 
@@ -103,7 +104,7 @@ public class Game01 implements Playable {
 
 	@Override
 	public void next() {
-
+        //calculateAverage();
 		gamesRepositoryImpl.getCurrentRound().saveThrowFields();
 
 //		for (String player : players[currentPlayer-1].getThrowFields()) {
@@ -211,7 +212,7 @@ public class Game01 implements Playable {
 		// Big Player name,points,average //
 		boardController.getPlayerNameLabel().setText(players[currentPlayer-1].getName());
 		boardController.getPlayerPointsLabel().setText(String.valueOf(players[currentPlayer-1].getPoints()));
-		boardController.getAverageLabel().setText("Average: "+ players[currentPlayer-1].getAverage());
+		boardController.getAverageLabel().setText("Average: "+ String.format("%.1f",players[currentPlayer-1].getAverage()));
 
 		// display Players points //
 
@@ -328,6 +329,13 @@ public class Game01 implements Playable {
 
 	}
 
+//	private void calculateAverage() {
+//	    if(gamesRepositoryImpl.getIndexOfRound(this) !=0) {
+//            double average = (Game01.startingPoints - players[currentPlayer-1].getPoints()) / gamesRepositoryImpl.getIndexOfRound(this);
+//            players[currentPlayer-1].setAverage(average);
+//        }
+//    }
+
 	private boolean isWinner(int newPoints, ThrowValues throwValue) {
 		if(doubleOut && newPoints == 0 && throwValue.getMulitplier() == 2){
 			return true;
@@ -378,8 +386,11 @@ public class Game01 implements Playable {
 		return new ThrowValues(value,multiplier);
 	}
 
+    public static int getStartingPoints() {
+        return startingPoints;
+    }
 
-	//	@Override
+//	@Override
 //	public void throwDart(MouseEvent event) {
 //		if(currentThrow == 4)
 //			return;

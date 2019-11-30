@@ -14,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -122,5 +123,21 @@ public class MainController implements Initializable {
 		boardController.getGame01PlayersTable().getChildren().clear();
 		welcomeController.toFront();
 	}
-	
+
+	public void saveGameIconClicked() {
+		welcomeController.loadExistingGame();
+	}
+
+	public void volumeIconClicked(){
+		if(volumeIcon.getOpacity() == 0.58){
+			volumeIcon.setOpacity(1);
+			volumeIcon.setImage(new Image("images/volume_up.png"));
+			volumeSlider.setDisable(false);
+		}
+		else{
+			volumeIcon.setOpacity(0.58);
+			volumeIcon.setImage(new Image("images/volume_off.png"));
+			volumeSlider.setDisable(true);
+		}
+	}
 }	

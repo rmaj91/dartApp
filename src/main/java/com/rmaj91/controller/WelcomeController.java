@@ -59,9 +59,11 @@ public class WelcomeController implements Initializable {
     
     @FXML
     private Button exitButton;
-    
-    
-	@Override
+
+    private MainController mainController;
+
+
+    @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		chooseGameComboBox.getItems().addAll("'01 Game","Cricket","Master Cricket");
 		chooseGameComboBox.getSelectionModel().selectFirst();
@@ -89,7 +91,7 @@ public class WelcomeController implements Initializable {
 
     @FXML
     public void loadExistingGame() {	
-    	
+
     	
     }
     

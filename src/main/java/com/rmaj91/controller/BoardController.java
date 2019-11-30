@@ -281,7 +281,6 @@ public class BoardController implements Initializable {
             //test
             Main.gamesRepositotyImpl.getCurrentRound().calculatePoints();
         });
-
     }
 
     private GraphicsContext graphicsContext2D;

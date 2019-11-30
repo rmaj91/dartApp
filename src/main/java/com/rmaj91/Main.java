@@ -1,6 +1,7 @@
 package com.rmaj91;
 
 import com.rmaj91.domain.Game01;
+import com.rmaj91.domain.Player;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +36,7 @@ public class Main extends Application {
             //scene.getStylesheets().add(getClass().getResource("css/main.css").toExternalForm());
             stage = primaryStage;
             Game01.setGamesRepositoryImpl(gamesRepositotyImpl);
+            Player.gamesRepositoryImpl = gamesRepositotyImpl;
 
             primaryStage.getIcons().add(new Image("images/dartBoard.png"));
             primaryStage.setTitle("Dart Maju v.1.0.");
