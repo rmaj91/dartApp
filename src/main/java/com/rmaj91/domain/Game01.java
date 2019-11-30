@@ -163,6 +163,8 @@ public class Game01 implements Playable {
 				}
 			}
 
+
+
 			////////////////////////////////////////////
 			System.out.print("Rzut nr: " + currentThrow + " Pressed: x = " + xCartesian + "  y = " + yCartesian + "\t");
 			System.out.print(key + "\t");
@@ -179,6 +181,10 @@ public class Game01 implements Playable {
 				boardController.getThrowField3().setText(new String(key));
 
 			players[currentPlayer - 1].setCurrentThrow(currentThrow+1);
+
+			saveThrowFields();
+			//calculatePoints();
+			display();
 
 			// todo
 			System.out.print(players[currentPlayer-1].getThrowFields()[0].hashCode()+"\t");
