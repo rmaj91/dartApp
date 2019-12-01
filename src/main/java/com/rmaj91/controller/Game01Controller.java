@@ -231,8 +231,8 @@ public class Game01Controller implements Initializable{
             vBox.setAlignment(Pos.BOTTOM_CENTER);
             vBox.setMinWidth(100);
 
-            vBox.getChildren().addAll(createPlayerLabel(playersNames[i],false),
-                    createPlayerLabel(String.valueOf(getStartingPoints()),true));
+            vBox.getChildren().addAll(createPlayerLabel(Main.gamesRepositotyImpl.getCurrentRound().getPlayers()[i].getName(),false),
+                    createPlayerLabel(String.valueOf(Game01.getStartingPoints()),true));
             boardController.getGame01PlayersTable().getChildren().add(vBox);
         }
     }

@@ -10,6 +10,8 @@ public interface GamesRepository {
     void createNewGame(Playable round);
     boolean saveGame();
     boolean loadGame();
+    void clear();
+    boolean isEmpty();
     int getIndexOfRound(Playable round);
     Playable getPreviousRound();
 }

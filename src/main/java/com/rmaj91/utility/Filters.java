@@ -101,7 +101,7 @@ public class Filters {
         // Radius mapping //
         radiusList.add(new RadiusScope(0,8));
         radiusList.add(new RadiusScope(9,19));
-        radiusList.add(new RadiusScope(20,117));
+        radiusList.add(new RadiusScope(20,116));
         radiusList.add(new RadiusScope(118,126));
         radiusList.add(new RadiusScope(127,194));
         radiusList.add(new RadiusScope(195,205));

@@ -1,11 +1,12 @@
 package com.rmaj91.controller;
 
 import com.rmaj91.Main;
+import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.Point;
-import com.rmaj91.utility.Filters;
 import com.rmaj91.utility.Utility;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -19,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 
 import java.net.URL;
@@ -465,8 +467,6 @@ public class BoardController implements Initializable {
                 })
                 .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK));
         ////////////////////////////////
-
-//        boardPane.setStyle("-fx-background-color: radial-gradient(center 50% 50%, radius 55%, #198909, #333333);");
     }
 
 
@@ -480,18 +480,47 @@ public class BoardController implements Initializable {
 
     public void onClickThrowField1(){
         throwField1.selectAll();
-        System.out.println("TextField 1 Marked!");
         Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(1);
     }
     public void onClickThrowField2(){
         throwField2.selectAll();
-        System.out.println("TextField 2 Marked!");
         Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(2);
     }
     public void onClickThrowField3(){
         throwField3.selectAll();
-        System.out.println("TextField 3 Marked!");
         Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(3);
+    }
+
+    //todo dokonczyc init VBoxes
+    public void initAndDisplay(){
+        int currentPlayer = Main.gamesRepositotyImpl.getCurrentRound().getCurrentPlayer();
+        int length = Main.gamesRepositotyImpl.getCurrentRound().getPlayers().length;
+
+
+        for (int i = 0; i < length; i++) {
+
+            VBox vBox = new VBox();
+            vBox.setAlignment(Pos.BOTTOM_CENTER);
+            vBox.setMinWidth(100);
+
+            vBox.getChildren().addAll(createPlayerLabel( Main.gamesRepositotyImpl.getCurrentRound().getPlayers()[i].getName(),false),
+                    createPlayerLabel(String.valueOf(Game01.getStartingPoints()),true));
+            game01PlayersTable.getChildren().add(vBox);
+
+        }
+        Main.gamesRepositotyImpl.getCurrentRound().display();
+        boardPane.toFront();
+        game01ScoreTable.toFront();
+    }
+
+    private Label createPlayerLabel(String text,boolean ifBold){
+        Label playerLabel = new Label();
+        playerLabel.setText(text);
+        playerLabel.setFont(new Font("System",22));
+        playerLabel.setTextFill(Color.WHITE);
+        if(ifBold)
+            playerLabel.setStyle("-fx-font-weight: bold");
+        return playerLabel;
     }
 
 }

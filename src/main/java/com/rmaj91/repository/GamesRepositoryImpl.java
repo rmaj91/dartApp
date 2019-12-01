@@ -1,21 +1,29 @@
 package com.rmaj91.repository;
 
-import com.rmaj91.domain.Player;
+import com.rmaj91.Main;
+import com.rmaj91.controller.BoardController;
+import com.rmaj91.domain.Game01;
 import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.interfaces.Playable;
+import javafx.geometry.Pos;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
 public class GamesRepositoryImpl implements GamesRepository {
+
+    private BoardController boardController;
 	
 	private List<Playable> gamesList;
 
-	public GamesRepositoryImpl() {
+    public void setBoardController(BoardController boardController) {
+        this.boardController = boardController;
+    }
+
+    public GamesRepositoryImpl() {
 		gamesList = new LinkedList<>();
 	}
 
@@ -63,29 +71,83 @@ public class GamesRepositoryImpl implements GamesRepository {
 	@Override
 	public boolean saveGame() {
 
-//		FileOutputStream outputStream = new FileOutputStream("plik.dart");
-//		ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-//		for (Playable round : gamesList) {
-//			objectOutputStream.writeObject(round);
-//		}
-//
+		if(gamesList.isEmpty())
+			return false;
+        //Show save file dialog
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(Main.stage);
 
+        DataOutputStream dataOutputStream;
 
-		//todo save
-		return false;
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+            dataOutputStream = new DataOutputStream(outputStream);
+            dataOutputStream.writeBoolean(Game01.isDoubleOut());
+            dataOutputStream.write(Game01.getPlayersQuantity());
+            dataOutputStream.write(Game01.getRoundsMaxNumber());
+            dataOutputStream.write(Game01.getStartingPoints());
+
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(gamesList);
+
+            dataOutputStream.close();
+        } catch (IOException exception) {
+            System.out.println(exception);
+            return false;
+        }
+
+		return true;
 	}
+
 
 	@Override
 	public boolean loadGame() {
-//		FileInputStream fileInputStream = new FileInputStream("plik.dart");
-//
-//
-//		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+        //Show save file dialog
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showOpenDialog(Main.stage);
+
+        DataInputStream dataInputStream;
+        try {
+            FileInputStream inputStream = new FileInputStream(file);
+            dataInputStream = new DataInputStream(inputStream);
+            Game01.setDoubleOut(dataInputStream.readBoolean());
+            Game01.setPlayersQuantity(dataInputStream.readInt());
+            Game01.setRoundsMaxNumber(dataInputStream.readInt());
+            Game01.setStartingPoints(dataInputStream.readInt());
+
+            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+            gamesList = (List<Playable>)objectInputStream.readObject();
+
+            dataInputStream.close();
+        } catch (IOException exception) {
+            System.out.println(exception);
+            System.out.println("io exception");
+            return false;
+        }catch (ClassNotFoundException exception){
+            System.out.println(exception);
+            System.out.println("class not found exception");
+        }
 
 
-		return false;
+        boardController.initAndDisplay();
+        return true;
 
 	}
 
+    @Override
+    public void clear() {
+        gamesList.clear();
+    }
 
+    @Override
+    public boolean isEmpty() {
+        if(gamesList.isEmpty())
+            return true;
+        else
+            return false;
+    }
 }

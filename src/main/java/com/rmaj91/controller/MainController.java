@@ -92,6 +92,7 @@ public class MainController implements Initializable {
 		game01Controller.setBoardController(boardController);
 		Game01.setGame01Controller(game01Controller);
 		Game01.setBoardController(boardController);
+		Main.gamesRepositotyImpl.setBoardController(boardController);
 
 		initSoundFiles();
 
@@ -131,12 +132,25 @@ public class MainController implements Initializable {
 	}
 
 	public void newGameIconClicked(){
+
+		if(!Main.gamesRepositotyImpl.isEmpty()){
+			Alert a = new Alert(Alert.AlertType.NONE, "Are you sure you want to abandon game?", ButtonType.YES,
+					ButtonType.NO);
+			Optional<ButtonType> confirm = a.showAndWait();
+			if (confirm.isPresent() && confirm.get() == ButtonType.NO)
+				return;
+		}
+
+
+		Main.gamesRepositotyImpl.clear();
 		boardController.getGame01PlayersTable().getChildren().clear();
 		welcomeController.toFront();
 	}
 
 	public void saveGameIconClicked() {
 		// todo zapis do pliku
+		//if(boardController.getGame01ScoreTable().is)
+		Main.gamesRepositotyImpl.saveGame();
 	}
 
 	public void volumeIconClicked(){

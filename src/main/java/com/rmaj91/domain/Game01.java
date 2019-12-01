@@ -26,9 +26,9 @@ public class Game01 implements Playable, Serializable {
 	private static Game01Controller game01Controller;
 	private static GamesRepositoryImpl gamesRepositoryImpl;
 	// static variables //
-	private static int roundsMaxNumber;
-	private static int playersQuantity;
 	private static boolean doubleOut;
+	private static int playersQuantity;
+	private static int roundsMaxNumber;
 	private static int startingPoints;
 	// variables //
 	Player[] players;
@@ -73,10 +73,29 @@ public class Game01 implements Playable, Serializable {
 	// GETTERS //
 	/////////////
 
+
+
 	public Player[] getPlayers() {
 		return players;
 	}
 
+	public static boolean isDoubleOut() {
+		return doubleOut;
+	}
+
+	public static int getPlayersQuantity() {
+		return playersQuantity;
+	}
+
+	public static int getRoundsMaxNumber() {
+		return roundsMaxNumber;
+
+	}
+
+	@Override
+	public int getCurrentPlayer() {
+		return currentPlayer;
+	}
 
 	// Constructor //
 	public Game01() {

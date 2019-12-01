@@ -47,5 +47,15 @@ public class Cricket implements Playable {
 
     }
 
+    @Override
+    public int getCurrentPlayer() {
+        return 0;
+    }
+
+    @Override
+    public Player[] getPlayers() {
+        return new Player[0];
+    }
+
 
 }

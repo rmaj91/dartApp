@@ -1,6 +1,7 @@
 package com.rmaj91.interfaces;
 
 
+import com.rmaj91.domain.Player;
 import com.rmaj91.domain.ThrowValues;
 import javafx.scene.input.MouseEvent;
 
@@ -14,6 +15,8 @@ public interface Playable {
     Playable cloneRound();
     void saveThrowFields();
     void calculatePoints();
+    int getCurrentPlayer();
+    public Player[] getPlayers();
 //    boolean ifWin();
 
 }

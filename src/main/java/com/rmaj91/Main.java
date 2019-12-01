@@ -39,6 +39,7 @@ public class Main extends Application {
             Game01.setGamesRepositoryImpl(gamesRepositotyImpl);
             Player.gamesRepositoryImpl = gamesRepositotyImpl;
 
+
             primaryStage.getIcons().add(new Image("images/dartBoard.png"));
             primaryStage.setTitle("Dart Maju v.1.0.");
             primaryStage.setScene(scene);

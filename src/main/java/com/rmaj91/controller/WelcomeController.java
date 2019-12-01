@@ -91,7 +91,7 @@ public class WelcomeController implements Initializable {
 
     @FXML
     public void loadExistingGame() {	
-        // todo wczytywanie
+        Main.gamesRepositotyImpl.loadGame();
     }
     
     private Game01Controller game01Controller;	
