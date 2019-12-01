@@ -5,8 +5,7 @@ import com.rmaj91.controller.BoardController;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.interfaces.Playable;
-import javafx.geometry.Pos;
-import javafx.scene.layout.VBox;
+
 import javafx.stage.FileChooser;
 
 import java.io.*;
@@ -16,8 +15,9 @@ import java.util.List;
 public class GamesRepositoryImpl implements GamesRepository {
 
     private BoardController boardController;
-	
 	private List<Playable> gamesList;
+
+
 
     public void setBoardController(BoardController boardController) {
         this.boardController = boardController;
@@ -85,9 +85,9 @@ public class GamesRepositoryImpl implements GamesRepository {
             FileOutputStream outputStream = new FileOutputStream(file);
             dataOutputStream = new DataOutputStream(outputStream);
             dataOutputStream.writeBoolean(Game01.isDoubleOut());
-            dataOutputStream.write(Game01.getPlayersQuantity());
-            dataOutputStream.write(Game01.getRoundsMaxNumber());
-            dataOutputStream.write(Game01.getStartingPoints());
+            dataOutputStream.writeInt(Game01.getPlayersQuantity());
+            dataOutputStream.writeInt(Game01.getRoundsMaxNumber());
+            dataOutputStream.writeInt(Game01.getStartingPoints());
 
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(gamesList);
@@ -98,6 +98,8 @@ public class GamesRepositoryImpl implements GamesRepository {
             return false;
         }
 
+        //todo inform window o sukcesie
+        System.out.println("Save succefully!");
 		return true;
 	}
 
@@ -131,7 +133,6 @@ public class GamesRepositoryImpl implements GamesRepository {
             System.out.println(exception);
             System.out.println("class not found exception");
         }
-
 
         boardController.initAndDisplay();
         return true;

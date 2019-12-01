@@ -509,8 +509,13 @@ public class BoardController implements Initializable {
 
         }
         Main.gamesRepositotyImpl.getCurrentRound().display();
-        boardPane.toFront();
+
+        toFront();
         game01ScoreTable.toFront();
+        if(Game01.isDoubleOut())
+            doubleOut.setVisible(true);
+        else
+            doubleOut.setVisible(false);
     }
 
     private Label createPlayerLabel(String text,boolean ifBold){
