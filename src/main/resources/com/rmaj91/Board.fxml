@@ -20,7 +20,7 @@
          <children>
             <StackPane fx:id="boardPane" prefHeight="500.0" prefWidth="500.0">
                <children>
-                  <ImageView fx:id="dartBoard" fitHeight="500.0" fitWidth="500.0" opacity="0.67" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="dartBoard" fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/dartBoardNew.png" />
                      </image>

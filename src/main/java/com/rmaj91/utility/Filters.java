@@ -16,6 +16,14 @@ public class Filters {
         private double firstAngle;
         private double secondAngle;
 
+        public double getFirstAngle() {
+            return firstAngle;
+        }
+
+        public double getSecondAngle() {
+            return secondAngle;
+        }
+
         public AngleScope(double firstAngle, double secondAngle) {
             this.firstAngle = firstAngle;
             this.secondAngle = secondAngle;
@@ -94,9 +102,9 @@ public class Filters {
         radiusList.add(new RadiusScope(0,8));
         radiusList.add(new RadiusScope(9,19));
         radiusList.add(new RadiusScope(20,117));
-        radiusList.add(new RadiusScope(118,127));
-        radiusList.add(new RadiusScope(128,193));
-        radiusList.add(new RadiusScope(194,205));
+        radiusList.add(new RadiusScope(118,126));
+        radiusList.add(new RadiusScope(127,194));
+        radiusList.add(new RadiusScope(195,205));
         radiusList.add(new RadiusScope(206,249));
         radiusList.add(new RadiusScope(249,0));
 

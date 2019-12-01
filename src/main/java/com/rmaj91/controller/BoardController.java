@@ -255,9 +255,12 @@ public class BoardController implements Initializable {
         currentAngleIndex = -1;
     }
 
+
+    // todo dartboard hints
+    // todo serialize, save/load
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        canvas.setOpacity(0.8);
+        canvas.setOpacity(0.75);
         this.graphicsContext2DHighlight = canvas.getGraphicsContext2D();
         this.pixelWriterHighlight = graphicsContext2DHighlight.getPixelWriter();
 
@@ -336,7 +339,7 @@ public class BoardController implements Initializable {
 
         // Radius SINGLE BULL //
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 20)
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 19)
                 .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),greenColor) );
         ////////////////////////////////
 
@@ -345,6 +348,20 @@ public class BoardController implements Initializable {
                 .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 9)
                 .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),redColor) );
         ////////////////////////////////
+
+        // todo
+        // Radius
+        pointList.stream()
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 8)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+        ////////////////////////////////
+// todo
+        // Radius D
+        pointList.stream()
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 18)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+        ////////////////////////////////
+
 
         // Radius < 205 && Radius > 195 NOT EVEN indexes
         pointList.stream()
@@ -403,7 +420,45 @@ public class BoardController implements Initializable {
                 })
                 .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),greenColor));
         ////////////////////////////////
-        boardPane.setStyle("-fx-background-color: radial-gradient(center 80% 80%, radius 55%, #198909, #333333);");
+
+        // todo
+        // Radius D
+        pointList.stream()
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 126)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+        ////////////////////////////////
+        // todo
+        // Radius D
+        pointList.stream()
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 116)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+        ////////////////////////////////
+        // todo
+        // Radius D
+        pointList.stream()
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 194)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+        ////////////////////////////////
+
+//todo
+        pointList.stream()
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) > 18)
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 205)
+                .filter(point -> {
+                    for(int i=0;i<20;i++){
+                        if(Utility.filters.getAngleList().get(i).getFirstAngle()
+                                == getAngle(getCenterX(point.getX()),getCenterY(point.getY()))
+                        || Utility.filters.getAngleList().get(i).getSecondAngle()
+                                == getAngle(getCenterX(point.getX()),getCenterY(point.getY())))
+
+                            return true;
+                    }
+                    return false;
+                })
+                .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK));
+        ////////////////////////////////
+
+//        boardPane.setStyle("-fx-background-color: radial-gradient(center 50% 50%, radius 55%, #198909, #333333);");
     }
 
 
