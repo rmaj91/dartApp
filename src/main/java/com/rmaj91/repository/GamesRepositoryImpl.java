@@ -4,6 +4,10 @@ import com.rmaj91.domain.Player;
 import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.interfaces.Playable;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,13 +63,28 @@ public class GamesRepositoryImpl implements GamesRepository {
 	@Override
 	public boolean saveGame() {
 
+//		FileOutputStream outputStream = new FileOutputStream("plik.dart");
+//		ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+//		for (Playable round : gamesList) {
+//			objectOutputStream.writeObject(round);
+//		}
+//
+
+
 		//todo save
 		return false;
 	}
 
 	@Override
 	public boolean loadGame() {
+//		FileInputStream fileInputStream = new FileInputStream("plik.dart");
+//
+//
+//		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+
 		return false;
+
 	}
 
 

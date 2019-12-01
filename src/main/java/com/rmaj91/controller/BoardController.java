@@ -358,7 +358,7 @@ public class BoardController implements Initializable {
 // todo
         // Radius D
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 18)
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 19)
                 .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
         ////////////////////////////////
 
@@ -437,6 +437,14 @@ public class BoardController implements Initializable {
         // Radius D
         pointList.stream()
                 .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 194)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+        ////////////////////////////////
+
+        // todo
+        // fixing custom board edges :)
+        pointList.stream()
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) > 204)
+                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 206)
                 .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
         ////////////////////////////////
 
