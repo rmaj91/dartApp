@@ -44,16 +44,6 @@ public class GamesRepositoryImpl implements GamesRepository {
 	}
 
 	@Override
-	public boolean saveGame() {
-		return false;
-	}
-
-	@Override
-	public boolean loadGame() {
-		return false;
-	}
-
-	@Override
 	public int getIndexOfRound(Playable round) {
 		return gamesList.indexOf(round);
 	}
@@ -65,4 +55,18 @@ public class GamesRepositoryImpl implements GamesRepository {
 		else
 			return gamesList.get(gamesList.size()-2);
 	}
+
+	@Override
+	public boolean saveGame() {
+
+		//todo save
+		return false;
+	}
+
+	@Override
+	public boolean loadGame() {
+		return false;
+	}
+
+
 }

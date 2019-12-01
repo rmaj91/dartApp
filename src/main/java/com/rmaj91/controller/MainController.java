@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -91,6 +92,16 @@ public class MainController implements Initializable {
 		game01Controller.setBoardController(boardController);
 		Game01.setGame01Controller(game01Controller);
 		Game01.setBoardController(boardController);
+
+		initSoundFiles();
+
+	}
+
+	private void initSoundFiles() {
+
+//		volumeSlider.valueProperty().addListener((observable,oldValue,newValue) ->{
+//			Main.mediaPlayer.setVolume(volumeSlider.getValue());
+//		});
 	}
 
 	private void makePaneDragable() {
@@ -125,10 +136,11 @@ public class MainController implements Initializable {
 	}
 
 	public void saveGameIconClicked() {
-		welcomeController.loadExistingGame();
+		// todo zapis do pliku
 	}
 
 	public void volumeIconClicked(){
+		// todo dodac dzwieki
 		if(volumeIcon.getOpacity() == 0.58){
 			volumeIcon.setOpacity(1);
 			volumeIcon.setImage(new Image("images/volume_up.png"));
@@ -140,4 +152,6 @@ public class MainController implements Initializable {
 			volumeSlider.setDisable(true);
 		}
 	}
+
+
 }	

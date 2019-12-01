@@ -20,7 +20,7 @@
          <children>
             <StackPane fx:id="boardPane" prefHeight="500.0" prefWidth="500.0">
                <children>
-                  <ImageView fx:id="dartBoard" fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="dartBoard" fitHeight="500.0" fitWidth="500.0" opacity="0.67" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../../images/dartBoardNew.png" />
                      </image>
@@ -28,6 +28,7 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </ImageView>
+                  <Canvas fx:id="drawedBoard" height="500.0" width="500.0" />
                   <Canvas fx:id="canvas" height="500.0" onMouseClicked="#boardClicked" onMouseExited="#boardHoverOff" onMouseMoved="#boardHover2" width="500.0">
                      <cursor>
                         <Cursor fx:constant="CROSSHAIR" />

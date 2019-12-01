@@ -9,6 +9,9 @@ public class Filters {
     List<RadiusScope> radiusList = new ArrayList<>();
     List<IndexMapper> indexMapperList = new ArrayList<>();
 
+
+
+
     public class AngleScope{
         private double firstAngle;
         private double secondAngle;
@@ -40,6 +43,16 @@ public class Filters {
                 return true;
             else
                 return false;
+        }
+
+        //todo test
+
+        public int getSmallRadius() {
+            return smallRadius;
+        }
+
+        public int getBigRadius() {
+            return bigRadius;
         }
     }
 

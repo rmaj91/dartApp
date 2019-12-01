@@ -23,6 +23,7 @@ public class Main extends Application {
 
     public static Stage stage = null;
     public static GamesRepositoryImpl gamesRepositotyImpl = new GamesRepositoryImpl();
+   //public static MediaPlayer mediaPlayer;
 
     public static void main(String[] args) {
         launch(args);

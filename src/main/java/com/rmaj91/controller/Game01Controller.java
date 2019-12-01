@@ -105,12 +105,6 @@ public class Game01Controller implements Initializable{
     @FXML
     private Button game01LetsButton;
 
-    ///////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////
-    //
-    ///////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////
-
 
     public void toFront() {
     	newGame01Pane.toFront();
@@ -150,12 +144,10 @@ public class Game01Controller implements Initializable{
         boardController.getMainStackPane().setDisable(false);
 
 	}
+	/**************************************************************
+     *                      Private methods
+     /*************************************************************/
 
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
-    //                       PRIVATE METHODS
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
 
     /*
      * Returns number of rounds defined by player
@@ -198,7 +190,6 @@ public class Game01Controller implements Initializable{
      * */
     private String[] getPlayersNames(int playersQuantity){
         String[] playersNames = new String[playersQuantity];
-        // TODO Add limit size of textField and defaultValues or emptyProtection
         if(playersQuantity >= 1)
             playersNames[0] = getPlayerName(game01NamePlayer1);
         if(playersQuantity >= 2)
@@ -295,8 +286,7 @@ public class Game01Controller implements Initializable{
     ///////////////////////////////////////////////////////////////////
     //                      INITIALIZING!
     ///////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////
+
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {

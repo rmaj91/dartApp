@@ -2,7 +2,9 @@ package com.rmaj91.domain;
 
 import com.rmaj91.repository.GamesRepositoryImpl;
 
-public class Player{
+import java.io.Serializable;
+
+public class Player implements Serializable {
 
     public static GamesRepositoryImpl gamesRepositoryImpl;
 

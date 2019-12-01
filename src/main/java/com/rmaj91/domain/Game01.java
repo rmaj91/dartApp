@@ -15,11 +15,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 
-import javax.swing.*;
+import java.io.Serializable;
 import java.util.Arrays;
 
 
-public class Game01 implements Playable {
+public class Game01 implements Playable, Serializable {
 
 	// dependencies //
 	private static BoardController boardController;
