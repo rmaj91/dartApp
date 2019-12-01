@@ -3,6 +3,7 @@ package com.rmaj91.controller;
 import com.rmaj91.Main;
 import com.rmaj91.domain.Point;
 import com.rmaj91.utility.Filters;
+import com.rmaj91.utility.Utility;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -182,22 +183,35 @@ public class BoardController implements Initializable {
     // dart fields ALGORITHM ///////////////////
     ////////////////////////////////////////////
     List<Point> pointList = new ArrayList<>();
-    // TODO przniesc do Main
-    Filters filters = new Filters();
+
+    private int currentRadiusIndex = -1;
+    private int currentAngleIndex = -1;
 
     public void boardHover2(MouseEvent event){
+
+        System.out.println("Cursor Moving1");
+        int hoverRadiusIndex = Utility.filters.getRadiusScope(getRadius(getX(event),getY(event)));
+        int hoverAngleIndex = Utility.filters.getAngleScope(getAngle(getX(event),getY(event)));
+        if(hoverRadiusIndex == currentRadiusIndex && hoverAngleIndex == currentAngleIndex)
+            return;
+
+        currentRadiusIndex = hoverRadiusIndex;
+        currentAngleIndex = hoverAngleIndex;
+
+        System.out.println("Field changed!");
+
         graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         pointList.stream()
                 .filter(point -> {
-                    int indexRangeScope = filters.getRadiusScope(getRadius(getX(event),getY(event)));
-                    return filters.getRadiusList().get(indexRangeScope).isInRange(getRadius(getCenterX(point.getX()), getCenterY(point.getY()))); })
+                    //int indexRangeScope = Utility.filters.getRadiusScope(getRadius(getX(event),getY(event)));
+                    return Utility.filters.getRadiusList().get(hoverRadiusIndex).isInRange(getRadius(getCenterX(point.getX()), getCenterY(point.getY()))); })
                 .filter(point -> {
                     if(getRadius(getX(event),getY(event)) < 19 || getRadius(getX(event),getY(event)) > 205)
                         return true;
                     else{
-                        int indexAngleScope = filters.getAngleScope(getAngle(getX(event),getY(event)));
-                        return filters.getAngleList().get(indexAngleScope).isInRange(getAngle(getCenterX(point.getX()), getCenterY(point.getY()))); } })
+                        //int indexAngleScope = Utility.filters.getAngleScope(getAngle(getX(event),getY(event)));
+                        return Utility.filters.getAngleList().get(hoverAngleIndex).isInRange(getAngle(getCenterX(point.getX()), getCenterY(point.getY()))); } })
                 .forEach(point -> {
                     displayPixel(point.getX(),point.getY()); });
     }
@@ -236,6 +250,8 @@ public class BoardController implements Initializable {
 
     public void boardHoverOff() {
         graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        currentRadiusIndex = -1;
+        currentAngleIndex = -1;
     }
 
 

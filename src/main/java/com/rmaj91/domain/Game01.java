@@ -104,13 +104,8 @@ public class Game01 implements Playable {
 
 	@Override
 	public void next() {
-        //calculateAverage();
+
 		gamesRepositoryImpl.getCurrentRound().saveThrowFields();
-
-//		for (String player : players[currentPlayer-1].getThrowFields()) {
-//			System.out.println("Odczytano: "+Game01.readValues(player));
-//		}
-
 
 		if(gamesRepositoryImpl.getIndexOfRound(this)+1 < Game01.roundsMaxNumber || currentPlayer != playersQuantity){
 			if(currentPlayer  == Game01.playersQuantity){
@@ -122,6 +117,7 @@ public class Game01 implements Playable {
 				currentPlayer++;
 			}
 
+			boardController.getThrowField1().requestFocus();
 			gamesRepositoryImpl.getCurrentRound().display();
 		}
 		else
@@ -164,8 +160,6 @@ public class Game01 implements Playable {
 				}
 			}
 
-
-
 			////////////////////////////////////////////
 			System.out.print("Rzut nr: " + currentThrow + " Pressed: x = " + xCartesian + "  y = " + yCartesian + "\t");
 			System.out.print(key + "\t");
@@ -182,17 +176,8 @@ public class Game01 implements Playable {
 				boardController.getThrowField3().setText(new String(key));
 
 			players[currentPlayer - 1].setCurrentThrow(currentThrow+1);
-
 			saveThrowFields();
-			//calculatePoints();
 			display();
-
-			// todo
-			System.out.print(players[currentPlayer-1].getThrowFields()[0].hashCode()+"\t");
-			System.out.print(players[currentPlayer-1].getThrowFields()[1].hashCode()+"\t");
-			System.out.print(players[currentPlayer-1].getThrowFields()[2].hashCode());
-			System.out.println(" ");
-			System.out.println(" ");
 		}
 	}
 
@@ -222,8 +207,6 @@ public class Game01 implements Playable {
 				((Label)node2).setText(String.valueOf(players[i].getPoints()));
 			}
 
-
-
 		// reset player name highlight //
 		for(int i=0;i<Game01.playersQuantity;i++){
 			Node node = boardController.getGame01PlayersTable().getChildren().get(i);
@@ -234,18 +217,9 @@ public class Game01 implements Playable {
 		Node node = boardController.getGame01PlayersTable().getChildren().get(currentPlayer-1);
 		((VBox)node).getChildren().get(0).setStyle("-fx-background-color: #0388fc;");
 
-
-		// todo diplay
 		// display throwfields //
-		System.out.println("Round: "+(gamesRepositoryImpl.getIndexOfRound(this)+1)+"\t"+"Player: "+currentPlayer+"\t");
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++)
 			boardController.getThrowTextFieldArray()[i].setText(players[currentPlayer-1].getThrowFields()[i]);
-			//boardController.getThrowTextFieldArray()[i].setText("awd");
-			System.out.print("Pola playera: "+"w"+(i+1)+": "+players[currentPlayer-1].getThrowFields()[i]+"\t");
-			System.out.println("");
-		}
-		System.out.println(" ");
-
 
 	}
 
@@ -256,14 +230,8 @@ public class Game01 implements Playable {
 
 	@Override
 	public void saveThrowFields() {
-
-		for (int i = 0; i < 3; i++){
-			//System.out.println(boardController.getThrowTextFieldArray()[i].getText());
+		for (int i = 0; i < 3; i++)
 			this.players[currentPlayer-1].setThrowFieldsByIndex(i,new String(boardController.getThrowTextFieldArray()[i].getText()));
-			System.out.print("Zapisane pole: "+(i+1)+" "+boardController.getThrowTextFieldArray()[i].getText()+"\t");
-		}
-		System.out.println(" ");
-		System.out.println(" ");
 		calculatePoints();
 	}
 
@@ -286,7 +254,6 @@ public class Game01 implements Playable {
 			int points = throwValue.getValue() * throwValue.getMulitplier();
 			newPoints = newPoints - points;
 			difference += points;
-
 
 			// todo wygrana //
 			if(isWinner(newPoints,throwValue)){
@@ -328,12 +295,6 @@ public class Game01 implements Playable {
 
 	}
 
-//	private void calculateAverage() {
-//	    if(gamesRepositoryImpl.getIndexOfRound(this) !=0) {
-//            double average = (Game01.startingPoints - players[currentPlayer-1].getPoints()) / gamesRepositoryImpl.getIndexOfRound(this);
-//            players[currentPlayer-1].setAverage(average);
-//        }
-//    }
 
 	private boolean isWinner(int newPoints, ThrowValues throwValue) {
 		if(doubleOut && newPoints == 0 && throwValue.getMulitplier() == 2){
@@ -389,80 +350,9 @@ public class Game01 implements Playable {
         return startingPoints;
     }
 
-//	@Override
-//	public void throwDart(MouseEvent event) {
-//		if(currentThrow == 4)
-//			return;
-//		double x = event.getX()-248;
-//		double y = -(event.getY()-248.5);
-//		System.out.print("Pressed: x="+x + "  y=" +y+"\t");
-//		// tODO do main
-//		Filters filters = new Filters();
-//		int radiusIndex = Utility.getRadiusIndex(x,y);
-//		int angleIndex = Utility.getAngleIndex(x,y);
-//		String key="";
-//		for (Filters.IndexMapper indexMapper : filters.getIndexMapperList()) {
-//			if(indexMapper.hasKey(radiusIndex,angleIndex)){
-//				key=indexMapper.getKey();
-//				System.out.print(key+"\t");
-//				break;
-//			}
-//		}
-//
-//
-//		if(currentThrow == 1){
-//			boardController.getThrowField1().setText(key);
-//			boardController.getThrowField2().requestFocus();
-//		}
-//
-//		else if(currentThrow == 2){
-//			boardController.getThrowField2().setText(key);
-//			boardController.getThrowField3().requestFocus();
-//		}
-//
-//		else if(currentThrow == 3)
-//			boardController.getThrowField3().setText(key);
-//		currentThrow++;
-//
-//		System.out.println(Utility.readValues(key));
-//
-//	}
 
-
-//	@Override
-//	public void display() {
-//		// Rounds //
-//		boardController.getRoundsLabel().setText("Round: "+ (1+currentSubround/playersQuantity) +"/"+Game01.subrounds /Game01.playersQuantity);
-//
-//		// TextFields //
-//		boardController.getThrowField1().setText(throwFieldsContent[0]);
-//		boardController.getThrowField2().setText(throwFieldsContent[1]);
-//		boardController.getThrowField3().setText(throwFieldsContent[2]);
-//
-//		// Big Player name,points,average //
-//		boardController.getPlayerNameLabel().setText(playersNames[(currentSubround-1)%playersQuantity]);
-//		boardController.getPlayerPointsLabel().setText(String.valueOf(playerPoints[(currentSubround-1)%playersQuantity]));
-//		boardController.getAverageLabel().setText("Average: "+ playersAverages[(currentSubround-1)%playersQuantity]);
-//
-//		// turn off highlighting in previous subround
-//		if(currentSubround >1){
-//			Node node2 = boardController.getGame01PlayersTable().getChildren().get((currentSubround-2)%playersQuantity);;
-//			((VBox)node2).getChildren().get(0).getStyleClass().removeIf(style -> style.equals("-fx-background-color: #0388fc;"));
-//		}
-//
-//		//highlight player
-//		Node node = boardController.getGame01PlayersTable().getChildren().get((currentSubround-1)%playersQuantity);
-//		((VBox)node).getChildren().get(0).setStyle("-fx-background-color: #0388fc;");
-//
-//
-//boardController.getThrowField1().requestFocus();
-//
-//
-//
-//	}
-//
-//	///////////////////////////////////////
-//	// PRIVATE METHODS
-//	///////////////////////////////////////
+	///////////////////////////////////////
+	// PRIVATE METHODS				   	//
+	///////////////////////////////////////
 
 }
