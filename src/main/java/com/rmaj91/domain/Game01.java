@@ -199,7 +199,6 @@ public class Game01 implements Playable {
 
 	@Override
 	public void display() {
-		boardController.getThrowField1().requestFocus();
 		// Rounds //
 		int currentRound = gamesRepositoryImpl.getIndexOfRound(this)+1;
 		boardController.getRoundsLabel().setText("Round: "+ currentRound +"/"+Game01.roundsMaxNumber);
