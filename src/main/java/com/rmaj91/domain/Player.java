@@ -7,7 +7,7 @@ import java.io.Serializable;
  * The Player01 class provides player model of '01 dart game type
  */
 
-public class Player01 implements Serializable {
+public class Player implements com.rmaj91.interfaces.Player,Serializable {
 
     /* Dependencies */
     private static GamesRepositoryImpl gamesRepositoryImpl;
@@ -20,7 +20,7 @@ public class Player01 implements Serializable {
     private int currentThrow;
 
     /*Constructor*/
-    public Player01() {
+    public Player() {
         average = 0;
         throwFieldsValues = new String[3];
         throwFieldsValues[0] = new String();
@@ -71,17 +71,17 @@ public class Player01 implements Serializable {
     }
 
     public static void setGamesRepositoryImpl(GamesRepositoryImpl gamesRepositoryImpl) {
-        Player01.gamesRepositoryImpl = gamesRepositoryImpl;
+        Player.gamesRepositoryImpl = gamesRepositoryImpl;
     }
 
     /*Public Methods*/
-    public Player01 clonePlayer(){
-        Player01 player01 = new Player01();
-        player01.name = this.name;
-        player01.points = this.points;
+    public Player clonePlayer(){
+        Player player = new Player();
+        player.name = this.name;
+        player.points = this.points;
         // Calculating average
         int currentRound = gamesRepositoryImpl.getIndexOfRound(gamesRepositoryImpl.getCurrentRound())+1;
-        player01.average = (double)(Game01.getStartingPoints() - player01.points) / currentRound;
-        return player01;
+        player.average = (double)(Game01.getStartingPoints() - player.points) / currentRound;
+        return player;
     }
 }

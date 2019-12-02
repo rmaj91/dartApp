@@ -1,5 +1,8 @@
 package com.rmaj91.interfaces;
 
+/**
+ * The GamesRepository interface provides methods for GamesRepository
+ */
 public interface GamesRepository {
     void pushRound(Playable round);
     Playable getCurrentRound();

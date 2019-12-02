@@ -33,15 +33,15 @@ public class Game01 implements Playable, Serializable {
 	private static int roundsMaxNumber;
 	private static int startingPoints;
 	// variables //
-	Player01[] player01s;
+	Player[] players;
 	private int currentPlayer;
 
 	// SETTERS //
 	/////////////
 
 
-	public void setPlayer01s(Player01[] player01s) {
-		this.player01s = player01s;
+	public void setPlayers(Player[] players) {
+		this.players = players;
 	}
 
 	public static void setBoardController(BoardController boardController) {
@@ -80,8 +80,8 @@ public class Game01 implements Playable, Serializable {
 
 
 
-	public Player01[] getPlayer01s() {
-		return player01s;
+	public Player[] getPlayer() {
+		return players;
 	}
 
 	public static boolean isDoubleOut() {
@@ -116,12 +116,12 @@ public class Game01 implements Playable, Serializable {
 	public Playable cloneRound() {
 		Game01 game01 = new Game01();
 
-		Player01[] playersArray = new Player01[playersQuantity];
-		Arrays.fill(playersArray,new Player01());
-		game01.player01s = playersArray;
+		Player[] playersArray = new Player[playersQuantity];
+		Arrays.fill(playersArray,new Player());
+		game01.players = playersArray;
 
-		for(int i = 0; i<this.player01s.length; i++){
-			game01.player01s[i] = this.player01s[i].clonePlayer();
+		for(int i = 0; i<this.players.length; i++){
+			game01.players[i] = this.players[i].clonePlayer();
 		}
 		return game01;
 	}
@@ -133,16 +133,16 @@ public class Game01 implements Playable, Serializable {
 
 		if(gamesRepositoryImpl.getIndexOfRound(this)+1 < Game01.roundsMaxNumber || currentPlayer != playersQuantity){
 			if(currentPlayer  == Game01.playersQuantity){
-				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayer01s()[currentPlayer-1].setCurrentThrow(1);
+				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayer()[currentPlayer-1].setCurrentThrow(1);
 				gamesRepositoryImpl.pushRound(this.cloneRound());
 			}
 			else{
-				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayer01s()[currentPlayer-1].setCurrentThrow(1);
+				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayer()[currentPlayer-1].setCurrentThrow(1);
 				currentPlayer++;
 			}
 
 			boardController.getThrowField1().requestFocus();
-			gamesRepositoryImpl.getCurrentRound().display();
+			gamesRepositoryImpl.getCurrentRound().displayRound();
 		}
 		else
 			return;
@@ -160,12 +160,12 @@ public class Game01 implements Playable, Serializable {
 		}
 		else
 			return;
-		gamesRepositoryImpl.getCurrentRound().display();
+		gamesRepositoryImpl.getCurrentRound().displayRound();
 	}
 
 	@Override
 	public void throwDart(MouseEvent event) {
-		int currentThrow = player01s[currentPlayer - 1].getCurrentThrow();
+		int currentThrow = players[currentPlayer - 1].getCurrentThrow();
 
 		double xCartesian = event.getX() - 248;
 		double yCartesian = -(event.getY() - 248.5);
@@ -179,7 +179,7 @@ public class Game01 implements Playable, Serializable {
 		else {
 			for (Filters.IndexMapper indexMapper : Utility.filters.getIndexMapperList()) {
 				if (indexMapper.hasKey(radiusIndex, angleIndex)) {
-					key = indexMapper.getKey();
+					key = indexMapper.getFieldName();
 					break;
 				}
 			}
@@ -201,28 +201,28 @@ public class Game01 implements Playable, Serializable {
 			} else if (currentThrow == 3)
 				boardController.getThrowField3().setText(new String(key));
 
-			player01s[currentPlayer - 1].setCurrentThrow(currentThrow+1);
+			players[currentPlayer - 1].setCurrentThrow(currentThrow+1);
 			saveThrowFields();
-			display();
+			displayRound();
 		}
 	}
 
 
 	@Override
-	public void display() {
+	public void displayRound() {
 		// Rounds //
 		int currentRound = gamesRepositoryImpl.getIndexOfRound(this)+1;
 		boardController.getRoundsLabel().setText("Round: "+ currentRound +"/"+Game01.roundsMaxNumber);
 
 		// TextFields //
-		boardController.getThrowField1().setText(player01s[currentPlayer-1].getThrowFieldsValues()[0]);
-		boardController.getThrowField2().setText(player01s[currentPlayer-1].getThrowFieldsValues()[1]);
-		boardController.getThrowField3().setText(player01s[currentPlayer-1].getThrowFieldsValues()[2]);
+		boardController.getThrowField1().setText(players[currentPlayer-1].getThrowFieldsValues()[0]);
+		boardController.getThrowField2().setText(players[currentPlayer-1].getThrowFieldsValues()[1]);
+		boardController.getThrowField3().setText(players[currentPlayer-1].getThrowFieldsValues()[2]);
 
 		// Big Player name,points,average //
-		boardController.getPlayerNameLabel().setText(player01s[currentPlayer-1].getName());
-		boardController.getPlayerPointsLabel().setText(String.valueOf(player01s[currentPlayer-1].getPoints()));
-		boardController.getAverageLabel().setText("Average: "+ String.format("%.1f", player01s[currentPlayer-1].getAverage()));
+		boardController.getPlayerNameLabel().setText(players[currentPlayer-1].getName());
+		boardController.getPlayerPointsLabel().setText(String.valueOf(players[currentPlayer-1].getPoints()));
+		boardController.getAverageLabel().setText("Average: "+ String.format("%.1f", players[currentPlayer-1].getAverage()));
 
 		// display Players points //
 
@@ -230,7 +230,7 @@ public class Game01 implements Playable, Serializable {
 			for(int i=0;i<Game01.playersQuantity;i++) {
 				Node node1 = playerVBoxes.get(i);
 				Node node2 = ((VBox) node1).getChildren().get(1);
-				((Label)node2).setText(String.valueOf(player01s[i].getPoints()));
+				((Label)node2).setText(String.valueOf(players[i].getPoints()));
 			}
 
 		// reset player name highlight //
@@ -245,19 +245,19 @@ public class Game01 implements Playable, Serializable {
 
 		// display throwfields //
 		for (int i = 0; i < 3; i++)
-			boardController.getThrowTextFieldArray()[i].setText(player01s[currentPlayer-1].getThrowFieldsValues()[i]);
+			boardController.getThrowTextFieldArray()[i].setText(players[currentPlayer-1].getThrowFieldsValues()[i]);
 
 	}
 
 	@Override
 	public void setCurrentThrow(int throwNumber) {
-		player01s[currentPlayer-1].setCurrentThrow(throwNumber);
+		players[currentPlayer-1].setCurrentThrow(throwNumber);
 	}
 
 	@Override
 	public void saveThrowFields() {
 		for (int i = 0; i < 3; i++)
-			this.player01s[currentPlayer-1].setThrowFieldsByIndex(i,new String(boardController.getThrowTextFieldArray()[i].getText()));
+			this.players[currentPlayer-1].setThrowFieldsByIndex(i,new String(boardController.getThrowTextFieldArray()[i].getText()));
 		calculatePoints();
 	}
 
@@ -271,12 +271,12 @@ public class Game01 implements Playable, Serializable {
 			oldPoints = Game01.startingPoints;
 		else
 			// z poprzedniej rundy
-			oldPoints = ((Game01)gamesRepositoryImpl.getPreviousRound()).getPlayer01s()[currentPlayer-1].getPoints();
+			oldPoints = ((Game01)gamesRepositoryImpl.getPreviousRound()).getPlayer()[currentPlayer-1].getPoints();
 
 		newPoints = oldPoints;
 		// obliczenia
 		for (int i = 0; i < 3; i++) {
-			ThrowValues throwValue = readValues(player01s[currentPlayer-1].getThrowFieldsValues()[i]);
+			ThrowValues throwValue = readValues(players[currentPlayer-1].getThrowFieldsValues()[i]);
 			int points = throwValue.getValue() * throwValue.getMulitplier();
 			newPoints = newPoints - points;
 			difference += points;
@@ -285,7 +285,7 @@ public class Game01 implements Playable, Serializable {
 			if(isWinner(newPoints,throwValue)){
 				Alert alert = new Alert(Alert.AlertType.WARNING);
 				alert.setTitle("Winner");
-				alert.setHeaderText(player01s[currentPlayer-1].getName()+ " Won!!!"+"\nCongratulations!");
+				alert.setHeaderText(players[currentPlayer-1].getName()+ " Won!!!"+"\nCongratulations!");
 				alert.showAndWait();
 				Main.soundPlayer.playSound("win");
 				boardController.getMainStackPane().setDisable(true);
@@ -293,7 +293,7 @@ public class Game01 implements Playable, Serializable {
 			}
 
 			if(newPoints < 2){
-				player01s[currentPlayer-1].setPoints(oldPoints);
+				players[currentPlayer-1].setPoints(oldPoints);
 				Main.soundPlayer.playSound("overthrow");
 				Alert alert = new Alert(Alert.AlertType.WARNING);
 				alert.setTitle("Warning Dialog");
@@ -301,9 +301,9 @@ public class Game01 implements Playable, Serializable {
 				alert.showAndWait();
 
 				for(int j=0;j<3;j++){
-					player01s[currentPlayer-1].setThrowFieldsByIndex(j,new String());
+					players[currentPlayer-1].setThrowFieldsByIndex(j,new String());
 				}
-				player01s[currentPlayer-1].setCurrentThrow(1);
+				players[currentPlayer-1].setCurrentThrow(1);
 				boardController.getThrowField1().requestFocus();
 				return;
 			}
@@ -318,11 +318,11 @@ public class Game01 implements Playable, Serializable {
 			alert.showAndWait();
 
 			for(int i=0;i<3;i++){
-				player01s[currentPlayer-1].setThrowFieldsByIndex(i,new String());
+				players[currentPlayer-1].setThrowFieldsByIndex(i,new String());
 			}
 			return;
 		}
-		player01s[currentPlayer-1].setPoints(newPoints);
+		players[currentPlayer-1].setPoints(newPoints);
 
 	}
 

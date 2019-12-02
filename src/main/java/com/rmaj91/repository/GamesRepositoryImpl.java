@@ -15,20 +15,26 @@ import java.util.List;
 
 public class GamesRepositoryImpl implements GamesRepository {
 
+
+    /*Dependencies*/
     private BoardController boardController;
-	private List<Playable> gamesList;
 
+    /*Variables*/
+    private List<Playable> gamesList;
 
+    /*Constructor*/
+    public GamesRepositoryImpl() {
+        gamesList = new LinkedList<>();
+    }
 
+    /*Setters & Getters*/
     public void setBoardController(BoardController boardController) {
         this.boardController = boardController;
     }
 
-    public GamesRepositoryImpl() {
-		gamesList = new LinkedList<>();
-	}
-
-
+    //////////////////
+    /*Public Methods*/
+    //////////////////
 	@Override
 	public void pushRound(Playable round) {
 		gamesList.add(round);
@@ -79,7 +85,6 @@ public class GamesRepositoryImpl implements GamesRepository {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(Main.stage);
-//        DataOutputStream.dataOutputStream;
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
@@ -88,6 +93,7 @@ public class GamesRepositoryImpl implements GamesRepository {
             dataOutputStream.writeInt(Game01.getRoundsMaxNumber());
             dataOutputStream.writeInt(Game01.getStartingPoints());
 
+            // Serializing List
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(gamesList);
             dataOutputStream.close();
@@ -95,19 +101,12 @@ public class GamesRepositoryImpl implements GamesRepository {
             System.out.println(exception);
             return false;
         }
-
-        System.out.println("Save succefully!");
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Saved!");
-        alert.setHeaderText("Game saved successfully :)");
-        alert.showAndWait();
+        showInformationWindow();
 		return true;
 	}
 
-
-	@Override
+    @Override
 	public boolean loadGame() {
-        //Show save file dialog
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
         fileChooser.getExtensionFilters().add(extFilter);
@@ -122,17 +121,15 @@ public class GamesRepositoryImpl implements GamesRepository {
             Game01.setRoundsMaxNumber(dataInputStream.readInt());
             Game01.setStartingPoints(dataInputStream.readInt());
 
+            // Reading Serialized List
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             gamesList = (List<Playable>)objectInputStream.readObject();
-
             dataInputStream.close();
         } catch (IOException exception) {
             System.out.println(exception);
-            System.out.println("io exception");
             return false;
         }catch (ClassNotFoundException exception){
             System.out.println(exception);
-            System.out.println("class not found exception");
         }
 
         boardController.initAndDisplay();
@@ -151,5 +148,15 @@ public class GamesRepositoryImpl implements GamesRepository {
             return true;
         else
             return false;
+    }
+
+    ///////////////////
+    /*Private Methods*/
+    ///////////////////
+    private void showInformationWindow() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Saved!");
+        alert.setHeaderText("Game saved successfully :)");
+        alert.showAndWait();
     }
 }

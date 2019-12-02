@@ -6,24 +6,25 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.io.File;
 
-
+/**
+ * This class provides audio player
+ */
 public class SoundPlayer {
 
-    private boolean soundActive;
-    // from 0.0 to 1.0 //
+    /*Variables*/
+    private boolean soundsActive;
+    // This is global control of application volume, scope from 0.0 to 1.0
     private final double volumeScale = 0.75;
     private double volumeLevel;
 
-
-    // Constructor //
+    /*Constructor*/
     public SoundPlayer() {
-        soundActive = true;
+        soundsActive = true;
     }
 
-
-    // GETTERS & SETTERS //
-    public void setSoundActive(boolean soundActive) {
-        this.soundActive = soundActive;
+    /*Getters & Setters*/
+    public void setSoundsActive(boolean soundsActive) {
+        this.soundsActive = soundsActive;
     }
 
     public void setVolumeLevel(double sliderValue) {
@@ -32,22 +33,31 @@ public class SoundPlayer {
             this.volumeLevel = 0;
     }
 
-    // METODS //
-    public void playSound(String fieldKey) {
-        if(!soundActive)
+    /*Public Methods*/
+
+    /**
+     * This method plays the ".wav" audio from /resources/sounds/ directory, it determines the name of audio
+     * by passed parameter which is the dart boards field name eg. "DOUBLE 25" it tranforms it to "double25.wav"
+     * @param fieldName the name of thrown field
+     */
+    public void playSound(String fieldName) {
+        if(!soundsActive)
             return;
         try {
-            String fileName = fieldKey.toLowerCase().replaceAll("\\s","");
+            String fileName = fieldName.toLowerCase().replaceAll("\\s","");
             File file = new File(getClass().getClassLoader().getResource("sounds/" + fileName+ ".wav").getFile());
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-            FloatControl control = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 
+            // Setting volume control
+            FloatControl control = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            // determining the allowed range of volume control
             float range = (control.getMaximum() - control.getMinimum());
-            double result = (range * volumeLevel * volumeScale + control.getMinimum());
-            System.out.println(result);
-            control.setValue((float) result);
+
+            // calculating resultVolume
+            double resultVolume = (range * volumeLevel * volumeScale + control.getMinimum());
+            control.setValue((float) resultVolume);
             clip.start();
         } catch (Exception exception) {
             System.out.println(exception);

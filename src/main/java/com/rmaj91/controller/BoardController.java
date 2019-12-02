@@ -206,8 +206,8 @@ public class BoardController implements Initializable {
 
     public void boardHover2(MouseEvent event){
 
-        int hoverRadiusIndex = Utility.filters.getRadiusScope(getRadius(getX(event),getY(event)));
-        int hoverAngleIndex = Utility.filters.getAngleScope(getAngle(getX(event),getY(event)));
+        int hoverRadiusIndex = Utility.getRadiusScope(getRadius(getX(event),getY(event)));
+        int hoverAngleIndex = Utility.getAngleScope(getAngle(getX(event),getY(event)));
         if(hoverRadiusIndex == currentRadiusIndex && hoverAngleIndex == currentAngleIndex)
             return;
         currentRadiusIndex = hoverRadiusIndex;
@@ -218,14 +218,14 @@ public class BoardController implements Initializable {
         pointList.stream()
                 .filter(point -> {
                     //int indexRangeScope = Utility.filters.getRadiusScope(getRadius(getX(event),getY(event)));
-                    return Utility.filters.getRadiusList().get(hoverRadiusIndex).isInRange(getRadius(getCenterX(point.getxCoordinate())
+                    return Utility.filters.getRadiusMapperList().get(hoverRadiusIndex).isInRange(getRadius(getCenterX(point.getxCoordinate())
                             , getCenterY(point.getyCoordinate()))); })
                 .filter(point -> {
                     if(getRadius(getX(event),getY(event)) < 19 || getRadius(getX(event),getY(event)) > 205)
                         return true;
                     else{
                         //int indexAngleScope = Utility.filters.getAngleScope(getAngle(getX(event),getY(event)));
-                        return Utility.filters.getAngleList().get(hoverAngleIndex).isInRange(getAngle(getCenterX(point.getxCoordinate())
+                        return Utility.filters.getAngleMapperList().get(hoverAngleIndex).isInRange(getAngle(getCenterX(point.getxCoordinate())
                                 , getCenterY(point.getyCoordinate()))); } })
                 .forEach(point -> {
                     displayPixel(point.getxCoordinate(),point.getyCoordinate()); });
@@ -327,7 +327,7 @@ public class BoardController implements Initializable {
                 .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 204)
                 .filter(point -> {
                     for(int i=0;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
+                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
@@ -340,7 +340,7 @@ public class BoardController implements Initializable {
                 .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 204)
                 .filter(point -> {
                     for(int i=1;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
+                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
@@ -381,7 +381,7 @@ public class BoardController implements Initializable {
                 .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 194)
                 .filter(point -> {
                     for(int i=0;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
+                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
@@ -395,7 +395,7 @@ public class BoardController implements Initializable {
                 .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 194)
                 .filter(point -> {
                     for(int i=1;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
+                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
@@ -411,7 +411,7 @@ public class BoardController implements Initializable {
                 .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 117)
                 .filter(point -> {
                     for(int i=0;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
+                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
@@ -425,7 +425,7 @@ public class BoardController implements Initializable {
                 .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 117)
                 .filter(point -> {
                     for(int i=1;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
+                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
@@ -466,9 +466,9 @@ public class BoardController implements Initializable {
                 .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 205)
                 .filter(point -> {
                     for(int i=0;i<20;i++){
-                        if(Utility.filters.getAngleList().get(i).getFirstAngle()
+                        if(Utility.filters.getAngleMapperList().get(i).getFirstAngle()
                                 == getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))
-                        || Utility.filters.getAngleList().get(i).getSecondAngle()
+                        || Utility.filters.getAngleMapperList().get(i).getSecondAngle()
                                 == getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())))
 
                             return true;
@@ -504,7 +504,7 @@ public class BoardController implements Initializable {
     //todo dokonczyc init VBoxes
     public void initAndDisplay(){
         int currentPlayer = Main.gamesRepositotyImpl.getCurrentRound().getCurrentPlayer();
-        int length = Main.gamesRepositotyImpl.getCurrentRound().getPlayer01s().length;
+        int length = Main.gamesRepositotyImpl.getCurrentRound().getPlayer().length;
 
 
         for (int i = 0; i < length; i++) {
@@ -513,12 +513,12 @@ public class BoardController implements Initializable {
             vBox.setAlignment(Pos.BOTTOM_CENTER);
             vBox.setMinWidth(100);
 
-            vBox.getChildren().addAll(createPlayerLabel( Main.gamesRepositotyImpl.getCurrentRound().getPlayer01s()[i].getName(),false),
+            vBox.getChildren().addAll(createPlayerLabel( Main.gamesRepositotyImpl.getCurrentRound().getPlayer()[i].getName(),false),
                     createPlayerLabel(String.valueOf(Game01.getStartingPoints()),true));
             game01PlayersTable.getChildren().add(vBox);
 
         }
-        Main.gamesRepositotyImpl.getCurrentRound().display();
+        Main.gamesRepositotyImpl.getCurrentRound().displayRound();
 
         toFront();
         game01ScoreTable.toFront();

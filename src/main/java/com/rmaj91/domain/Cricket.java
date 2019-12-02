@@ -22,7 +22,7 @@ public class Cricket implements Playable {
     }
 
     @Override
-    public void display() {
+    public void displayRound() {
 
     }
 
@@ -53,8 +53,8 @@ public class Cricket implements Playable {
     }
 
     @Override
-    public Player01[] getPlayer01s() {
-        return new Player01[0];
+    public Player[] getPlayer() {
+        return new Player[0];
     }
 
 

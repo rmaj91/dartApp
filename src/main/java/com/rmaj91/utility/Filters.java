@@ -3,19 +3,33 @@ package com.rmaj91.utility;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class provides list of mapped scopes, which are used for highlighting dart boards fields,
+ * determining of throwFields parameters and drawing dart board.
+ */
 public class Filters {
 
-    List<AngleScope> angleList = new ArrayList<>();
-    List<RadiusScope> radiusList = new ArrayList<>();
+    /*Variables - Scope Mappers Lists*/
+    List<AngleScope> angleMapperList = new ArrayList<>();
+    List<RadiusScope> radiusMapperList = new ArrayList<>();
     List<IndexMapper> indexMapperList = new ArrayList<>();
 
-
-
-
+    /**
+     * AngleScope class provides container for angles scopes of dart board
+     */
     public class AngleScope{
+
+        /*Variables*/
         private double firstAngle;
         private double secondAngle;
 
+        /*Constructor*/
+        public AngleScope(double firstAngle, double secondAngle) {
+            this.firstAngle = firstAngle;
+            this.secondAngle = secondAngle;
+        }
+
+        /*Getters*/
         public double getFirstAngle() {
             return firstAngle;
         }
@@ -24,11 +38,12 @@ public class Filters {
             return secondAngle;
         }
 
-        public AngleScope(double firstAngle, double secondAngle) {
-            this.firstAngle = firstAngle;
-            this.secondAngle = secondAngle;
-        }
-
+        /*Public Methods*/
+        /**
+         * This methods checks if angle passed through parameter are in a object specified angle scope
+         * @param angle in degrees
+         * @return Returns true if angle is in scope and false if not.
+         */
         public boolean isInRange(double angle) {
             if((angle > firstAngle && angle < secondAngle)||(firstAngle > secondAngle && (angle > firstAngle || angle < secondAngle)))
                 return true;
@@ -37,24 +52,23 @@ public class Filters {
 
         }
     }
+
+    /**
+     * AngleScope class provides container for radius scope of dart board
+     */
     public class RadiusScope{
+
+        /*Variables*/
         private int smallRadius;
         private int bigRadius;
 
+        /*Constructor*/
         public RadiusScope(int smallRadius, int bigRadius) {
             this.smallRadius = smallRadius;
             this.bigRadius = bigRadius;
         }
 
-        public boolean isInRange(int radius) {
-            if(radius >= smallRadius && radius < bigRadius)
-                return true;
-            else
-                return false;
-        }
-
-        //todo test
-
+        /*Getters*/
         public int getSmallRadius() {
             return smallRadius;
         }
@@ -62,20 +76,54 @@ public class Filters {
         public int getBigRadius() {
             return bigRadius;
         }
+
+        /*Public Methods*/
+
+        /**
+         * This methods checks if radius passed through parameter are in a object specified radius scope
+         * @param radius Radius (pixels)
+         * @return Returns true if radius is in scope and false if not.
+         */
+        public boolean isInRange(int radius) {
+            if(radius >= smallRadius && radius < bigRadius)
+                return true;
+            else
+                return false;
+        }
     }
 
+    /**
+     * AngleScope class mapper for dart boards fields, it's mapps fields using radius and angle scope. The value
+     * contained is String with name of a field eg. "DOUBLE 25".
+     */
     public class IndexMapper{
+
+        /*Variables*/
         private int indexRadius;
         private int indexAngle;
-        private String key;
+        private String fieldName;
 
-        public IndexMapper(int indexRadius, int indexAngle, String key) {
+        /*Constructor*/
+        public IndexMapper(int indexRadius, int indexAngle, String fieldName) {
             this.indexRadius = indexRadius;
             this.indexAngle = indexAngle;
 
-            this.key = key;
+            this.fieldName = fieldName;
         }
 
+        /*Getters*/
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        /*Public Methods*/
+
+        /**
+         * This methods returns the field name using angle and radius scope index
+         * @param indexRadius index of radius scope
+         * @param indexAngle index of angle scope
+         * @return returns the fieldName eg. "DOUBLE 25"
+         */
         public boolean hasKey(int indexRadius,int indexAngle){
             if(indexRadius == 0 ||indexRadius == 1 ||indexRadius == 6 )
                 indexAngle=20;
@@ -85,37 +133,40 @@ public class Filters {
                 return false;
         }
 
-        public String getKey() {
-            return key;
-        }
+
     }
 
+    /*Constructor*/
+    /**
+     * Constructor, initializing required scopes for recognizing dart board fields algorithm.
+     */
     public Filters() {
-        // Angle
+
+        /*Angles Mapping*/
         for(int i=0;i<19;i++){
-            angleList.add(new AngleScope(9+18*i,27+18*i));
+            angleMapperList.add(new AngleScope(9+18*i,27+18*i));
         }
-        angleList.add(new AngleScope(351,9));
+        angleMapperList.add(new AngleScope(351,9));
+        // todo check if really needed(if radius >5 its not enough)
+        angleMapperList.add(new AngleScope(0,0));
 
-        // moze by to wywalil ;p
-        angleList.add(new AngleScope(0,0));
+        /*Radius Mapping*/
+        radiusMapperList.add(new RadiusScope(0,8));
+        radiusMapperList.add(new RadiusScope(9,19));
+        radiusMapperList.add(new RadiusScope(20,116));
+        radiusMapperList.add(new RadiusScope(118,126));
+        radiusMapperList.add(new RadiusScope(127,194));
+        radiusMapperList.add(new RadiusScope(195,205));
+        radiusMapperList.add(new RadiusScope(206,249));
+        // out of board
+        radiusMapperList.add(new RadiusScope(249,0));
 
-        // Radius mapping //
-        radiusList.add(new RadiusScope(0,8));
-        radiusList.add(new RadiusScope(9,19));
-        radiusList.add(new RadiusScope(20,116));
-        radiusList.add(new RadiusScope(118,126));
-        radiusList.add(new RadiusScope(127,194));
-        radiusList.add(new RadiusScope(195,205));
-        radiusList.add(new RadiusScope(206,249));
-        radiusList.add(new RadiusScope(249,0));
-
-        // Fields Mapping //
-        ///////////
+        /*Dart Board Fields Names Mapping*/
         indexMapperList.add(new IndexMapper(0,20,"DOUBLE 25"));
         indexMapperList.add(new IndexMapper(1,20,"SINGLE 25"));
         indexMapperList.add(new IndexMapper(6,20,"BARREL"));
-        // SINGLE FIELDS mapping
+
+        /*Single Fields Mapping*/
         for(int i=2;i<=4;i+=2){
             indexMapperList.add(new IndexMapper(i,0,"SINGLE 13"));
             indexMapperList.add(new IndexMapper(i,1,"SINGLE 4"));
@@ -138,7 +189,7 @@ public class Filters {
             indexMapperList.add(new IndexMapper(i,19,"SINGLE 6"));
         }
 
-        // DOUBLE FIELDS mapping
+        /*Double Fields Mapping*/
         indexMapperList.add(new IndexMapper(5,0,"DOUBLE 13"));
         indexMapperList.add(new IndexMapper(5,1,"DOUBLE 4"));
         indexMapperList.add(new IndexMapper(5,2,"DOUBLE 18"));
@@ -160,7 +211,7 @@ public class Filters {
         indexMapperList.add(new IndexMapper(5,18,"DOUBLE 10"));
         indexMapperList.add(new IndexMapper(5,19,"DOUBLE 6"));
 
-        // TRIPLE FIELDS mapping
+        /*Triple Fields Mapping*/
         indexMapperList.add(new IndexMapper(3,0,"TRIPLE 13"));
         indexMapperList.add(new IndexMapper(3,1,"TRIPLE 4"));
         indexMapperList.add(new IndexMapper(3,2,"TRIPLE 18"));
@@ -183,28 +234,13 @@ public class Filters {
         indexMapperList.add(new IndexMapper(3,19,"TRIPLE 6"));
     }
 
-    public int getAngleScope(double angle){
-        for (AngleScope angleScope : angleList) {
-            if(angleScope.isInRange(angle))
-                return angleList.indexOf(angleScope);
-        }
-        return 20;
+    /*Getters*/
+    public List<AngleScope> getAngleMapperList() {
+        return angleMapperList;
     }
 
-    public int getRadiusScope(int radius) {
-        for (RadiusScope radiusScope : radiusList) {
-            if(radiusScope.isInRange(radius))
-                return radiusList.indexOf(radiusScope);
-        }
-        return 7;
-    }
-
-    public List<AngleScope> getAngleList() {
-        return angleList;
-    }
-
-    public List<RadiusScope> getRadiusList() {
-        return radiusList;
+    public List<RadiusScope> getRadiusMapperList() {
+        return radiusMapperList;
     }
 
     public List<IndexMapper> getIndexMapperList() {

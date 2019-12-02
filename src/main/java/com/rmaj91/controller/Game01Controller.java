@@ -6,7 +6,7 @@ import java.util.function.UnaryOperator;
 
 import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
-import com.rmaj91.domain.Player01;
+import com.rmaj91.domain.Player;
 import com.rmaj91.repository.GameFactory;
 import javafx.beans.value.ObservableValue;
 
@@ -138,7 +138,7 @@ public class Game01Controller implements Initializable{
         initializeStaticGame01Variables();
         createPlayersHBoxes(getPlayersQuantity());
 
-		Main.gamesRepositotyImpl.getCurrentRound().display();
+		Main.gamesRepositotyImpl.getCurrentRound().displayRound();
         boardController.getThrowField1().requestFocus();
         boardController.getMainStackPane().setDisable(false);
 
@@ -228,7 +228,7 @@ public class Game01Controller implements Initializable{
             vBox.setAlignment(Pos.BOTTOM_CENTER);
             vBox.setMinWidth(100);
 
-            vBox.getChildren().addAll(createPlayerLabel(Main.gamesRepositotyImpl.getCurrentRound().getPlayer01s()[i].getName(),false),
+            vBox.getChildren().addAll(createPlayerLabel(Main.gamesRepositotyImpl.getCurrentRound().getPlayer()[i].getName(),false),
                     createPlayerLabel(String.valueOf(Game01.getStartingPoints()),true));
             boardController.getGame01PlayersTable().getChildren().add(vBox);
         }
@@ -245,20 +245,20 @@ public class Game01Controller implements Initializable{
         // get names //
         String[] playersNames = getPlayersNames(getPlayersQuantity());
         // get blank players array//
-        Player01[] playersArray = new Player01[getPlayersQuantity()];
+        Player[] playersArray = new Player[getPlayersQuantity()];
         for(int i=0;i<getPlayersQuantity();i++){
-            playersArray[i] = new Player01();
+            playersArray[i] = new Player();
 //            for(int j=0;j<3;j++)
 //                playersArray[i].setThrowFieldsByIndex(j,new String());
         }
-        ((Game01)Main.gamesRepositotyImpl.getCurrentRound()).setPlayer01s(playersArray);
+        ((Game01)Main.gamesRepositotyImpl.getCurrentRound()).setPlayers(playersArray);
         // init players Names //
         for(int i=0;i<getPlayersQuantity();i++){
             playersArray[i].setName(playersNames[i]);
         }
         // init players points //
-        for (Player01 player01 : playersArray) {
-            player01.setPoints(getStartingPoints());
+        for (Player player : playersArray) {
+            player.setPoints(getStartingPoints());
         }
         return playersNames;
     }

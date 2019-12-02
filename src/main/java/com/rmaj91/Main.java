@@ -1,7 +1,7 @@
 package com.rmaj91;
 
 import com.rmaj91.domain.Game01;
-import com.rmaj91.domain.Player01;
+import com.rmaj91.domain.Player;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.SoundPlayer;
 import javafx.application.Application;
@@ -36,7 +36,7 @@ public class Main extends Application {
 
             // Injecting //
             Game01.setGamesRepositoryImpl(gamesRepositotyImpl);
-            Player01.setGamesRepositoryImpl(gamesRepositotyImpl);
+            Player.setGamesRepositoryImpl(gamesRepositotyImpl);
 
             AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("Main.fxml"));
 

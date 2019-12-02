@@ -1,7 +1,6 @@
 package com.rmaj91.controller;
 
 import java.net.URL;
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -22,7 +21,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 public class MainController implements Initializable {
 
@@ -103,7 +101,7 @@ public class MainController implements Initializable {
 		Game01.setMainController(this);
 		Main.gamesRepositotyImpl.setBoardController(boardController);
 
-		Main.soundPlayer.setSoundActive(!volumeSlider.isDisable());
+		Main.soundPlayer.setSoundsActive(!volumeSlider.isDisable());
 		Main.soundPlayer.setVolumeLevel(volumeSlider.getValue());
 
 		// slider listeners
@@ -111,7 +109,7 @@ public class MainController implements Initializable {
 			Main.soundPlayer.setVolumeLevel(volumeSlider.getValue());
 		});
 		volumeSlider.disableProperty().addListener((obs,oldValue,newValue)->{
-			Main.soundPlayer.setSoundActive(!volumeSlider.isDisable());
+			Main.soundPlayer.setSoundsActive(!volumeSlider.isDisable());
 		});
 
 		//todo
