@@ -3,6 +3,7 @@ package com.rmaj91.controller;
 import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.Point;
+import com.rmaj91.utility.SoundPlayer;
 import com.rmaj91.utility.Utility;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,6 +30,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class BoardController implements Initializable {
+
+    // Dependencies //
+    private SoundPlayer soundPlayer;
 
     @FXML
     private StackPane mainStackPane;
@@ -166,16 +170,16 @@ public class BoardController implements Initializable {
     }
 
 
+    public void setSoundPlayer(SoundPlayer soundPlayer) {
+        this.soundPlayer = soundPlayer;
+    }
 
     public VBox getStatusPlayer1() {
         return statusPlayer1;
     }
 
 
-    // OnClick Board
-    public void boardClicked(MouseEvent event) {
-        Main.gamesRepositotyImpl.getCurrentRound().throwDart(event);
-    }
+
     // Onclick button next
     public void nextButtonClicked(){
         Main.gamesRepositotyImpl.getCurrentRound().next();
@@ -188,6 +192,13 @@ public class BoardController implements Initializable {
     ////////////////////////////////////////////
     // dart fields ALGORITHM ///////////////////
     ////////////////////////////////////////////
+
+    // OnClick Board
+    public void boardClicked(MouseEvent event) {
+        Main.gamesRepositotyImpl.getCurrentRound().throwDart(event);
+    }
+
+
     List<Point> pointList = new ArrayList<>();
 
     private int currentRadiusIndex = -1;
@@ -259,7 +270,6 @@ public class BoardController implements Initializable {
 
 
     // todo dartboard hints
-    // todo serialize, save/load
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         canvas.setOpacity(0.75);

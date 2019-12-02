@@ -3,6 +3,7 @@ package com.rmaj91;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.Player;
 import com.rmaj91.repository.GamesRepositoryImpl;
+import com.rmaj91.utility.SoundPlayer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,8 +23,8 @@ import java.util.Optional;
 public class Main extends Application {
 
     public static Stage stage = null;
-    public static GamesRepositoryImpl gamesRepositotyImpl = new GamesRepositoryImpl();
-   //public static MediaPlayer mediaPlayer;
+    public static final GamesRepositoryImpl gamesRepositotyImpl = new GamesRepositoryImpl();
+    public static final SoundPlayer soundPlayer= new SoundPlayer();
 
     public static void main(String[] args) {
         launch(args);
@@ -32,12 +33,17 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+
+            // Injecting //
+            Game01.setGamesRepositoryImpl(gamesRepositotyImpl);
+            Player.gamesRepositoryImpl = gamesRepositotyImpl;
+
             AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("Main.fxml"));
+
             Scene scene = new Scene(root);
             //scene.getStylesheets().add(getClass().getResource("css/main.css").toExternalForm());
             stage = primaryStage;
-            Game01.setGamesRepositoryImpl(gamesRepositotyImpl);
-            Player.gamesRepositoryImpl = gamesRepositotyImpl;
+
 
 
             primaryStage.getIcons().add(new Image("images/dartBoard.png"));
@@ -64,26 +70,6 @@ public class Main extends Application {
             event.consume();
     }
 
-//    private static Scene scene;
-//
-//    @Override
-//    public void start(Stage stage) throws IOException {
-//        scene = new Scene(loadFXML("primary"));
-//        stage.setScene(scene);
-//        stage.show();
-//    }
-//
-//    static void setRoot(String fxml) throws IOException {
-//        scene.setRoot(loadFXML(fxml));
-//    }
-//
-//    private static Parent loadFXML(String fxml) throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml + ".fxml"));
-//        return fxmlLoader.load();
-//    }
-//
-//    public static void main(String[] args) {
-//        launch();
-//    }
+
 
 }

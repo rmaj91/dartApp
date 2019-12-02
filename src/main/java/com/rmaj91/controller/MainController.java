@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
+import com.rmaj91.utility.SoundPlayer;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,8 +23,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class MainController implements Initializable {
+
+	// Dependencies //
+	private SoundPlayer soundPlayer;
+
 
 	@FXML
 	private AnchorPane rootPane;
@@ -80,6 +86,10 @@ public class MainController implements Initializable {
 	private BoardController boardController;
 
 
+	public Slider getVolumeSlider() {
+		return volumeSlider;
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		makePaneDragable();
@@ -92,18 +102,25 @@ public class MainController implements Initializable {
 		game01Controller.setBoardController(boardController);
 		Game01.setGame01Controller(game01Controller);
 		Game01.setBoardController(boardController);
+		Game01.setMainController(this);
 		Main.gamesRepositotyImpl.setBoardController(boardController);
 
-		initSoundFiles();
+		Main.soundPlayer.setSoundActive(!volumeSlider.isDisable());
+		Main.soundPlayer.setVolumeLevel(volumeSlider.getValue());
 
+		// slider listeners
+		volumeSlider.valueProperty().addListener((obs,oldValue,newValue)->{
+			Main.soundPlayer.setVolumeLevel(volumeSlider.getValue());
+		});
+		volumeSlider.disableProperty().addListener((obs,oldValue,newValue)->{
+			Main.soundPlayer.setSoundActive(!volumeSlider.isDisable());
+		});
+
+		//todo
+		Stage stage = (Stage) rootPane.getScene().getWindow();
 	}
 
-	private void initSoundFiles() {
 
-//		volumeSlider.valueProperty().addListener((observable,oldValue,newValue) ->{
-//			Main.mediaPlayer.setVolume(volumeSlider.getValue());
-//		});
-	}
 
 	private void makePaneDragable() {
 		mainTopPane.setOnMousePressed((event) -> {

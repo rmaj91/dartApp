@@ -1,7 +1,9 @@
 package com.rmaj91.domain;
 
+import com.rmaj91.Main;
 import com.rmaj91.controller.BoardController;
 import com.rmaj91.controller.Game01Controller;
+import com.rmaj91.controller.MainController;
 import com.rmaj91.interfaces.Playable;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.Filters;
@@ -15,6 +17,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 
+import javax.sound.sampled.*;
+import java.io.File;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -25,6 +29,7 @@ public class Game01 implements Playable, Serializable {
 	private static BoardController boardController;
 	private static Game01Controller game01Controller;
 	private static GamesRepositoryImpl gamesRepositoryImpl;
+	private static MainController mainController;
 	// static variables //
 	private static boolean doubleOut;
 	private static int playersQuantity;
@@ -70,6 +75,9 @@ public class Game01 implements Playable, Serializable {
 		Game01.startingPoints = startingPoints;
 	}
 
+	public static void setMainController(MainController mainController) {
+		Game01.mainController = mainController;
+	}
 	// GETTERS //
 	/////////////
 
@@ -162,7 +170,7 @@ public class Game01 implements Playable, Serializable {
 	public void throwDart(MouseEvent event) {
 		int currentThrow = players[currentPlayer - 1].getCurrentThrow();
 
-		if (currentThrow == 4)
+		if (currentThrow > 3)
 			return;
 		else {
 
@@ -171,13 +179,15 @@ public class Game01 implements Playable, Serializable {
 			int radiusIndex = Utility.getRadiusIndex(xCartesian, yCartesian);
 			int angleIndex = Utility.getAngleIndex(xCartesian, yCartesian);
 
-			String key = "";
+			String key = new String();
 			for (Filters.IndexMapper indexMapper : Utility.filters.getIndexMapperList()) {
 				if (indexMapper.hasKey(radiusIndex, angleIndex)) {
 					key = indexMapper.getKey();
 					break;
 				}
 			}
+
+			Main.soundPlayer.playSound(key);
 
 			////////////////////////////////////////////
 			System.out.print("Rzut nr: " + currentThrow + " Pressed: x = " + xCartesian + "  y = " + yCartesian + "\t");
@@ -280,31 +290,36 @@ public class Game01 implements Playable, Serializable {
 				alert.setTitle("Winner");
 				alert.setHeaderText(players[currentPlayer-1].getName()+ " Won!!!"+"\nCongratulations!");
 				alert.showAndWait();
+				Main.soundPlayer.playSound("win");
 				boardController.getMainStackPane().setDisable(true);
 				return;
 			}
 
-
-
 			if(newPoints < 2){
 				players[currentPlayer-1].setPoints(oldPoints);
+				Main.soundPlayer.playSound("overthrow");
 				Alert alert = new Alert(Alert.AlertType.WARNING);
 				alert.setTitle("Warning Dialog");
 				alert.setHeaderText("Over Throw !!!");
 				alert.showAndWait();
+
 				for(int j=0;j<3;j++){
 					players[currentPlayer-1].setThrowFieldsByIndex(j,new String());
 				}
+				players[currentPlayer-1].setCurrentThrow(1);
+				boardController.getThrowField1().requestFocus();
 				return;
 			}
 			// sprawdzenie wygranej !!!
 		}
 		if(difference > 180){
 			// todo wysw alert ze nie mozna 180
+			Main.soundPlayer.playSound("overthrow");
 			Alert alert = new Alert(Alert.AlertType.WARNING);
 			alert.setTitle("Warning Dialog");
 			alert.setHeaderText("U cant get more than 180 by 3 throws !!!");
 			alert.showAndWait();
+
 			for(int i=0;i<3;i++){
 				players[currentPlayer-1].setThrowFieldsByIndex(i,new String());
 			}

@@ -96,6 +96,8 @@ public class Filters {
             angleList.add(new AngleScope(9+18*i,27+18*i));
         }
         angleList.add(new AngleScope(351,9));
+
+        // moze by to wywalil ;p
         angleList.add(new AngleScope(0,0));
 
         // Radius mapping //
