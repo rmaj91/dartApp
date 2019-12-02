@@ -34,7 +34,8 @@ public class SoundPlayer {
 
     // METODS //
     public void playSound(String fieldKey) {
-
+        if(!soundActive)
+            return;
         try {
             String fileName = fieldKey.toLowerCase().replaceAll("\\s","");
             File file = new File(getClass().getClassLoader().getResource("sounds/" + fileName+ ".wav").getFile());

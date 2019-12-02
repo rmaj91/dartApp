@@ -130,22 +130,22 @@
                         </HBox>
                         <VBox layoutY="30.0" prefHeight="150.0" prefWidth="150.0">
                            <children>
-                              <TextField fx:id="game01NamePlayer1" promptText="Enter player name">
+                              <TextField fx:id="game01NamePlayer1" promptText="Enter player01 name">
                                  <VBox.margin>
                                     <Insets top="3.0" />
                                  </VBox.margin>
                               </TextField>
-                              <TextField fx:id="game01NamePlayer2" disable="true" promptText="Enter player name">
+                              <TextField fx:id="game01NamePlayer2" disable="true" promptText="Enter player01 name">
                                  <VBox.margin>
                                     <Insets top="3.0" />
                                  </VBox.margin>
                               </TextField>
-                              <TextField fx:id="game01NamePlayer3" disable="true" promptText="Enter player name">
+                              <TextField fx:id="game01NamePlayer3" disable="true" promptText="Enter player01 name">
                                  <VBox.margin>
                                     <Insets top="3.0" />
                                  </VBox.margin>
                               </TextField>
-                              <TextField fx:id="game01NamePlayer4" disable="true" promptText="Enter player name">
+                              <TextField fx:id="game01NamePlayer4" disable="true" promptText="Enter player01 name">
                                  <VBox.margin>
                                     <Insets top="3.0" />
                                  </VBox.margin>

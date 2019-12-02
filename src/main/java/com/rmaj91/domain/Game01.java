@@ -12,13 +12,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 
-import javax.sound.sampled.*;
-import java.io.File;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -36,15 +33,15 @@ public class Game01 implements Playable, Serializable {
 	private static int roundsMaxNumber;
 	private static int startingPoints;
 	// variables //
-	Player[] players;
+	Player01[] player01s;
 	private int currentPlayer;
 
 	// SETTERS //
 	/////////////
 
 
-	public void setPlayers(Player[] players) {
-		this.players = players;
+	public void setPlayer01s(Player01[] player01s) {
+		this.player01s = player01s;
 	}
 
 	public static void setBoardController(BoardController boardController) {
@@ -83,8 +80,8 @@ public class Game01 implements Playable, Serializable {
 
 
 
-	public Player[] getPlayers() {
-		return players;
+	public Player01[] getPlayer01s() {
+		return player01s;
 	}
 
 	public static boolean isDoubleOut() {
@@ -119,12 +116,12 @@ public class Game01 implements Playable, Serializable {
 	public Playable cloneRound() {
 		Game01 game01 = new Game01();
 
-		Player[] playersArray = new Player[playersQuantity];
-		Arrays.fill(playersArray,new Player());
-		game01.players = playersArray;
+		Player01[] playersArray = new Player01[playersQuantity];
+		Arrays.fill(playersArray,new Player01());
+		game01.player01s = playersArray;
 
-		for(int i=0;i<this.players.length;i++){
-			game01.players[i] = this.players[i].clonePlayer();
+		for(int i = 0; i<this.player01s.length; i++){
+			game01.player01s[i] = this.player01s[i].clonePlayer();
 		}
 		return game01;
 	}
@@ -136,11 +133,11 @@ public class Game01 implements Playable, Serializable {
 
 		if(gamesRepositoryImpl.getIndexOfRound(this)+1 < Game01.roundsMaxNumber || currentPlayer != playersQuantity){
 			if(currentPlayer  == Game01.playersQuantity){
-				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayers()[currentPlayer-1].setCurrentThrow(1);
+				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayer01s()[currentPlayer-1].setCurrentThrow(1);
 				gamesRepositoryImpl.pushRound(this.cloneRound());
 			}
 			else{
-				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayers()[currentPlayer-1].setCurrentThrow(1);
+				((Game01)gamesRepositoryImpl.getCurrentRound()).getPlayer01s()[currentPlayer-1].setCurrentThrow(1);
 				currentPlayer++;
 			}
 
@@ -168,18 +165,18 @@ public class Game01 implements Playable, Serializable {
 
 	@Override
 	public void throwDart(MouseEvent event) {
-		int currentThrow = players[currentPlayer - 1].getCurrentThrow();
+		int currentThrow = player01s[currentPlayer - 1].getCurrentThrow();
 
-		if (currentThrow > 3)
+		double xCartesian = event.getX() - 248;
+		double yCartesian = -(event.getY() - 248.5);
+		int radiusIndex = Utility.getRadiusIndex(xCartesian, yCartesian);
+		int angleIndex = Utility.getAngleIndex(xCartesian, yCartesian);
+		String key = new String();
+
+		System.out.println(radiusIndex);
+		if (currentThrow > 3 || radiusIndex == 7)
 			return;
 		else {
-
-			double xCartesian = event.getX() - 248;
-			double yCartesian = -(event.getY() - 248.5);
-			int radiusIndex = Utility.getRadiusIndex(xCartesian, yCartesian);
-			int angleIndex = Utility.getAngleIndex(xCartesian, yCartesian);
-
-			String key = new String();
 			for (Filters.IndexMapper indexMapper : Utility.filters.getIndexMapperList()) {
 				if (indexMapper.hasKey(radiusIndex, angleIndex)) {
 					key = indexMapper.getKey();
@@ -204,7 +201,7 @@ public class Game01 implements Playable, Serializable {
 			} else if (currentThrow == 3)
 				boardController.getThrowField3().setText(new String(key));
 
-			players[currentPlayer - 1].setCurrentThrow(currentThrow+1);
+			player01s[currentPlayer - 1].setCurrentThrow(currentThrow+1);
 			saveThrowFields();
 			display();
 		}
@@ -218,14 +215,14 @@ public class Game01 implements Playable, Serializable {
 		boardController.getRoundsLabel().setText("Round: "+ currentRound +"/"+Game01.roundsMaxNumber);
 
 		// TextFields //
-		boardController.getThrowField1().setText(players[currentPlayer-1].getThrowFields()[0]);
-		boardController.getThrowField2().setText(players[currentPlayer-1].getThrowFields()[1]);
-		boardController.getThrowField3().setText(players[currentPlayer-1].getThrowFields()[2]);
+		boardController.getThrowField1().setText(player01s[currentPlayer-1].getThrowFieldsValues()[0]);
+		boardController.getThrowField2().setText(player01s[currentPlayer-1].getThrowFieldsValues()[1]);
+		boardController.getThrowField3().setText(player01s[currentPlayer-1].getThrowFieldsValues()[2]);
 
 		// Big Player name,points,average //
-		boardController.getPlayerNameLabel().setText(players[currentPlayer-1].getName());
-		boardController.getPlayerPointsLabel().setText(String.valueOf(players[currentPlayer-1].getPoints()));
-		boardController.getAverageLabel().setText("Average: "+ String.format("%.1f",players[currentPlayer-1].getAverage()));
+		boardController.getPlayerNameLabel().setText(player01s[currentPlayer-1].getName());
+		boardController.getPlayerPointsLabel().setText(String.valueOf(player01s[currentPlayer-1].getPoints()));
+		boardController.getAverageLabel().setText("Average: "+ String.format("%.1f", player01s[currentPlayer-1].getAverage()));
 
 		// display Players points //
 
@@ -233,7 +230,7 @@ public class Game01 implements Playable, Serializable {
 			for(int i=0;i<Game01.playersQuantity;i++) {
 				Node node1 = playerVBoxes.get(i);
 				Node node2 = ((VBox) node1).getChildren().get(1);
-				((Label)node2).setText(String.valueOf(players[i].getPoints()));
+				((Label)node2).setText(String.valueOf(player01s[i].getPoints()));
 			}
 
 		// reset player name highlight //
@@ -248,19 +245,19 @@ public class Game01 implements Playable, Serializable {
 
 		// display throwfields //
 		for (int i = 0; i < 3; i++)
-			boardController.getThrowTextFieldArray()[i].setText(players[currentPlayer-1].getThrowFields()[i]);
+			boardController.getThrowTextFieldArray()[i].setText(player01s[currentPlayer-1].getThrowFieldsValues()[i]);
 
 	}
 
 	@Override
 	public void setCurrentThrow(int throwNumber) {
-		players[currentPlayer-1].setCurrentThrow(throwNumber);
+		player01s[currentPlayer-1].setCurrentThrow(throwNumber);
 	}
 
 	@Override
 	public void saveThrowFields() {
 		for (int i = 0; i < 3; i++)
-			this.players[currentPlayer-1].setThrowFieldsByIndex(i,new String(boardController.getThrowTextFieldArray()[i].getText()));
+			this.player01s[currentPlayer-1].setThrowFieldsByIndex(i,new String(boardController.getThrowTextFieldArray()[i].getText()));
 		calculatePoints();
 	}
 
@@ -274,12 +271,12 @@ public class Game01 implements Playable, Serializable {
 			oldPoints = Game01.startingPoints;
 		else
 			// z poprzedniej rundy
-			oldPoints = ((Game01)gamesRepositoryImpl.getPreviousRound()).getPlayers()[currentPlayer-1].getPoints();
+			oldPoints = ((Game01)gamesRepositoryImpl.getPreviousRound()).getPlayer01s()[currentPlayer-1].getPoints();
 
 		newPoints = oldPoints;
 		// obliczenia
 		for (int i = 0; i < 3; i++) {
-			ThrowValues throwValue = readValues(players[currentPlayer-1].getThrowFields()[i]);
+			ThrowValues throwValue = readValues(player01s[currentPlayer-1].getThrowFieldsValues()[i]);
 			int points = throwValue.getValue() * throwValue.getMulitplier();
 			newPoints = newPoints - points;
 			difference += points;
@@ -288,7 +285,7 @@ public class Game01 implements Playable, Serializable {
 			if(isWinner(newPoints,throwValue)){
 				Alert alert = new Alert(Alert.AlertType.WARNING);
 				alert.setTitle("Winner");
-				alert.setHeaderText(players[currentPlayer-1].getName()+ " Won!!!"+"\nCongratulations!");
+				alert.setHeaderText(player01s[currentPlayer-1].getName()+ " Won!!!"+"\nCongratulations!");
 				alert.showAndWait();
 				Main.soundPlayer.playSound("win");
 				boardController.getMainStackPane().setDisable(true);
@@ -296,7 +293,7 @@ public class Game01 implements Playable, Serializable {
 			}
 
 			if(newPoints < 2){
-				players[currentPlayer-1].setPoints(oldPoints);
+				player01s[currentPlayer-1].setPoints(oldPoints);
 				Main.soundPlayer.playSound("overthrow");
 				Alert alert = new Alert(Alert.AlertType.WARNING);
 				alert.setTitle("Warning Dialog");
@@ -304,9 +301,9 @@ public class Game01 implements Playable, Serializable {
 				alert.showAndWait();
 
 				for(int j=0;j<3;j++){
-					players[currentPlayer-1].setThrowFieldsByIndex(j,new String());
+					player01s[currentPlayer-1].setThrowFieldsByIndex(j,new String());
 				}
-				players[currentPlayer-1].setCurrentThrow(1);
+				player01s[currentPlayer-1].setCurrentThrow(1);
 				boardController.getThrowField1().requestFocus();
 				return;
 			}
@@ -321,11 +318,11 @@ public class Game01 implements Playable, Serializable {
 			alert.showAndWait();
 
 			for(int i=0;i<3;i++){
-				players[currentPlayer-1].setThrowFieldsByIndex(i,new String());
+				player01s[currentPlayer-1].setThrowFieldsByIndex(i,new String());
 			}
 			return;
 		}
-		players[currentPlayer-1].setPoints(newPoints);
+		player01s[currentPlayer-1].setPoints(newPoints);
 
 	}
 

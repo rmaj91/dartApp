@@ -40,7 +40,7 @@ public class Utility {
             if(radiusScope.isInRange(getRadius(x,y)))
                 return filters.getRadiusList().indexOf(radiusScope);
         }
-        return 6;
+        return 7;
     }
 
 

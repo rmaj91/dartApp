@@ -53,8 +53,8 @@ public class Cricket implements Playable {
     }
 
     @Override
-    public Player[] getPlayers() {
-        return new Player[0];
+    public Player01[] getPlayer01s() {
+        return new Player01[0];
     }
 
 

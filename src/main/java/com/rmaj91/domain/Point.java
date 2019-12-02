@@ -1,19 +1,25 @@
 package com.rmaj91.domain;
 
+/**
+ * The Point class Specifies two coordinate of point in cartesian coordinate system
+ */
 public class Point {
-    private int x;
-    private int y;
 
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
+    /*Variables*/
+    private int xCoordinate;
+    private int yCoordinate;
+
+    /*Constructor*/
+    public Point(int xCoordinate, int yCoordinate) {
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
     }
 
-    public int getX() {
-        return x;
+    /*Getters*/
+    public int getxCoordinate() {
+        return xCoordinate;
     }
-
-    public int getY() {
-        return y;
+    public int getyCoordinate() {
+        return yCoordinate;
     }
 }

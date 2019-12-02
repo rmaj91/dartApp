@@ -6,6 +6,7 @@ import com.rmaj91.domain.Game01;
 import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.interfaces.Playable;
 
+import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 
 import java.io.*;
@@ -78,12 +79,10 @@ public class GamesRepositoryImpl implements GamesRepository {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(Main.stage);
-
-        DataOutputStream dataOutputStream;
-
+//        DataOutputStream.dataOutputStream;
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
-            dataOutputStream = new DataOutputStream(outputStream);
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             dataOutputStream.writeBoolean(Game01.isDoubleOut());
             dataOutputStream.writeInt(Game01.getPlayersQuantity());
             dataOutputStream.writeInt(Game01.getRoundsMaxNumber());
@@ -91,15 +90,17 @@ public class GamesRepositoryImpl implements GamesRepository {
 
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(gamesList);
-
             dataOutputStream.close();
         } catch (IOException exception) {
             System.out.println(exception);
             return false;
         }
 
-        //todo inform window o sukcesie
         System.out.println("Save succefully!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Saved!");
+        alert.setHeaderText("Game saved successfully :)");
+        alert.showAndWait();
 		return true;
 	}
 

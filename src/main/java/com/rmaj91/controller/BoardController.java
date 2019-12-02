@@ -218,17 +218,17 @@ public class BoardController implements Initializable {
         pointList.stream()
                 .filter(point -> {
                     //int indexRangeScope = Utility.filters.getRadiusScope(getRadius(getX(event),getY(event)));
-                    return Utility.filters.getRadiusList().get(hoverRadiusIndex).isInRange(getRadius(getCenterX(point.getX())
-                            , getCenterY(point.getY()))); })
+                    return Utility.filters.getRadiusList().get(hoverRadiusIndex).isInRange(getRadius(getCenterX(point.getxCoordinate())
+                            , getCenterY(point.getyCoordinate()))); })
                 .filter(point -> {
                     if(getRadius(getX(event),getY(event)) < 19 || getRadius(getX(event),getY(event)) > 205)
                         return true;
                     else{
                         //int indexAngleScope = Utility.filters.getAngleScope(getAngle(getX(event),getY(event)));
-                        return Utility.filters.getAngleList().get(hoverAngleIndex).isInRange(getAngle(getCenterX(point.getX())
-                                , getCenterY(point.getY()))); } })
+                        return Utility.filters.getAngleList().get(hoverAngleIndex).isInRange(getAngle(getCenterX(point.getxCoordinate())
+                                , getCenterY(point.getyCoordinate()))); } })
                 .forEach(point -> {
-                    displayPixel(point.getX(),point.getY()); });
+                    displayPixel(point.getxCoordinate(),point.getyCoordinate()); });
     }
 
     public int getRadius(double x, double y){
@@ -318,164 +318,164 @@ public class BoardController implements Initializable {
 
         // Radius < 204 BackGROUND
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 204)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.WHITE) );
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 204)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.WHITE) );
         ////////////////////////////////
 
         // NOT EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 204)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 204)
                 .filter(point -> {
                     for(int i=0;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getX()),getCenterY(point.getY()))))
+                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
                 })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK));
+                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK));
         ////////////////////////////////
 
         // EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 204)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 204)
                 .filter(point -> {
                     for(int i=1;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getX()),getCenterY(point.getY()))))
+                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
                 })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.WHITE));
+                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.WHITE));
         ////////////////////////////////
 
 
         // Radius SINGLE BULL //
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 19)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),greenColor) );
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 19)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),greenColor) );
         ////////////////////////////////
 
         // Radius DOUBLE BULL //
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 9)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),redColor) );
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 9)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),redColor) );
         ////////////////////////////////
 
         // todo
         // Radius
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 8)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 8)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
         ////////////////////////////////
 // todo
         // Radius D
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 19)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 19)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
         ////////////////////////////////
 
 
         // Radius < 205 && Radius > 195 NOT EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 205)
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) >= 194)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 205)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 194)
                 .filter(point -> {
                     for(int i=0;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getX()),getCenterY(point.getY()))))
+                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
                 })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),redColor));
+                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),redColor));
         ////////////////////////////////
 
         // Radius < 205 && Radius > 195 EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 205)
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) >= 194)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 205)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 194)
                 .filter(point -> {
                     for(int i=1;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getX()),getCenterY(point.getY()))))
+                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
                 })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),greenColor));
+                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),greenColor));
         ////////////////////////////////
         ////////////////////////////////
         ////////////////////////////////
 
         // Radius < 127 && Radius > 118 NOT EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 127)
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) >= 117)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 127)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 117)
                 .filter(point -> {
                     for(int i=0;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getX()),getCenterY(point.getY()))))
+                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
                 })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),redColor));
+                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),redColor));
         ////////////////////////////////
 
         // Radius < 127 && Radius > 118 EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 127)
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) >= 117)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 127)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 117)
                 .filter(point -> {
                     for(int i=1;i<20;i+=2){
-                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getX()),getCenterY(point.getY()))))
+                        if(Utility.filters.getAngleList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
                 })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),greenColor));
+                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),greenColor));
         ////////////////////////////////
 
         // todo
         // Radius D
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 126)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 126)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
         ////////////////////////////////
         // todo
         // Radius D
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 116)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 116)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
         ////////////////////////////////
         // todo
         // Radius D
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) == 194)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 194)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
         ////////////////////////////////
 
         // todo
         // fixing custom board edges :)
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) > 204)
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 206)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK) );
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) > 204)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 206)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
         ////////////////////////////////
 
 //todo
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) > 18)
-                .filter(point -> getRadius(getCenterX(point.getX()),getCenterY(point.getY())) < 205)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) > 18)
+                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 205)
                 .filter(point -> {
                     for(int i=0;i<20;i++){
                         if(Utility.filters.getAngleList().get(i).getFirstAngle()
-                                == getAngle(getCenterX(point.getX()),getCenterY(point.getY()))
+                                == getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))
                         || Utility.filters.getAngleList().get(i).getSecondAngle()
-                                == getAngle(getCenterX(point.getX()),getCenterY(point.getY())))
+                                == getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())))
 
                             return true;
                     }
                     return false;
                 })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getX(),point.getY(),Color.BLACK));
+                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK));
         ////////////////////////////////
     }
 
@@ -504,7 +504,7 @@ public class BoardController implements Initializable {
     //todo dokonczyc init VBoxes
     public void initAndDisplay(){
         int currentPlayer = Main.gamesRepositotyImpl.getCurrentRound().getCurrentPlayer();
-        int length = Main.gamesRepositotyImpl.getCurrentRound().getPlayers().length;
+        int length = Main.gamesRepositotyImpl.getCurrentRound().getPlayer01s().length;
 
 
         for (int i = 0; i < length; i++) {
@@ -513,7 +513,7 @@ public class BoardController implements Initializable {
             vBox.setAlignment(Pos.BOTTOM_CENTER);
             vBox.setMinWidth(100);
 
-            vBox.getChildren().addAll(createPlayerLabel( Main.gamesRepositotyImpl.getCurrentRound().getPlayers()[i].getName(),false),
+            vBox.getChildren().addAll(createPlayerLabel( Main.gamesRepositotyImpl.getCurrentRound().getPlayer01s()[i].getName(),false),
                     createPlayerLabel(String.valueOf(Game01.getStartingPoints()),true));
             game01PlayersTable.getChildren().add(vBox);
 

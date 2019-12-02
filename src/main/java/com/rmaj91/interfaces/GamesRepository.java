@@ -1,8 +1,5 @@
 package com.rmaj91.interfaces;
 
-import com.rmaj91.domain.Player;
-import com.rmaj91.interfaces.Playable;
-
 public interface GamesRepository {
     void pushRound(Playable round);
     Playable getCurrentRound();

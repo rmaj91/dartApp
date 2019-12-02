@@ -1,6 +1,7 @@
 package com.rmaj91.controller;
 
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -8,7 +9,6 @@ import java.util.ResourceBundle;
 import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.utility.SoundPlayer;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -22,14 +22,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainController implements Initializable {
 
 	// Dependencies //
 	private SoundPlayer soundPlayer;
-
 
 	@FXML
 	private AnchorPane rootPane;
@@ -117,7 +115,7 @@ public class MainController implements Initializable {
 		});
 
 		//todo
-		Stage stage = (Stage) rootPane.getScene().getWindow();
+		//Stage stage = (Stage) rootPane.getScene().getWindow();
 	}
 
 

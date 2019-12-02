@@ -1,13 +1,12 @@
 package com.rmaj91.controller;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
 import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
-import com.rmaj91.domain.Player;
+import com.rmaj91.domain.Player01;
 import com.rmaj91.repository.GameFactory;
 import javafx.beans.value.ObservableValue;
 
@@ -15,8 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -231,7 +228,7 @@ public class Game01Controller implements Initializable{
             vBox.setAlignment(Pos.BOTTOM_CENTER);
             vBox.setMinWidth(100);
 
-            vBox.getChildren().addAll(createPlayerLabel(Main.gamesRepositotyImpl.getCurrentRound().getPlayers()[i].getName(),false),
+            vBox.getChildren().addAll(createPlayerLabel(Main.gamesRepositotyImpl.getCurrentRound().getPlayer01s()[i].getName(),false),
                     createPlayerLabel(String.valueOf(Game01.getStartingPoints()),true));
             boardController.getGame01PlayersTable().getChildren().add(vBox);
         }
@@ -248,20 +245,20 @@ public class Game01Controller implements Initializable{
         // get names //
         String[] playersNames = getPlayersNames(getPlayersQuantity());
         // get blank players array//
-        Player[] playersArray = new Player[getPlayersQuantity()];
+        Player01[] playersArray = new Player01[getPlayersQuantity()];
         for(int i=0;i<getPlayersQuantity();i++){
-            playersArray[i] = new Player();
+            playersArray[i] = new Player01();
 //            for(int j=0;j<3;j++)
 //                playersArray[i].setThrowFieldsByIndex(j,new String());
         }
-        ((Game01)Main.gamesRepositotyImpl.getCurrentRound()).setPlayers(playersArray);
+        ((Game01)Main.gamesRepositotyImpl.getCurrentRound()).setPlayer01s(playersArray);
         // init players Names //
         for(int i=0;i<getPlayersQuantity();i++){
             playersArray[i].setName(playersNames[i]);
         }
         // init players points //
-        for (Player player : playersArray) {
-            player.setPoints(getStartingPoints());
+        for (Player01 player01 : playersArray) {
+            player01.setPoints(getStartingPoints());
         }
         return playersNames;
     }
