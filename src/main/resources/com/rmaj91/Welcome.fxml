@@ -35,7 +35,7 @@
                   </ComboBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="chooseGameBackButton" focusTraversable="false" mnemonicParsing="false" onAction="#backToWelcome" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 15px;" text="Back">
+                        <Button fx:id="chooseGameBackButton" focusTraversable="false" mnemonicParsing="false" onAction="#backToWelcomeButtonClicked" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 15px;" text="Back">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
@@ -46,7 +46,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="chooseGameLetsButton" focusTraversable="false" mnemonicParsing="false" onAction="#letsPlayButton" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 15px;" text="Let's Play!">
+                        <Button fx:id="chooseGameLetsButton" focusTraversable="false" mnemonicParsing="false" onAction="#letsPlayButtonClicked" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 15px;" text="Let's Play!">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -95,7 +95,7 @@
                   </Hyperlink>
                </children>
             </HBox>
-            <Button fx:id="aboutButton1" focusTraversable="false" mnemonicParsing="false" onAction="#backToWelcome" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Back">
+            <Button fx:id="aboutButton1" focusTraversable="false" mnemonicParsing="false" onAction="#backToWelcomeButtonClicked" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Back">
                <font>
                   <Font size="18.0" />
                </font>
@@ -127,7 +127,7 @@
                   <Insets bottom="20.0" />
                </VBox.margin>
             </AnchorPane>
-            <Button fx:id="createNewGameButton" focusTraversable="false" mnemonicParsing="false" onAction="#createNewGame" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Create New Game">
+            <Button fx:id="createNewGameButton" focusTraversable="false" mnemonicParsing="false" onAction="#createNewGameButtonClicked" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Create New Game">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -138,7 +138,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="loadGameButton" focusTraversable="false" mnemonicParsing="false" onAction="#loadExistingGame" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Load Existing Game">
+            <Button fx:id="loadGameButton" focusTraversable="false" mnemonicParsing="false" onAction="#loadExistingGameButtonClicked" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Load Existing Game">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -149,7 +149,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="aboutButton" focusTraversable="false" mnemonicParsing="false" onAction="#about" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="About">
+            <Button fx:id="aboutButton" focusTraversable="false" mnemonicParsing="false" onAction="#aboutButtonClicked" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="About">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -160,7 +160,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="exitButton" focusTraversable="false" mnemonicParsing="false" onAction="#exit" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Exit">
+            <Button fx:id="exitButton" focusTraversable="false" mnemonicParsing="false" onAction="#exitButtonClicked" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Exit">
                <font>
                   <Font size="18.0" />
                </font>

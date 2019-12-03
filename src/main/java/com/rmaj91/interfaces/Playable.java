@@ -64,4 +64,10 @@ public interface Playable {
      */
     public Player[] getPlayer();
 
+    /**
+     * init board view and display
+     */
+    public void initAndDisplay();
+
+
 }

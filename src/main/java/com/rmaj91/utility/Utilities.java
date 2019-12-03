@@ -4,13 +4,13 @@ package com.rmaj91.utility;
  * This class provides the utilities for calculating, cartesian cooridanes, angles, radius etc.
  * This class have private constructor. it's impossible to create object of this class.
  */
-public class Utility {
+public class Utilities {
 
     /*Variables*/
     public static final Filters filters = new Filters();
 
     /*Private Constructor*/
-    private Utility() {
+    private Utilities() {
     }
 
     /*Public Static Methods*/

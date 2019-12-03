@@ -7,26 +7,31 @@ import java.util.ResourceBundle;
 
 import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
+import com.rmaj91.domain.Player;
+import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.SoundPlayer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class MainController implements Initializable {
 
+	public static final int PLAYERS_NAME_MAX_LENGTH = 8;
+
 	/*Dependencies*/
+	private GamesRepositoryImpl gamesRepository;
 	private SoundPlayer soundPlayer;
+	private static Stage stage;
 	@FXML
 	private WelcomeController welcomeController;
 	@FXML
@@ -38,45 +43,16 @@ public class MainController implements Initializable {
 	@FXML
 	private BoardController boardController;
 
-	/*Controls etc.*/
-	@FXML
-	private AnchorPane rootPane;
 
-	@FXML
-	private StackPane mainStackPane;
-
+	/*JavaFX elements*/
 	@FXML
 	private StackPane mainTopPane;
-
-	@FXML
-	private ImageView closeIcon;
-
-	@FXML
-	private ImageView maxIcon;
-
-	@FXML
-	private ImageView minIcon;
-
-	@FXML
-	private ImageView smallLogo;
-
-	@FXML
-	private Label gameName;
-
-	@FXML
-	private HBox mainBottomPane;
 
 	@FXML
 	private ImageView volumeIcon;
 
 	@FXML
 	private Slider volumeSlider;
-
-	@FXML
-	private ImageView newGameIcon;
-
-	@FXML
-	private ImageView saveGameIcon;
 
 	/*Variables*/
 	private double xOffSet = 0;
@@ -85,83 +61,77 @@ public class MainController implements Initializable {
 	/*Initalizing*/
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		makePaneDragable();
-		welcomeController.setGame01Controller(game01Controller);
-		//welcomeController.setCricketController(cricketController);
-		//welcomeController.setMasterCricketController(masterCricketController);
-		game01Controller.setWelcomeController(welcomeController);
-		//cricketController.setWelcomeController(welcomeController);
-		//masterCricketController.setWelcomeController(welcomeController);
-		game01Controller.setBoardController(boardController);
+
+		//Creating repository
+		gamesRepository = new GamesRepositoryImpl();
+		gamesRepository.setBoardController(boardController);
+		// Creating Sound player
+		soundPlayer = new SoundPlayer();
+		soundPlayer.setSoundsActive(!volumeSlider.isDisable());
+		soundPlayer.setVolumeLevel(volumeSlider.getValue());
+
+		/*Injecting Dependencies*/
+		Player.setGamesRepositoryImpl(gamesRepository);
+
+		Game01.setSoundPlayer(soundPlayer);
+		Game01.setGamesRepositoryImpl(gamesRepository);
 		Game01.setGame01Controller(game01Controller);
 		Game01.setBoardController(boardController);
 		Game01.setMainController(this);
-		Main.gamesRepositotyImpl.setBoardController(boardController);
 
-		Main.soundPlayer.setSoundsActive(!volumeSlider.isDisable());
-		Main.soundPlayer.setVolumeLevel(volumeSlider.getValue());
+		welcomeController.setMainController(this);
+		welcomeController.setGame01Controller(game01Controller);
+		welcomeController.setGamesRepository(gamesRepository);
+		//welcomeController.setCricketController(cricketController);
+		//welcomeController.setMasterCricketController(masterCricketController);
 
-		// slider listeners
+		game01Controller.setWelcomeController(welcomeController);
+		game01Controller.setGamesRepository(gamesRepository);
+		game01Controller.setBoardController(boardController);
+
+		boardController.setGamesRepository(gamesRepository);
+
+		//cricketController.setWelcomeController(welcomeController);
+		//masterCricketController.setWelcomeController(welcomeController);
+
+		/*Initializing stuff*/
+		stage.setOnCloseRequest((e)->{closeApplication(e);});
+		makeAppWindowDragable();
+		// Volume slider listener
 		volumeSlider.valueProperty().addListener((obs,oldValue,newValue)->{
-			Main.soundPlayer.setVolumeLevel(volumeSlider.getValue());
+			soundPlayer.setVolumeLevel(volumeSlider.getValue());
 		});
-//		volumeSlider.disableProperty().addListener((obs,oldValue,newValue)->{
-//			Main.soundPlayer.setSoundsActive(!volumeSlider.isDisable());
-//		});
-
-		//todo
-		//Stage stage = (Stage) rootPane.getScene().getWindow();
 	}
 
 	/*Getters & Setters*/
-	public Slider getVolumeSlider() {
-		return volumeSlider;
-	}
-
-	/*Methods*/
-	private void makePaneDragable() {
-		mainTopPane.setOnMousePressed((event) -> {
-			xOffSet = event.getSceneX();
-			yOffSet = event.getSceneY();
-			mainTopPane.setCursor(Cursor.CLOSED_HAND);
-		});
-		mainTopPane.setOnMouseDragged((event) -> {
-			Main.stage.setX(event.getScreenX() - xOffSet);
-			Main.stage.setY(event.getScreenY() - yOffSet);
-			Main.stage.setOpacity(0.92);
-		});
-		mainTopPane.setOnMouseReleased((event) -> {
-			mainTopPane.setCursor(Cursor.DEFAULT);
-			Main.stage.setOpacity(1.0);
-		});
+	public static void setStage(Stage stage) {
+		MainController.stage = stage;
 	}
 
 	/*Events*/
-	public void minimallizeApplication(MouseEvent event) {
-		Main.stage.setIconified(true);
+	public void minimalizeIconClicked(MouseEvent event) {
+		stage.setIconified(true);
     }
 
-	public void closeApplication() {
-		Main.closeApplication(null);
+	public void closeIconClicked(MouseEvent event) {
+		closeApplication(null);
 	}
 
 	public void newGameIconClicked(){
-
-		if(!Main.gamesRepositotyImpl.isEmpty()){
+		if(!gamesRepository.isEmpty()){
 			Alert a = new Alert(Alert.AlertType.NONE, "Are you sure you want to abandon game?", ButtonType.YES,
 					ButtonType.NO);
 			Optional<ButtonType> confirm = a.showAndWait();
 			if (confirm.isPresent() && confirm.get() == ButtonType.NO)
 				return;
 		}
-
-		Main.gamesRepositotyImpl.clear();
+		gamesRepository.clear();
 		boardController.getGame01PlayersTable().getChildren().clear();
 		welcomeController.toFront();
 	}
 
 	public void saveGameIconClicked() {
-		Main.gamesRepositotyImpl.saveGame();
+		gamesRepository.saveGame();
 	}
 
 	public void volumeIconClicked(){
@@ -175,9 +145,21 @@ public class MainController implements Initializable {
 			volumeIcon.setImage(new Image("images/volume_off.png"));
 			volumeSlider.setDisable(true);
 		}
-		Main.soundPlayer.setSoundsActive(!volumeSlider.isDisable());
+		soundPlayer.setSoundsActive(!volumeSlider.isDisable());
 	}
 
+	public void closeApplication(WindowEvent event) {
+		Alert alert = new Alert(Alert.AlertType.NONE, "Are you sure you want to quit?", ButtonType.YES,
+				ButtonType.NO);
+		Optional<ButtonType> confirm = alert.showAndWait();
+		if (confirm.isPresent() && confirm.get() == ButtonType.YES) {
+			stage.close();
+		}
+		else if (event != null)
+			event.consume();
+	}
+
+	/*Highlighting Menu Icons Events*/
 	public void paneIconHoverIn(MouseEvent event) {
 		((Pane)event.getSource()).setStyle("-fx-background-color: white;");
 	}
@@ -185,4 +167,21 @@ public class MainController implements Initializable {
 		((Pane)event.getSource()).setStyle("-fx-background-color: #8f2f28;");
 	}
 
+	/*Private Methods*/
+	private void makeAppWindowDragable() {
+		mainTopPane.setOnMousePressed((event) -> {
+			xOffSet = event.getSceneX();
+			yOffSet = event.getSceneY();
+			mainTopPane.setCursor(Cursor.CLOSED_HAND);
+		});
+		mainTopPane.setOnMouseDragged((event) -> {
+			stage.setX(event.getScreenX() - xOffSet);
+			stage.setY(event.getScreenY() - yOffSet);
+			stage.setOpacity(0.92);
+		});
+		mainTopPane.setOnMouseReleased((event) -> {
+			mainTopPane.setCursor(Cursor.DEFAULT);
+			stage.setOpacity(1.0);
+		});
+	}
 }	

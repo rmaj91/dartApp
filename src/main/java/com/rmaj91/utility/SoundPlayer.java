@@ -16,6 +16,7 @@ public class SoundPlayer {
     // This is global control of application volume, scope from 0.0 to 1.0
     private final double volumeScale = 0.75;
     private double volumeLevel;
+    private Clip previousClip = null;
 
     /*Constructor*/
     public SoundPlayer() {
@@ -43,6 +44,8 @@ public class SoundPlayer {
     public void playSound(String fieldName) {
         if(!soundsActive)
             return;
+        if(previousClip != null)
+            previousClip.stop();
         try {
             String fileName = fieldName.toLowerCase().replaceAll("\\s","");
             File file = new File(getClass().getClassLoader().getResource("sounds/" + fileName+ ".wav").getFile());

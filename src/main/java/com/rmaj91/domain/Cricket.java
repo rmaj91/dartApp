@@ -57,5 +57,10 @@ public class Cricket implements Playable {
         return new Player[0];
     }
 
+    @Override
+    public void initAndDisplay() {
+
+    }
+
 
 }

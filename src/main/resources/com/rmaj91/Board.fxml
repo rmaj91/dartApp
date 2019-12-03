@@ -29,7 +29,7 @@
                      </cursor>
                   </ImageView>
                   <Canvas fx:id="drawedBoard" height="500.0" width="500.0" />
-                  <Canvas fx:id="canvas" height="500.0" onMouseClicked="#boardClicked" onMouseExited="#boardHoverOff" onMouseMoved="#boardHover2" width="500.0">
+                  <Canvas fx:id="canvas" height="500.0" onMouseClicked="#dartBoardClicked" onMouseExited="#boardHoverOff" onMouseMoved="#boardHover2" width="500.0">
                      <cursor>
                         <Cursor fx:constant="CROSSHAIR" />
                      </cursor></Canvas>

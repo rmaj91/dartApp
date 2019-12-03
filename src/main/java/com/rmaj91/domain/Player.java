@@ -1,13 +1,15 @@
 package com.rmaj91.domain;
 
+import com.rmaj91.interfaces.PlayerInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * The Player01 class provides player model of '01 dart game type
  */
 
-public class Player implements com.rmaj91.interfaces.Player,Serializable {
+public class Player implements PlayerInterface,Serializable {
 
     /* Dependencies */
     private static GamesRepositoryImpl gamesRepositoryImpl;
@@ -23,9 +25,7 @@ public class Player implements com.rmaj91.interfaces.Player,Serializable {
     public Player() {
         average = 0;
         throwFieldsValues = new String[3];
-        throwFieldsValues[0] = new String();
-        throwFieldsValues[1] = new String();
-        throwFieldsValues[2] = new String();
+        Arrays.fill(throwFieldsValues,new String());
         currentThrow = 1;
     }
 

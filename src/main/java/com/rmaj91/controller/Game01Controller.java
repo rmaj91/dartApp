@@ -4,11 +4,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
-import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.Player;
 import com.rmaj91.repository.GameFactory;
-import javafx.beans.value.ObservableValue;
+import com.rmaj91.repository.GamesRepositoryImpl;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,7 +19,13 @@ import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 
 public class Game01Controller implements Initializable{
-	
+
+    /*Dependencies*/
+    private GamesRepositoryImpl gamesRepository;
+    private WelcomeController welcomeController;
+    private BoardController boardController;
+
+    /*Final Values*/
 	public final static int MIN_POINTS=100;
 	public final static int MAX_POINTS=999;
 	public final static int DEFAULT_POINTS=501;
@@ -29,177 +34,131 @@ public class Game01Controller implements Initializable{
 	public final static int MAX_ROUNDS=99;
 	public final static int DEFAULT_ROUNDS=25;
 
+	/*JavaFX elements*/
     @FXML
     private VBox newGame01Pane;
-
-    @FXML
-    private TitledPane pointsGame01Pane;
 
     @FXML
     private RadioButton game01RadioPoints501;
 
     @FXML
-    private ToggleGroup group01_1;
-
-    @FXML
-    private RadioButton game01RadioPoints701;
-
-    @FXML
     private RadioButton game01RadioPointsOther;
 
     @FXML
-    private Spinner<Integer> game01PointsBox;
+    private Spinner<Integer> game01PointsSpinner;
 
     @FXML
-    private TitledPane roundsGame01Pane;
-
-    @FXML
-    private Spinner<Integer> game01RoundsBox;
-
-    @FXML
-    private RadioButton game01RadioRounds25;
-
-    @FXML
-    private ToggleGroup group01_2;
+    private Spinner<Integer> game01RoundsSpinner;
 
     @FXML
     private RadioButton game01RadioRoundsOther;
 
     @FXML
-    private TitledPane playersGame01Pane;
-
-    @FXML
-    private RadioButton game01RadioPlayers1;
-
-    @FXML
-    private ToggleGroup group01_3;
-
-    @FXML
-    private RadioButton game01RadioPlayers2;
-
-    @FXML
-    private RadioButton game01RadioPlayers3;
-
-    @FXML
-    private RadioButton game01RadioPlayers4;
+    private ToggleGroup radioPlayersGroup;
 
     @FXML
     private CheckBox game01DoubleOut;
 
     @FXML
-    private TextField game01NamePlayer1;
+    private TextField game01PlayerNameTextField1;
 
     @FXML
-    private TextField game01NamePlayer2;
+    private TextField game01PlayerNameTextField2;
 
     @FXML
-    private TextField game01NamePlayer3;
+    private TextField game01PlayerNameTextField3;
 
     @FXML
-    private TextField game01NamePlayer4;
+    private TextField game01PlayerNameTextField4;
 
-    @FXML
-    private Button game01BackButton;
+    TextField[] game01PlayerNamesTextFields;
 
-    @FXML
-    private Button game01LetsButton;
+    /*Setters & Getters*/
+    public void setGamesRepository(GamesRepositoryImpl gamesRepository) {
+        this.gamesRepository = gamesRepository;
+    }
 
+    public void setWelcomeController(WelcomeController welcomeController) {
+        this.welcomeController = welcomeController;
+    }
 
+    public void setBoardController(BoardController boardController) {
+        this.boardController = boardController;
+    }
+
+    /*Events*/
     public void toFront() {
     	newGame01Pane.toFront();
     }
-    
-    private WelcomeController welcomeController;
-    
-	public void setWelcomeController(WelcomeController welcomeController) {
-		this.welcomeController = welcomeController;
-	}
 
-
-	private BoardController boardController;
-
-    public void backButton() {
+    public void backButtonClicked() {
         welcomeController.toFront();
     }
 
-	public void setBoardController(BoardController boardController) {
-		this.boardController = boardController;
-	}
-
-
+    /**
+     * Method Initialize board view and games repository
+     */
 	public void letsPlayButtonClicked() {
-
-
         boardController.toFront();
         boardController.getGame01ScoreTable().toFront();
         displayDoubleOutLabel();
 
-        Main.gamesRepositotyImpl.createNewGame(GameFactory.getGame("'01 Game"));
+        gamesRepository.createNewGame(GameFactory.getGame("'01 Game"));
         initializeStaticGame01Variables();
-        createPlayersHBoxes(getPlayersQuantity());
+        createPlayersVBoxes(getPlayersQuantity());
 
-		Main.gamesRepositotyImpl.getCurrentRound().displayRound();
+		gamesRepository.getCurrentRound().displayRound();
         boardController.getThrowField1().requestFocus();
+        // In case of startig new game after winning
         boardController.getMainStackPane().setDisable(false);
-
 	}
-	/**************************************************************
-     *                      Private methods
-     /*************************************************************/
 
-
-    /*
-     * Returns number of rounds defined by player
-     * */
+    /*Private Methods*/
+    /**
+     * Method defines number of rounds selected by radio buttons and returns it.
+     */
     private int getRounds(){
         if(game01RadioRoundsOther.isSelected())
-            return game01RoundsBox.getValue();
+            return game01RoundsSpinner.getValue();
         else
             return 25;
     }
 
-    /*
-     * Returns number of starting points defined by player
+    /**
+     * Method defines starting points selected by radio buttons and returns it.
      * */
     private int getStartingPoints(){
         if(game01RadioPointsOther.isSelected())
-            return game01PointsBox.getValue();
+            return game01PointsSpinner.getValue();
         else if(game01RadioPoints501.isSelected())
             return 501;
         else
             return 701;
     }
 
-    /*
-     * Returns number of players defined by player
+    /**
+     * Method defines number of players selected by radio buttons and returns it.
      * */
     private int getPlayersQuantity(){
-        if(game01RadioPlayers1.isSelected())
-            return 1;
-        else if(game01RadioPlayers2.isSelected())
-            return 2;
-        else if(game01RadioPlayers3.isSelected())
-            return 3;
-        else
-            return 4;
+        int playersQuantity = Integer.parseInt(((RadioButton) radioPlayersGroup.getSelectedToggle()).getText());
+        return playersQuantity;
     }
 
-    /*
-     * Returns players names defines by player
+    /**
+     * Method gets players names from textFieldsArray and returns it.
      * */
     private String[] getPlayersNames(int playersQuantity){
         String[] playersNames = new String[playersQuantity];
-        if(playersQuantity >= 1)
-            playersNames[0] = getPlayerName(game01NamePlayer1);
-        if(playersQuantity >= 2)
-            playersNames[1] = getPlayerName(game01NamePlayer2);
-        if(playersQuantity >= 3)
-            playersNames[2] = getPlayerName(game01NamePlayer3);
-        if(playersQuantity == 4)
-            playersNames[3] = getPlayerName(game01NamePlayer4);
+        for (int i = 0; i < playersQuantity; i++) {
+            playersNames[i] = getPlayerName(game01PlayerNamesTextFields[i]);
+        }
         return playersNames;
     }
 
+    /**
+     * Method takes text from textfield and if its empty returns "Player"+"player number"
+     * else returns getText() value
+     */
     private String getPlayerName(TextField textField){
         if(textField.getText().trim().equals("")){
             return "Player"+textField.getId().substring(textField.getId().length()-1);
@@ -208,6 +167,9 @@ public class Game01Controller implements Initializable{
             return textField.getText();
     }
 
+    /**
+     * Method checks if double out option is checked, return true if yes, false if not.
+     */
     private boolean isDoubleOut(){
         if(game01DoubleOut.isSelected())
             return true;
@@ -215,54 +177,29 @@ public class Game01Controller implements Initializable{
             return false;
     }
 
-
-
-
-    private void createPlayersHBoxes(int playersQuantity){
-
-        // initializing player Names
-        String[] playersNames = initializeGame01Players();
-
+    /**
+     * Method creates VBoxes for players in game01PlayersTable at board view,
+     * VBoxes contains labels with name and amount of points
+     * @param playersQuantity quantity of setted players
+     */
+    private void createPlayersVBoxes(int playersQuantity){
+       initializeGame01Players();
         for(int i=0;i<playersQuantity;i++){
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.BOTTOM_CENTER);
             vBox.setMinWidth(100);
-
-            vBox.getChildren().addAll(createPlayerLabel(Main.gamesRepositotyImpl.getCurrentRound().getPlayer()[i].getName(),false),
+            vBox.getChildren().addAll(createPlayerLabel(gamesRepository.getCurrentRound().getPlayer()[i].getName(),false),
                     createPlayerLabel(String.valueOf(Game01.getStartingPoints()),true));
             boardController.getGame01PlayersTable().getChildren().add(vBox);
         }
     }
 
-    private void initializeStaticGame01Variables(){
-        Game01.setDoubleOut(isDoubleOut());
-        Game01.setPlayersQuantity(getPlayersQuantity());
-        Game01.setRoundsMaxNumber(getRounds());
-        Game01.setStartingPoints(getStartingPoints());
-    }
-
-    private String[] initializeGame01Players(){
-        // get names //
-        String[] playersNames = getPlayersNames(getPlayersQuantity());
-        // get blank players array//
-        Player[] playersArray = new Player[getPlayersQuantity()];
-        for(int i=0;i<getPlayersQuantity();i++){
-            playersArray[i] = new Player();
-//            for(int j=0;j<3;j++)
-//                playersArray[i].setThrowFieldsByIndex(j,new String());
-        }
-        ((Game01)Main.gamesRepositotyImpl.getCurrentRound()).setPlayers(playersArray);
-        // init players Names //
-        for(int i=0;i<getPlayersQuantity();i++){
-            playersArray[i].setName(playersNames[i]);
-        }
-        // init players points //
-        for (Player player : playersArray) {
-            player.setPoints(getStartingPoints());
-        }
-        return playersNames;
-    }
-
+    /**
+     * Method created label for game01PlayersTable VBoxes
+     * @param text content of the label
+     * @param ifBold if text in label should be bolded
+     * @return player label
+     */
     private Label createPlayerLabel(String text,boolean ifBold){
         Label playerLabel = new Label();
         playerLabel.setText(text);
@@ -273,6 +210,42 @@ public class Game01Controller implements Initializable{
         return playerLabel;
     }
 
+    /**
+     * Method initialize Game01.class static variables
+     */
+    private void initializeStaticGame01Variables(){
+        Game01.setDoubleOut(isDoubleOut());
+        Game01.setPlayersQuantity(getPlayersQuantity());
+        Game01.setRoundsMaxNumber(getRounds());
+        Game01.setStartingPoints(getStartingPoints());
+    }
+
+    /**
+     * Method initialize players array in Game01 object at games repository with Player.class objects
+      */
+    private void initializeGame01Players(){
+        // Getting players names
+        String[] playersNames = getPlayersNames(getPlayersQuantity());
+        // Getting blank players Array
+        Player[] playersArray = new Player[getPlayersQuantity()];
+        for(int i=0;i<getPlayersQuantity();i++){
+            playersArray[i] = new Player();
+        }
+        // Init players names
+        for(int i=0;i<getPlayersQuantity();i++){
+            playersArray[i].setName(playersNames[i]);
+        }
+        // Init players points
+        for (Player player : playersArray) {
+            player.setPoints(getStartingPoints());
+        }
+        // Injecting Array into repository
+        ((Game01)gamesRepository.getCurrentRound()).setPlayers(playersArray);
+    }
+
+    /**
+     * Method displays on game01PlayersTable if double out option is setted if not label its not visible
+     */
     private void displayDoubleOutLabel(){
         if(isDoubleOut())
             boardController.getDoubleOut().setVisible(true);
@@ -281,90 +254,65 @@ public class Game01Controller implements Initializable{
     }
 
 
-
-    ///////////////////////////////////////////////////////////////////
-    //                      INITIALIZING!
-    ///////////////////////////////////////////////////////////////////
-
-
+    ////////////////
+    /*Initializing*/
+    ////////////////
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        // points box
-        game01RadioPointsOther.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
+
+        // Creating array of game01PlayerNameText fields
+        game01PlayerNamesTextFields = new TextField[4];
+        game01PlayerNamesTextFields[0] = game01PlayerNameTextField1;
+        game01PlayerNamesTextFields[1] = game01PlayerNameTextField2;
+        game01PlayerNamesTextFields[2] = game01PlayerNameTextField3;
+        game01PlayerNamesTextFields[3] = game01PlayerNameTextField4;
+
+        // Points Box listener
+        game01RadioPointsOther.selectedProperty().addListener((obs,wasPrevSelected,isNowSelected)->{
             if(isNowSelected) {
-                game01PointsBox.setDisable(false);
+                game01PointsSpinner.setDisable(false);
             }else {
-                game01PointsBox.setDisable(true);
-            }
-        });
-        // rounds box
-        game01RadioRoundsOther.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
-            if(isNowSelected) {
-                game01RoundsBox.setDisable(false);
-            }else {
-                game01RoundsBox.setDisable(true);
+                game01PointsSpinner.setDisable(true);
             }
         });
 
-        // player boxes 2
-        game01RadioPlayers2.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
+        // Rounds Box listener
+        game01RadioRoundsOther.selectedProperty().addListener((obs,wasPrevSelected,isNowSelected)->{
             if(isNowSelected) {
-                game01NamePlayer2.setDisable(false);
+                game01RoundsSpinner.setDisable(false);
             }else {
-                game01NamePlayer2.setDisable(true);
+                game01RoundsSpinner.setDisable(true);
             }
-        });
-        // player boxes 3
-        game01RadioPlayers3.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
-            if(isNowSelected) {
-                game01NamePlayer2.setDisable(false);
-                game01NamePlayer3.setDisable(false);
-            }else {
-                game01NamePlayer2.setDisable(false);
-                game01NamePlayer3.setDisable(true);
-            }
-        });
-        // player boxes 4
-        game01RadioPlayers4.selectedProperty().addListener((ObservableValue<?extends Boolean> obs,Boolean wasPreviouslySelected, Boolean isNowSelected)->{
-            if(isNowSelected) {
-                game01NamePlayer2.setDisable(false);
-                game01NamePlayer3.setDisable(false);
-                game01NamePlayer4.setDisable(false);
-            }else {
-                game01NamePlayer2.setDisable(true);
-                game01NamePlayer3.setDisable(true);
-                game01NamePlayer4.setDisable(true);
-            }
-        });
-        // Textfields listener //
-        /////////////////////////
-        game01NamePlayer1.textProperty().addListener((observable,oldValue,newValue) ->{
-            if(newValue.length() > 8)
-                game01NamePlayer1.setText(newValue.substring(0, 8));
-        });
-        game01NamePlayer2.textProperty().addListener((observable,oldValue,newValue) ->{
-            if(newValue.length() > 8)
-                game01NamePlayer2.setText(newValue.substring(0, 8));
-        });
-        game01NamePlayer3.textProperty().addListener((observable,oldValue,newValue) ->{
-            if(newValue.length() > 8)
-                game01NamePlayer3.setText(newValue.substring(0, 8));
-        });
-        game01NamePlayer4.textProperty().addListener((observable,oldValue,newValue) ->{
-            if(newValue.length() > 8)
-                game01NamePlayer4.setText(newValue.substring(0, 8));
         });
 
-        //////////////////////////////
-        // game points spinner
-        //////////////////////////////
+        // Players quantity radio button group listener
+        radioPlayersGroup.selectedToggleProperty().addListener((obs,oldValue,newValue)->{
+            String radioButtonText = ((RadioButton)radioPlayersGroup.getSelectedToggle()).getText();
+            int playersQuantity = Integer.parseInt(radioButtonText);
+            // Disabling all players text fields
+            for(int i=0;i<4;i++)
+                game01PlayerNamesTextFields[i].setDisable(true);
+            // Setting active players text fields
+            for(int i=0;i<playersQuantity;i++)
+                game01PlayerNamesTextFields[i].setDisable(false);
+        });
 
+        // Players names length validation
+        for (TextField game01PlayerNamesTextField : game01PlayerNamesTextFields) {
+            game01PlayerNamesTextField.textProperty().addListener((observable, oldValue, newValue) ->{
+                if(newValue.length() > MainController.PLAYERS_NAME_MAX_LENGTH)
+                    game01PlayerNamesTextField.setText(newValue.substring(0, MainController.PLAYERS_NAME_MAX_LENGTH));
+            });
+        }
+
+
+        // Spinners Factories
         SpinnerValueFactory<Integer> svfPoints = new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_POINTS, MAX_POINTS, DEFAULT_POINTS);
         SpinnerValueFactory<Integer> svfRounds = new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_ROUNDS,MAX_ROUNDS, DEFAULT_ROUNDS);
-        game01PointsBox.setValueFactory(svfPoints);
-        game01RoundsBox.setValueFactory(svfRounds);
+        game01PointsSpinner.setValueFactory(svfPoints);
+        game01RoundsSpinner.setValueFactory(svfRounds);
 
-        // POINTS VALIDATION //
+        // Spinner points validation
         StringConverter<Integer> pointsConverter = new StringConverter<>() {
 
             @Override
@@ -395,7 +343,7 @@ public class Game01Controller implements Initializable{
             }
         };
 
-        // ROUnds VALIDATION //
+        // Spinner rounds validation
         StringConverter<Integer> roundsConverter = new StringConverter<>() {
 
             @Override
@@ -426,11 +374,10 @@ public class Game01Controller implements Initializable{
             }
         };
 
+        // Setting converters and filters
         svfPoints.setConverter(pointsConverter);
-        game01PointsBox.getEditor().setTextFormatter(new TextFormatter<>(pointsConverter,DEFAULT_POINTS,pointsFilter));
+        game01PointsSpinner.getEditor().setTextFormatter(new TextFormatter<>(pointsConverter,DEFAULT_POINTS,pointsFilter));
         svfRounds.setConverter(roundsConverter);
-        game01RoundsBox.getEditor().setTextFormatter(new TextFormatter<>(roundsConverter,DEFAULT_ROUNDS,roundsFilter));
-
-
+        game01RoundsSpinner.getEditor().setTextFormatter(new TextFormatter<>(roundsConverter,DEFAULT_ROUNDS,roundsFilter));
     }
 }

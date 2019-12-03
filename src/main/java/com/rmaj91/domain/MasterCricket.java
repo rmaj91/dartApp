@@ -54,4 +54,9 @@ public class MasterCricket implements Playable {
     public Player[] getPlayer() {
         return new Player[0];
     }
+
+    @Override
+    public void initAndDisplay() {
+
+    }
 }

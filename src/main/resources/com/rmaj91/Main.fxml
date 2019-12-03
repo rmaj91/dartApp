@@ -47,7 +47,7 @@
       </HBox>
       <StackPane fx:id="mainTopPane" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #8f2f28;">
          <children>
-            <Pane fx:id="backgroundPaneMin" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#minimallizeApplication" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
+            <Pane fx:id="backgroundPaneMin" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#minimalizeIconClicked" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
                <StackPane.margin>
                   <Insets right="80.0" />
                </StackPane.margin>
@@ -83,7 +83,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Pane>
-            <Pane fx:id="backgroundPaneClose" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#closeApplication" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
+            <Pane fx:id="backgroundPaneClose" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#closeIconClicked" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
                <children>
                   <ImageView fx:id="closeIcon" fitHeight="24.0" fitWidth="24.0" layoutX="8.0" layoutY="8.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
                      <image>

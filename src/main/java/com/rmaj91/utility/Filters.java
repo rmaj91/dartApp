@@ -124,7 +124,7 @@ public class Filters {
          * @param indexAngle index of angle scope
          * @return returns the fieldName eg. "DOUBLE 25"
          */
-        public boolean hasKey(int indexRadius,int indexAngle){
+        public boolean hasFieldName(int indexRadius, int indexAngle){
             if(indexRadius == 0 ||indexRadius == 1 ||indexRadius == 6 )
                 indexAngle=20;
             if(this.indexAngle == indexAngle && this.indexRadius == indexRadius)

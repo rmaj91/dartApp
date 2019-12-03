@@ -1,5 +1,6 @@
 package com.rmaj91;
 
+import com.rmaj91.controller.MainController;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.Player;
 import com.rmaj91.repository.GamesRepositoryImpl;
@@ -18,14 +19,14 @@ import javafx.stage.WindowEvent;
 import java.util.Optional;
 
 /**
- * JavaFX App
+ * JavaFX App main class
  */
 public class Main extends Application {
 
+    /*Static*/
     public static Stage stage = null;
-    public static final GamesRepositoryImpl gamesRepositotyImpl = new GamesRepositoryImpl();
-    public static final SoundPlayer soundPlayer= new SoundPlayer();
 
+    /*Main Method*/
     public static void main(String[] args) {
         launch(args);
     }
@@ -33,43 +34,19 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-
-            // Injecting //
-            Game01.setGamesRepositoryImpl(gamesRepositotyImpl);
-            Player.setGamesRepositoryImpl(gamesRepositotyImpl);
+            /*Injecting into static field*/
+            MainController.setStage(primaryStage);
 
             AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("Main.fxml"));
-
             Scene scene = new Scene(root);
-            //scene.getStylesheets().add(getClass().getResource("css/main.css").toExternalForm());
-            stage = primaryStage;
-
-
-
+//            scene.getStylesheets().add(getClass().getResource("css/main.css").toExternalForm());
             primaryStage.getIcons().add(new Image("images/dartBoard.png"));
             primaryStage.setTitle("Dart Maju v.1.0.");
             primaryStage.setScene(scene);
             primaryStage.initStyle(StageStyle.UNDECORATED);
-            primaryStage.setOnCloseRequest((e)->{closeApplication(e);});
             primaryStage.show();
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
-
-
-
-    public static void closeApplication(WindowEvent event) {
-        Alert a = new Alert(Alert.AlertType.NONE, "Are you sure you want to quit?", ButtonType.YES,
-                ButtonType.NO);
-        Optional<ButtonType> confirm = a.showAndWait();
-        if (confirm.isPresent() && confirm.get() == ButtonType.YES) {
-            Main.stage.close();
-        }
-        else if (event !=null)
-            event.consume();
-    }
-
-
-
 }

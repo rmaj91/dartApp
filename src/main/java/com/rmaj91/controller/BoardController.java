@@ -1,10 +1,10 @@
 package com.rmaj91.controller;
 
-import com.rmaj91.Main;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.Point;
+import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.SoundPlayer;
-import com.rmaj91.utility.Utility;
+import com.rmaj91.utility.Utilities;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -29,11 +29,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static com.rmaj91.utility.Utilities.filters;
+import static com.rmaj91.utility.Utilities.getRadius;
+import static com.rmaj91.utility.Utilities.getAngle;
+
 public class BoardController implements Initializable {
 
-    // Dependencies //
+    /*Dependencies*/
     private SoundPlayer soundPlayer;
+    private GamesRepositoryImpl gamesRepository;
 
+    /*Javafx stuff*/
     @FXML
     private StackPane mainStackPane;
 
@@ -112,9 +118,18 @@ public class BoardController implements Initializable {
     @FXML
     private Canvas drawedBoard;
 
-
     TextField[] throwTextFieldArray;
+    private GraphicsContext graphicsContext2DHighlight;
+    private PixelWriter pixelWriterHighlight;
+    private GraphicsContext graphicsContext2DDrawed;
+    private PixelWriter pixelWriterDrawed;
 
+    // Variables for dart boards highlighting
+    private int currentRadiusIndex = 7;
+    private int currentAngleIndex = 20;
+    List<Point> pointList = new ArrayList<>();
+
+    /*Getters & Setters*/
     public TextField[] getThrowTextFieldArray() {
         return throwTextFieldArray;
     }
@@ -126,12 +141,6 @@ public class BoardController implements Initializable {
     public Label getAverageLabel() {
         return averageLabel;
     }
-
-
-    public void toFront() {
-        mainStackPane.toFront();
-    }
-
 
     public Label getDoubleOut() {
         return doubleOut;
@@ -169,7 +178,6 @@ public class BoardController implements Initializable {
         return game01PlayersTable;
     }
 
-
     public void setSoundPlayer(SoundPlayer soundPlayer) {
         this.soundPlayer = soundPlayer;
     }
@@ -178,364 +186,259 @@ public class BoardController implements Initializable {
         return statusPlayer1;
     }
 
+    public void setGamesRepository(GamesRepositoryImpl gamesRepository) {
+        this.gamesRepository = gamesRepository;
+    }
 
-
-    // Onclick button next
+    /*Events*/
     public void nextButtonClicked(){
-        Main.gamesRepositotyImpl.getCurrentRound().next();
+        gamesRepository.getCurrentRound().next();
     }
-    //Onclick Button back
+
     public void backButtonClicked(){
-        Main.gamesRepositotyImpl.getCurrentRound().back();
+        gamesRepository.getCurrentRound().back();
     }
 
-    ////////////////////////////////////////////
-    // dart fields ALGORITHM ///////////////////
-    ////////////////////////////////////////////
-
-    // OnClick Board
-    public void boardClicked(MouseEvent event) {
-        Main.gamesRepositotyImpl.getCurrentRound().throwDart(event);
+    public void dartBoardClicked(MouseEvent event) {
+        gamesRepository.getCurrentRound().throwDart(event);
     }
 
+    public void toFront() {
+        mainStackPane.toFront();
+    }
 
-    List<Point> pointList = new ArrayList<>();
+    public void onClickThrowField1(MouseEvent event){
+        throwField1.selectAll();
+        gamesRepository.getCurrentRound().setCurrentThrow(1);
+    }
+    public void onClickThrowField2(){
+        throwField2.selectAll();
+        gamesRepository.getCurrentRound().setCurrentThrow(2);
+    }
+    public void onClickThrowField3(){
+        throwField3.selectAll();
+        gamesRepository.getCurrentRound().setCurrentThrow(3);
+    }
 
-    private int currentRadiusIndex = -1;
-    private int currentAngleIndex = -1;
+    /**
+     * Method clears highligh when cursor leaves board
+     */
+    public void boardHoverOff() {
+        graphicsContext2DHighlight.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        currentRadiusIndex = 7;
+        currentAngleIndex = 20;
+    }
 
+    /**
+     * Method contains algorith for highlighting dart boards fields when hover
+     * @param event Mouse event
+     */
     public void boardHover2(MouseEvent event){
 
-        int hoverRadiusIndex = Utility.getRadiusScope(getRadius(getX(event),getY(event)));
-        int hoverAngleIndex = Utility.getAngleScope(getAngle(getX(event),getY(event)));
+        // New fields indexes
+        int hoverRadiusIndex = Utilities.getRadiusScope(getRadius(getX(event),getY(event)));
+        int hoverAngleIndex = Utilities.getAngleScope(getAngle(getX(event),getY(event)));
+        // Checking if mouse leaves current field
         if(hoverRadiusIndex == currentRadiusIndex && hoverAngleIndex == currentAngleIndex)
             return;
+        // Saving new field indexes
         currentRadiusIndex = hoverRadiusIndex;
         currentAngleIndex = hoverAngleIndex;
-
+        // Clearing previous highlighting
         graphicsContext2DHighlight.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
+        // Filtering pixels for highlighting field
         pointList.stream()
+                .filter(point ->{
+                    int xCartesian = calculateCartesianX(point.getxCoordinate());
+                    int yCartesian = calculateCartesianY(point.getyCoordinate());
+                    int radius = getRadius(xCartesian, yCartesian);
+                    return filters.getRadiusMapperList().get(hoverRadiusIndex).isInRange(radius);
+                })
                 .filter(point -> {
-                    //int indexRangeScope = Utility.filters.getRadiusScope(getRadius(getX(event),getY(event)));
-                    return Utility.filters.getRadiusMapperList().get(hoverRadiusIndex).isInRange(getRadius(getCenterX(point.getxCoordinate())
-                            , getCenterY(point.getyCoordinate()))); })
-                .filter(point -> {
+                    // id cursor is out of this radius, filter is off
                     if(getRadius(getX(event),getY(event)) < 19 || getRadius(getX(event),getY(event)) > 205)
                         return true;
                     else{
-                        //int indexAngleScope = Utility.filters.getAngleScope(getAngle(getX(event),getY(event)));
-                        return Utility.filters.getAngleMapperList().get(hoverAngleIndex).isInRange(getAngle(getCenterX(point.getxCoordinate())
-                                , getCenterY(point.getyCoordinate()))); } })
+                        int xCartesian = calculateCartesianX(point.getxCoordinate());
+                        int yCartesian = calculateCartesianY(point.getyCoordinate());
+                        double angle = getAngle(xCartesian, yCartesian);
+                        return filters.getAngleMapperList().get(hoverAngleIndex).isInRange(angle); } })
                 .forEach(point -> {
                     displayPixel(point.getxCoordinate(),point.getyCoordinate()); });
     }
 
-    public int getRadius(double x, double y){
-        return (int)Math.sqrt(x*x+y*y);
-    }
-    public void displayPixel(int x,int y){
+    /**
+     * displaying highlight pixel on x,y coordinates
+     */
+    private void displayPixel(int x,int y){
         pixelWriterHighlight.setColor(x, y, Color.rgb(66, 135, 245));
     }
 
-    public int getCenterX(int x){
+    private int calculateCartesianX(int x){
         return x-248;
     }
 
-    public int getCenterY(int y){
+    private int calculateCartesianY(int y){
         return -(y-248);
     }
 
-    public double getX(MouseEvent event){
+    private double getX(MouseEvent event){
         return event.getX() - 248;
     }
 
-    public  double getY(MouseEvent event){
+    private   double getY(MouseEvent event){
         return -(event.getY() - 248.5);
     }
 
-    public double getAngle(double x, double y){
-        double angle=Math.atan2(y,x);
-        angle = Math.toDegrees(angle);
-        if(angle<0)
-            angle+=360;
-        return angle;
-    }
 
-    public void boardHoverOff() {
-        graphicsContext2DHighlight.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        currentRadiusIndex = -1;
-        currentAngleIndex = -1;
-    }
-
-
-    // todo dartboard hints
+    /**
+     * Initializing: drawing dart board and some variables init.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        canvas.setOpacity(0.75);
-        this.graphicsContext2DHighlight = canvas.getGraphicsContext2D();
-        this.pixelWriterHighlight = graphicsContext2DHighlight.getPixelWriter();
-
-        this.graphicsContext2DDrawed = drawedBoard.getGraphicsContext2D();
-        this.pixelWriterDrawed = graphicsContext2DDrawed.getPixelWriter();
-        // points list init
-        for(int y=0;y<canvas.getHeight();y++){
-            for(int x=0;x<canvas.getWidth();x++)
-                pointList.add(new Point(x,y));
-        }
 
         throwTextFieldArray = new TextField[3];
         throwTextFieldArray[0] = throwField1;
         throwTextFieldArray[1] = throwField2;
         throwTextFieldArray[2] = throwField3;
 
-        // adding textField validation and save()
-        throwField1.textProperty().addListener((observable,oldValue,newValue) ->{
-            if(newValue.length() > 10)
-                throwField1.setText(newValue.substring(0, 10));
-            Main.gamesRepositotyImpl.getCurrentRound().calculatePoints();
-        });
-        // adding textField validation and save()
-        throwField2.textProperty().addListener((observable,oldValue,newValue) ->{
-            if(newValue.length() > 10)
-                throwField2.setText(newValue.substring(0, 10));
-            Main.gamesRepositotyImpl.getCurrentRound().calculatePoints();
-        });
-        // adding textField validation and save()
-        throwField3.textProperty().addListener((observable,oldValue,newValue) ->{
-            if(newValue.length() > 10)
-                throwField3.setText(newValue.substring(0, 10));
-            Main.gamesRepositotyImpl.getCurrentRound().calculatePoints();
-        });
+        // ThrowTextField length validation
+        for (int i = 0; i < 3; i++) {
+            throwTextFieldArray[i].textProperty().addListener((observable,oldValue,newValue) ->{
+                if(newValue.length() > 10)
+                    throwField1.setText(newValue.substring(0, 10));
+                gamesRepository.getCurrentRound().calculatePoints();
+            });
+        }
 
+        // Stuff for drawing dart board
+        canvas.setOpacity(0.75);
+        this.graphicsContext2DHighlight = canvas.getGraphicsContext2D();
+        this.pixelWriterHighlight = graphicsContext2DHighlight.getPixelWriter();
 
-        /**********************************************/
-        /**********    Drawing dart board    **********/
-        /**********************************************/
-        // todo drawing
+        this.graphicsContext2DDrawed = drawedBoard.getGraphicsContext2D();
+        this.pixelWriterDrawed = graphicsContext2DDrawed.getPixelWriter();
+
+        // Points list init
+        for(int y=0;y<canvas.getHeight();y++){
+            for(int x=0;x<canvas.getWidth();x++)
+                pointList.add(new Point(x,y));
+        }
+
         Color redColor = Color.rgb(229, 9, 9);
         Color greenColor = Color.rgb(25, 137, 9);
 
+        /*Drawing dart board*/
         // Radius < 204 BackGROUND
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 204)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 204)
                 .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.WHITE) );
-        ////////////////////////////////
 
-        // NOT EVEN indexes
+        // Angle, NOT EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 204)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 204)
                 .filter(point -> {
                     for(int i=0;i<20;i+=2){
-                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
+                        if(filters.getAngleMapperList().get(i).isInRange(getAngle(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
                 })
                 .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK));
-        ////////////////////////////////
 
-        // EVEN indexes
+        // SINGLE BULL
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 204)
-                .filter(point -> {
-                    for(int i=1;i<20;i+=2){
-                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
-                            return true;
-                    }
-                    return false;
-                })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.WHITE));
-        ////////////////////////////////
-
-
-        // Radius SINGLE BULL //
-        pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 19)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 19)
                 .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),greenColor) );
-        ////////////////////////////////
 
-        // Radius DOUBLE BULL //
+        // DOUBLE BULL
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 9)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 9)
                 .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),redColor) );
-        ////////////////////////////////
-
-        // todo
-        // Radius
-        pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 8)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
-        ////////////////////////////////
-// todo
-        // Radius D
-        pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 19)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
-        ////////////////////////////////
-
-
-        // Radius < 205 && Radius > 195 NOT EVEN indexes
-        pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 205)
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 194)
-                .filter(point -> {
-                    for(int i=0;i<20;i+=2){
-                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
-                            return true;
-                    }
-                    return false;
-                })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),redColor));
-        ////////////////////////////////
 
         // Radius < 205 && Radius > 195 EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 205)
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 194)
-                .filter(point -> {
-                    for(int i=1;i<20;i+=2){
-                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
-                            return true;
-                    }
-                    return false;
-                })
-                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),greenColor));
-        ////////////////////////////////
-        ////////////////////////////////
-        ////////////////////////////////
-
-        // Radius < 127 && Radius > 118 NOT EVEN indexes
-        pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 127)
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 117)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 205)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) >= 194)
                 .filter(point -> {
                     for(int i=0;i<20;i+=2){
-                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
+                        if(filters.getAngleMapperList().get(i).isInRange(getAngle(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
                 })
                 .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),redColor));
-        ////////////////////////////////
 
-        // Radius < 127 && Radius > 118 EVEN indexes
+        // Radius < 205 && Radius > 195 not EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 127)
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) >= 117)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 205)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) >= 194)
                 .filter(point -> {
                     for(int i=1;i<20;i+=2){
-                        if(Utility.filters.getAngleMapperList().get(i).isInRange(getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))))
+                        if(filters.getAngleMapperList().get(i).isInRange(getAngle(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate()))))
                             return true;
                     }
                     return false;
                 })
                 .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),greenColor));
-        ////////////////////////////////
 
-        // todo
-        // Radius D
+        // Radius < 127 && Radius > 118 EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 126)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
-        ////////////////////////////////
-        // todo
-        // Radius D
-        pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 116)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
-        ////////////////////////////////
-        // todo
-        // Radius D
-        pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) == 194)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
-        ////////////////////////////////
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 127)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) >= 117)
+                .filter(point -> {
+                    for(int i=0;i<20;i+=2){
+                        if(filters.getAngleMapperList().get(i).isInRange(getAngle(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate()))))
+                            return true;
+                    }
+                    return false;
+                })
+                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),redColor));
 
-        // todo
-        // fixing custom board edges :)
+        // Radius < 127 && Radius > 118 not EVEN indexes
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) > 204)
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 206)
-                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
-        ////////////////////////////////
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 127)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) >= 117)
+                .filter(point -> {
+                    for(int i=1;i<20;i+=2){
+                        if(filters.getAngleMapperList().get(i).isInRange(getAngle(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate()))))
+                            return true;
+                    }
+                    return false;
+                })
+                .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),greenColor));
 
-//todo
+        // Black borders
+        int[] radiuses = {8,19,116,126,194};
+        for (int radius : radiuses) {
+            pointList.stream()
+                    .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) == radius)
+                    .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
+        }
+
+        // Fixing custom board edges :)
         pointList.stream()
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) > 18)
-                .filter(point -> getRadius(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())) < 205)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) > 204)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 206)
+                .forEach(point ->  pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK) );
+
+        // Fixing "angle" borders
+        pointList.stream()
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) > 18)
+                .filter(point -> getRadius(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())) < 205)
                 .filter(point -> {
                     for(int i=0;i<20;i++){
-                        if(Utility.filters.getAngleMapperList().get(i).getFirstAngle()
-                                == getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate()))
-                        || Utility.filters.getAngleMapperList().get(i).getSecondAngle()
-                                == getAngle(getCenterX(point.getxCoordinate()),getCenterY(point.getyCoordinate())))
-
+                        if(filters.getAngleMapperList().get(i).getFirstAngle()
+                                == getAngle(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate()))
+                        || filters.getAngleMapperList().get(i).getSecondAngle()
+                                == getAngle(calculateCartesianX(point.getxCoordinate()), calculateCartesianY(point.getyCoordinate())))
                             return true;
                     }
                     return false;
                 })
                 .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(),point.getyCoordinate(),Color.BLACK));
-        ////////////////////////////////
-    }
 
-
-
-
-    private GraphicsContext graphicsContext2DHighlight;
-    private PixelWriter pixelWriterHighlight;
-
-    private GraphicsContext graphicsContext2DDrawed;
-    private PixelWriter pixelWriterDrawed;
-
-    public void onClickThrowField1(){
-        throwField1.selectAll();
-        Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(1);
-    }
-    public void onClickThrowField2(){
-        throwField2.selectAll();
-        Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(2);
-    }
-    public void onClickThrowField3(){
-        throwField3.selectAll();
-        Main.gamesRepositotyImpl.getCurrentRound().setCurrentThrow(3);
-    }
-
-    //todo dokonczyc init VBoxes
-    public void initAndDisplay(){
-        int currentPlayer = Main.gamesRepositotyImpl.getCurrentRound().getCurrentPlayer();
-        int length = Main.gamesRepositotyImpl.getCurrentRound().getPlayer().length;
-
-
-        for (int i = 0; i < length; i++) {
-
-            VBox vBox = new VBox();
-            vBox.setAlignment(Pos.BOTTOM_CENTER);
-            vBox.setMinWidth(100);
-
-            vBox.getChildren().addAll(createPlayerLabel( Main.gamesRepositotyImpl.getCurrentRound().getPlayer()[i].getName(),false),
-                    createPlayerLabel(String.valueOf(Game01.getStartingPoints()),true));
-            game01PlayersTable.getChildren().add(vBox);
-
-        }
-        Main.gamesRepositotyImpl.getCurrentRound().displayRound();
-
-        toFront();
-        game01ScoreTable.toFront();
-        if(Game01.isDoubleOut())
-            doubleOut.setVisible(true);
-        else
-            doubleOut.setVisible(false);
-    }
-
-    private Label createPlayerLabel(String text,boolean ifBold){
-        Label playerLabel = new Label();
-        playerLabel.setText(text);
-        playerLabel.setFont(new Font("System",22));
-        playerLabel.setTextFill(Color.WHITE);
-        if(ifBold)
-            playerLabel.setStyle("-fx-font-weight: bold");
-        return playerLabel;
     }
 
 }

@@ -15,7 +15,6 @@ import java.util.List;
 
 public class GamesRepositoryImpl implements GamesRepository {
 
-
     /*Dependencies*/
     private BoardController boardController;
 
@@ -95,6 +94,7 @@ public class GamesRepositoryImpl implements GamesRepository {
             dataOutputStream.writeInt(Game01.getRoundsMaxNumber());
             dataOutputStream.writeInt(Game01.getStartingPoints());
 
+            //todo for other games classes
             //System.out.println(this.getCurrentRound().getClass().getName());
 
             // Serializing List
@@ -124,6 +124,7 @@ public class GamesRepositoryImpl implements GamesRepository {
 
 
             //reads class name
+            //todo for other game classes
             String className = dataInputStream.readUTF();
             if(className.equals("com.rmaj91.domain.Game01")){
                 Game01.setDoubleOut(dataInputStream.readBoolean());
@@ -140,8 +141,8 @@ public class GamesRepositoryImpl implements GamesRepository {
             exception.printStackTrace();
             return false;
         }
+        this.getCurrentRound().initAndDisplay();
 
-        boardController.initAndDisplay();
         return true;
 
 	}
@@ -156,9 +157,7 @@ public class GamesRepositoryImpl implements GamesRepository {
         return gamesList.isEmpty();
     }
 
-    ///////////////////
     /*Private Methods*/
-    ///////////////////
     private void showInformationWindow() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Saved!");
