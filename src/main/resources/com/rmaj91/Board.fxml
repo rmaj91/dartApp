@@ -37,11 +37,6 @@
             </StackPane>
             <AnchorPane fx:id="pointsAreaPane" minHeight="520.0" minWidth="500.0">
                <children>
-                  <Label fx:id="roundsLabel" text="Round: 1/25" textFill="WHITE">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
                   <HBox fx:id="throwsPoints" alignment="CENTER_LEFT" layoutY="401.0" prefHeight="70.0" prefWidth="520.0">
                      <children>
                         <TextField fx:id="throwField1" alignment="CENTER" onMouseClicked="#onClickThrowField1" prefHeight="40.0" prefWidth="110.0" promptText="Enter Value">
@@ -100,7 +95,32 @@
                   </Button>
                   <StackPane layoutX="2.0" layoutY="4.0" maxHeight="369.0" maxWidth="500.0" prefHeight="369.0" prefWidth="500.0">
                      <children>
-                        <HBox fx:id="cricketsScoreTable" minHeight="300.0" prefHeight="343.0" prefWidth="500.0" visible="false">
+                        <AnchorPane fx:id="game01ScoreTable" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #333333;">
+                           <children>
+                              <Label fx:id="averageLabel" layoutX="330.0" layoutY="6.0" text="Average: 0.0" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="playerNameLabel" alignment="CENTER" layoutX="173.0" layoutY="82.0" text="Player1" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font size="48.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="playerPointsLabel" alignment="CENTER" layoutX="198.0" layoutY="152.0" text="501" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="64.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="doubleOut" layoutX="330.0" layoutY="41.0" text="Double out" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <HBox fx:id="game01PlayersTable" alignment="BOTTOM_CENTER" minHeight="300.0" prefHeight="369.0" prefWidth="500.0" />
+                           </children>
+                        </AnchorPane>
+                        <HBox fx:id="cricketsScoreTable" minHeight="300.0" prefHeight="343.0" prefWidth="500.0" style="-fx-background-color: #333333;">
                            <children>
                               <VBox fx:id="cricketsFields" alignment="BOTTOM_CENTER" minWidth="40.0" prefHeight="200.0" prefWidth="40.0">
                                  <children>
@@ -151,231 +171,15 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox fx:id="statusPlayer1" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Player1" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="501" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                              <VBox fx:id="statusPlayer2" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Player2" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="501" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                              <VBox fx:id="statusPlayer3" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Player3" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="501" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                              <VBox fx:id="statusPlayer4" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="III" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Player4" textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="501" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
                            </children>
                         </HBox>
-                        <AnchorPane fx:id="game01ScoreTable" prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <Label fx:id="averageLabel" layoutX="330.0" layoutY="6.0" text="Average: 0.0" textFill="WHITE">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="playerNameLabel" alignment="CENTER" layoutX="173.0" layoutY="82.0" text="Player1" textAlignment="CENTER" textFill="WHITE">
-                                 <font>
-                                    <Font size="48.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="playerPointsLabel" alignment="CENTER" layoutX="198.0" layoutY="152.0" text="501" textAlignment="CENTER" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="64.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="doubleOut" layoutX="330.0" layoutY="41.0" text="Double out" textFill="WHITE">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <HBox fx:id="game01PlayersTable" alignment="BOTTOM_CENTER" minHeight="300.0" prefHeight="369.0" prefWidth="500.0" />
-                           </children>
-                        </AnchorPane>
                      </children>
                   </StackPane>
+                  <Label fx:id="roundsLabel" text="Round: 1/25" textFill="WHITE">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </children>

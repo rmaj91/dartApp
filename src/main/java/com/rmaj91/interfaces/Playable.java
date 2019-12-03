@@ -1,6 +1,6 @@
 package com.rmaj91.interfaces;
 
-import com.rmaj91.domain.Player;
+import com.rmaj91.domain.Player01;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -63,7 +63,7 @@ public interface Playable {
     /**
      * This method returns players array of current round
      */
-    public Player[] getPlayer();
+    public PlayerInterface[] getPlayers();
 
     /**
      * Inits board view and display current round

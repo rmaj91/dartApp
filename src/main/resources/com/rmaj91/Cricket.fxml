@@ -28,7 +28,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Spinner fx:id="cricketRoundsBox" disable="true" layoutX="71.0" layoutY="25.0" prefHeight="25.0" prefWidth="70.0" />
+                        <Spinner fx:id="cricketRoundsBox" disable="true" editable="true" layoutX="71.0" layoutY="25.0" prefHeight="25.0" prefWidth="70.0" />
                         <VBox prefHeight="56.0" prefWidth="71.0">
                            <children>
                               <RadioButton fx:id="cricketRadioRounds25" mnemonicParsing="false" selected="true" text="25">
@@ -58,7 +58,7 @@
                            <children>
                               <RadioButton fx:id="cricketRadioPlayers1" mnemonicParsing="false" selected="true" text="1">
                                  <toggleGroup>
-                                    <ToggleGroup fx:id="group01_32" />
+                                    <ToggleGroup fx:id="radioPlayersGroup" />
                                  </toggleGroup>
                                  <HBox.margin>
                                     <Insets left="5.0" />
@@ -67,26 +67,21 @@
                                     <Insets left="5.0" />
                                  </padding>
                               </RadioButton>
-                              <RadioButton fx:id="cricketRadioPlayers2" mnemonicParsing="false" text="2" toggleGroup="$group01_32">
+                              <RadioButton fx:id="cricketRadioPlayers2" mnemonicParsing="false" text="2" toggleGroup="$radioPlayersGroup">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <RadioButton fx:id="cricketRadioPlayers3" mnemonicParsing="false" text="3" toggleGroup="$group01_32">
+                              <RadioButton fx:id="cricketRadioPlayers3" mnemonicParsing="false" text="3" toggleGroup="$radioPlayersGroup">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <RadioButton fx:id="cricketRadioPlayers4" mnemonicParsing="false" text="4" toggleGroup="$group01_32">
+                              <RadioButton fx:id="cricketRadioPlayers4" mnemonicParsing="false" text="4" toggleGroup="$radioPlayersGroup">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <CheckBox fx:id="cricketDoubleOut" mnemonicParsing="false" selected="true" text=" Double out">
-                                 <HBox.margin>
-                                    <Insets left="30.0" />
-                                 </HBox.margin>
-                              </CheckBox>
                            </children>
                         </HBox>
                         <VBox layoutY="30.0" prefHeight="150.0" prefWidth="150.0">
@@ -184,7 +179,7 @@
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="cricketLetsButton" focusTraversable="false" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Let's play!">
+            <Button fx:id="cricketLetsButton" focusTraversable="false" mnemonicParsing="false" onAction="#letsPlayButtonClicked" prefHeight="35.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Let's play!">
                <font>
                   <Font size="16.0" />
                </font>

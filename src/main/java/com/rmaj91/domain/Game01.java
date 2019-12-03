@@ -4,6 +4,7 @@ import com.rmaj91.controller.BoardController;
 import com.rmaj91.controller.Game01Controller;
 import com.rmaj91.controller.MainController;
 import com.rmaj91.interfaces.Playable;
+import com.rmaj91.interfaces.PlayerInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.Filters;
 import com.rmaj91.utility.SoundPlayer;
@@ -41,7 +42,7 @@ public class Game01 implements Playable, Serializable {
 	private static int startingPoints;
 
 	/*Variables*/
-	Player[] players;
+	Player01[] players;
 	private int currentPlayer;
 
 	/*Constructor*/
@@ -54,7 +55,7 @@ public class Game01 implements Playable, Serializable {
 		Game01.soundPlayer = soundPlayer;
 	}
 
-	public void setPlayers(Player[] players) {
+	public void setPlayers(Player01[] players) {
 		this.players = players;
 	}
 
@@ -90,9 +91,7 @@ public class Game01 implements Playable, Serializable {
 		Game01.mainController = mainController;
 	}
 
-	public Player[] getPlayer() {
-		return players;
-	}
+
 
 	public static boolean isDoubleOut() {
 		return doubleOut;
@@ -114,6 +113,11 @@ public class Game01 implements Playable, Serializable {
 
 	/*METHODS FROM PLAYABLE*/
 	@Override
+	public PlayerInterface[] getPlayers() {
+		return players;
+	}
+
+	@Override
 	public int getCurrentPlayer() {
 		return currentPlayer;
 	}
@@ -122,8 +126,8 @@ public class Game01 implements Playable, Serializable {
 	public Playable cloneRound() {
 		Game01 game01 = new Game01();
 
-		Player[] playersArray = new Player[playersQuantity];
-		Arrays.fill(playersArray,new Player());
+		Player01[] playersArray = new Player01[playersQuantity];
+		Arrays.fill(playersArray,new Player01());
 		game01.players = playersArray;
 		// Copying players
 		for(int i = 0; i<this.players.length; i++){
@@ -181,9 +185,6 @@ public class Game01 implements Playable, Serializable {
 		}
 	}
 
-
-
-
 	@Override
 	public void displayRound() {
 		int currentRound = gamesRepositoryImpl.getIndexOfRound(this)+1;
@@ -213,7 +214,7 @@ public class Game01 implements Playable, Serializable {
 		if(gamesRepositoryImpl.getIndexOfRound(this) == 0)
 			previousRoundPoints = Game01.startingPoints;
 		else
-			previousRoundPoints = gamesRepositoryImpl.getPreviousRound().getPlayer()[currentPlayer-1].getPoints();
+			previousRoundPoints = gamesRepositoryImpl.getPreviousRound().getPlayers()[currentPlayer-1].getPoints();
 		int currentRoundPoints = previousRoundPoints;
 		int totalThrownValue = 0;
 		// Each loop step for throw
@@ -251,6 +252,7 @@ public class Game01 implements Playable, Serializable {
         }
         this.displayRound();
         boardController.toFront();
+		boardController.getMainStackPane().setDisable(false);
 		boardController.getGame01PlayersTable().toFront();
         if(Game01.isDoubleOut())
             boardController.getDoubleOut().setVisible(true);

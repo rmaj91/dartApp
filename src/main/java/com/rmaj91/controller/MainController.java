@@ -5,9 +5,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-import com.rmaj91.Main;
+import com.rmaj91.domain.Cricket;
 import com.rmaj91.domain.Game01;
-import com.rmaj91.domain.Player;
+import com.rmaj91.domain.Player01;
+import com.rmaj91.domain.PlayerCricket;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.SoundPlayer;
 import javafx.fxml.FXML;
@@ -72,7 +73,10 @@ public class MainController implements Initializable {
 		soundPlayer.setVolumeLevel(volumeSlider.getValue());
 
 		/*Injecting Dependencies*/
-		Player.setGamesRepositoryImpl(gamesRepository);
+		Player01.setGamesRepositoryImpl(gamesRepository);
+		Cricket.setGamesRepositoryImpl(gamesRepository);
+		Cricket.setBoardController(boardController);
+		PlayerCricket.setGamesRepositoryImpl(gamesRepository);
 
 		Game01.setSoundPlayer(soundPlayer);
 		Game01.setGamesRepositoryImpl(gamesRepository);
@@ -93,6 +97,9 @@ public class MainController implements Initializable {
 		boardController.setGamesRepository(gamesRepository);
 
 		cricketController.setWelcomeController(welcomeController);
+		cricketController.setBoardController(boardController);
+		cricketController.setGamesRepository(gamesRepository);
+
 		masterCricketController.setWelcomeController(welcomeController);
 
 		/*Initializing stuff*/

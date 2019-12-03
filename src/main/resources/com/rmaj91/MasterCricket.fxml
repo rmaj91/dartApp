@@ -82,11 +82,6 @@
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <CheckBox fx:id="masterDoubleOut" mnemonicParsing="false" selected="true" text=" Double out">
-                                 <HBox.margin>
-                                    <Insets left="30.0" />
-                                 </HBox.margin>
-                              </CheckBox>
                            </children>
                         </HBox>
                         <VBox layoutY="30.0" prefHeight="150.0" prefWidth="150.0">

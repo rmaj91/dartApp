@@ -130,6 +130,15 @@ public class BoardController implements Initializable {
     List<Point> pointList = new ArrayList<>();
 
     /*Getters & Setters*/
+
+    public HBox getCricketsScoreTable() {
+        return cricketsScoreTable;
+    }
+
+    public VBox getCricketsFields() {
+        return cricketsFields;
+    }
+
     public TextField[] getThrowTextFieldArray() {
         return throwTextFieldArray;
     }

@@ -1,6 +1,7 @@
 package com.rmaj91.domain;
 
 import com.rmaj91.interfaces.Playable;
+import com.rmaj91.interfaces.PlayerInterface;
 import javafx.scene.input.MouseEvent;
 
 public class MasterCricket implements Playable {
@@ -51,8 +52,8 @@ public class MasterCricket implements Playable {
     }
 
     @Override
-    public Player[] getPlayer() {
-        return new Player[0];
+    public PlayerInterface[] getPlayers() {
+        return new Player01[0];
     }
 
     @Override

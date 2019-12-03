@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
 import com.rmaj91.domain.Game01;
-import com.rmaj91.domain.Player;
+import com.rmaj91.domain.Player01;
 import com.rmaj91.repository.GameFactory;
 import com.rmaj91.repository.GamesRepositoryImpl;
 
@@ -105,11 +105,12 @@ public class Game01Controller implements Initializable{
 
         gamesRepository.createNewGame(GameFactory.getGame("'01 Game"));
         initializeStaticGame01Variables();
+        initializeGame01Players();
         createPlayersVBoxes(getPlayersQuantity());
 
 		gamesRepository.getCurrentRound().displayRound();
         boardController.getThrowField1().requestFocus();
-        // In case of startig new game after winning
+        // In case of startig new game after winning previous
         boardController.getMainStackPane().setDisable(false);
 	}
 
@@ -183,12 +184,11 @@ public class Game01Controller implements Initializable{
      * @param playersQuantity quantity of setted players
      */
     private void createPlayersVBoxes(int playersQuantity){
-       initializeGame01Players();
         for(int i=0;i<playersQuantity;i++){
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.BOTTOM_CENTER);
             vBox.setMinWidth(100);
-            vBox.getChildren().addAll(createPlayerLabel(gamesRepository.getCurrentRound().getPlayer()[i].getName(),false),
+            vBox.getChildren().addAll(createPlayerLabel(gamesRepository.getCurrentRound().getPlayers()[i].getName(),false),
                     createPlayerLabel(String.valueOf(Game01.getStartingPoints()),true));
             boardController.getGame01PlayersTable().getChildren().add(vBox);
         }
@@ -227,16 +227,16 @@ public class Game01Controller implements Initializable{
         // Getting players names
         String[] playersNames = getPlayersNames(getPlayersQuantity());
         // Getting blank players Array
-        Player[] playersArray = new Player[getPlayersQuantity()];
+        Player01[] playersArray = new Player01[getPlayersQuantity()];
         for(int i=0;i<getPlayersQuantity();i++){
-            playersArray[i] = new Player();
+            playersArray[i] = new Player01();
         }
         // Init players names
         for(int i=0;i<getPlayersQuantity();i++){
             playersArray[i].setName(playersNames[i]);
         }
         // Init players points
-        for (Player player : playersArray) {
+        for (Player01 player : playersArray) {
             player.setPoints(getStartingPoints());
         }
         // Injecting Array into repository

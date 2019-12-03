@@ -9,7 +9,7 @@ import java.util.Arrays;
  * The Player01 class provides player model of '01 dart game type
  */
 
-public class Player implements PlayerInterface,Serializable {
+public class Player01 implements PlayerInterface,Serializable {
 
     /* Dependencies */
     private static GamesRepositoryImpl gamesRepositoryImpl;
@@ -22,7 +22,7 @@ public class Player implements PlayerInterface,Serializable {
     private int currentThrow;
 
     /*Constructor*/
-    public Player() {
+    public Player01() {
         average = 0;
         throwFieldsValues = new String[3];
         Arrays.fill(throwFieldsValues,new String());
@@ -67,12 +67,12 @@ public class Player implements PlayerInterface,Serializable {
     }
 
     public static void setGamesRepositoryImpl(GamesRepositoryImpl gamesRepositoryImpl) {
-        Player.gamesRepositoryImpl = gamesRepositoryImpl;
+        Player01.gamesRepositoryImpl = gamesRepositoryImpl;
     }
 
     /*Public Methods*/
-    public Player clonePlayer(){
-        Player player = new Player();
+    public Player01 clonePlayer(){
+        Player01 player = new Player01();
         player.name = this.name;
         player.points = this.points;
 

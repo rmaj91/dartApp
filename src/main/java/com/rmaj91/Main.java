@@ -1,22 +1,13 @@
 package com.rmaj91;
 
 import com.rmaj91.controller.MainController;
-import com.rmaj91.domain.Game01;
-import com.rmaj91.domain.Player;
-import com.rmaj91.repository.GamesRepositoryImpl;
-import com.rmaj91.utility.SoundPlayer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
-
-import java.util.Optional;
 
 /**
  * JavaFX App main class
