@@ -308,7 +308,7 @@ public class BoardController implements Initializable {
             throwTextFieldArray[i].textProperty().addListener((observable,oldValue,newValue) ->{
                 if(newValue.length() > 10)
                     throwField1.setText(newValue.substring(0, 10));
-                gamesRepository.getCurrentRound().calculatePoints();
+                //gamesRepository.getCurrentRound().calculatePoints();
             });
         }
 

@@ -23,8 +23,8 @@ public class WelcomeController implements Initializable {
     private GamesRepository gamesRepository;
     private Game01Controller game01Controller;
     private MainController mainController;
-    //private CricketController cricketController;
-    //private MasterCricketController masterCricketController;
+    private CricketController cricketController;
+    private MasterCricketController masterCricketController;
 
     /*JavaFX elements*/
     @FXML
@@ -55,12 +55,13 @@ public class WelcomeController implements Initializable {
         this.game01Controller = game01Controller;
     }
 
-//	public void setCricketController(CricketController cricketController) {
-//		this.cricketController = cricketController;
-//	}
-//	public void setMasterCricketController(MasterCricketController masterCricketController) {
-//		this.masterCricketController = masterCricketController;
-//	}
+	public void setCricketController(CricketController cricketController) {
+		this.cricketController = cricketController;
+	}
+	public void setMasterCricketController(MasterCricketController masterCricketController) {
+		this.masterCricketController = masterCricketController;
+	}
+
 
     /*Initializing*/
     @Override
@@ -94,10 +95,10 @@ public class WelcomeController implements Initializable {
     	if(chooseGameComboBox.getValue() == "'01 Game") {
     		game01Controller.toFront();
     	}    		
-//    	else if(chooseGameComboBox.getValue() == "Cricket")
-//    		cricketController.toFront();
-//    	else if(chooseGameComboBox.getValue() == "Master Cricket")
-//    		masterCricketController.toFront();
+    	else if(chooseGameComboBox.getValue() == "Cricket")
+    		cricketController.toFront();
+    	else if(chooseGameComboBox.getValue() == "Master Cricket")
+    		masterCricketController.toFront();
     	
     }
 

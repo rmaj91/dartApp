@@ -27,7 +27,7 @@ public class Utilities {
     }
 
     /**
-     * This method calculated radius, method use arcus tangens function
+     * This method calculates radius, method use arcus tangens function
      *
      * @param xCoordinate Cartesian x coordinate
      * @param yCoordinate Cartesian y coordinate
@@ -41,7 +41,7 @@ public class Utilities {
         return angle;
     }
 
-    /** This method uses cartesian x and y coordinate and returns index of angle scope(mapped in Filters)
+    /** This method uses cartesian x and y coordinates and returns index of angle scope(mapped in Filters)
      * @param xCoordinate Cartesian x coordinate
      * @param yCoordinate Cartesian y coordinate
      * @return index of angle scope

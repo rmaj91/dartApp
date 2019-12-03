@@ -9,10 +9,9 @@ import com.rmaj91.interfaces.Playable;
  * Implements Factory design pattern, class provides method for creating games objects.
  */
 public class GameFactory {
-	/*Private Constructor*/
+
 	private GameFactory() {}
 
-	/*Public Methods*/
 	public static Playable getGame(String gameName) {
 		if(gameName == "'01 Game")
 			return new Game01();

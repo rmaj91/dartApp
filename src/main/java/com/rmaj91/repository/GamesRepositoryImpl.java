@@ -157,6 +157,8 @@ public class GamesRepositoryImpl implements GamesRepository {
         return gamesList.isEmpty();
     }
 
+
+
     /*Private Methods*/
     private void showInformationWindow() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

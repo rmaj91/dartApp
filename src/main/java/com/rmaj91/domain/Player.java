@@ -50,10 +50,6 @@ public class Player implements PlayerInterface,Serializable {
         return currentThrow;
     }
 
-    public void setAverage(double average) {
-        this.average = average;
-    }
-
     public void setThrowFieldsByIndex(int index, String string) {
         this.throwFieldsValues[index] = string;
     }
@@ -79,8 +75,9 @@ public class Player implements PlayerInterface,Serializable {
         Player player = new Player();
         player.name = this.name;
         player.points = this.points;
-        // Calculating average
+
         int currentRound = gamesRepositoryImpl.getIndexOfRound(gamesRepositoryImpl.getCurrentRound())+1;
+        // Calculating average
         player.average = (double)(Game01.getStartingPoints() - player.points) / currentRound;
         return player;
     }

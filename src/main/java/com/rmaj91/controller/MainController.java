@@ -36,10 +36,10 @@ public class MainController implements Initializable {
 	private WelcomeController welcomeController;
 	@FXML
 	private Game01Controller game01Controller;
-	//@FXML
-	//private CricketController cricketController;
-	//@FXML
-	//private MasterCricketController masterCricketController;
+	@FXML
+	private CricketController cricketController;
+	@FXML
+	private MasterCricketController masterCricketController;
 	@FXML
 	private BoardController boardController;
 
@@ -62,6 +62,7 @@ public class MainController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
+		// todo make smaller functions
 		//Creating repository
 		gamesRepository = new GamesRepositoryImpl();
 		gamesRepository.setBoardController(boardController);
@@ -82,8 +83,8 @@ public class MainController implements Initializable {
 		welcomeController.setMainController(this);
 		welcomeController.setGame01Controller(game01Controller);
 		welcomeController.setGamesRepository(gamesRepository);
-		//welcomeController.setCricketController(cricketController);
-		//welcomeController.setMasterCricketController(masterCricketController);
+		welcomeController.setCricketController(cricketController);
+		welcomeController.setMasterCricketController(masterCricketController);
 
 		game01Controller.setWelcomeController(welcomeController);
 		game01Controller.setGamesRepository(gamesRepository);
@@ -91,8 +92,8 @@ public class MainController implements Initializable {
 
 		boardController.setGamesRepository(gamesRepository);
 
-		//cricketController.setWelcomeController(welcomeController);
-		//masterCricketController.setWelcomeController(welcomeController);
+		cricketController.setWelcomeController(welcomeController);
+		masterCricketController.setWelcomeController(welcomeController);
 
 		/*Initializing stuff*/
 		stage.setOnCloseRequest((e)->{closeApplication(e);});

@@ -22,6 +22,8 @@ import javafx.scene.text.Font;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import static com.rmaj91.utility.Utilities.*;
+
 
 public class Game01 implements Playable, Serializable {
 
@@ -105,9 +107,12 @@ public class Game01 implements Playable, Serializable {
 
 	}
 
+	public static int getStartingPoints() {
+		return startingPoints;
+	}
+
 
 	/*METHODS FROM PLAYABLE*/
-
 	@Override
 	public int getCurrentPlayer() {
 		return currentPlayer;
@@ -130,22 +135,7 @@ public class Game01 implements Playable, Serializable {
 	@Override
 	public void next() {
 		gamesRepositoryImpl.getCurrentRound().saveThrowFields();
-		// if there's not last player in last round
-		if(gamesRepositoryImpl.getIndexOfRound(this)+1 < Game01.roundsMaxNumber || currentPlayer != playersQuantity){
-
-			// setting current throw to one to start from 1st throw after back round
-			players[currentPlayer-1].setCurrentThrow(1);
-			// if last player in round
-			if(currentPlayer  == Game01.playersQuantity)
-				gamesRepositoryImpl.pushRound(this.cloneRound());
-			else
-				currentPlayer++;
-
-			boardController.getThrowField1().requestFocus();
-			gamesRepositoryImpl.getCurrentRound().displayRound();
-		}
-		else
-			return;
+		goToNextRoundOrPlayer();
 	}
 
 	@Override
@@ -172,41 +162,19 @@ public class Game01 implements Playable, Serializable {
 		// Geting cartesian coordinates of cursor over dartboard
 		double xCartesian = event.getX() - 248;
 		double yCartesian = -(event.getY() - 248.5);
-		// Defining dart board field scope indexes
-		int radiusIndex = Utilities.getRadiusIndex(xCartesian, yCartesian);
-		int angleIndex = Utilities.getAngleIndex(xCartesian, yCartesian);
+		int radiusIndex = getRadiusIndex(xCartesian, yCartesian);
+		int angleIndex = getAngleIndex(xCartesian, yCartesian);
 		String fieldName = new String();
 
-		// If current throw > 3 or mouse clicked out of dart board
-		if (currentThrow > 3 || radiusIndex == 7)
-			return;
-		else {
+		if (currentThrow <= 3 || radiusIndex != 7){
 			for (Filters.IndexMapper indexMapper : Utilities.filters.getIndexMapperList()) {
 				if (indexMapper.hasFieldName(radiusIndex, angleIndex)) {
 					fieldName = indexMapper.getFieldName();
 					break;
 				}
 			}
-			// Playing sound of clicked field
 			soundPlayer.playSound(fieldName);
-
-			// todo, dont delete INFO STUFF
-			////////////////////////////////////////////
-			System.out.print("Rzut nr: " + currentThrow + " Pressed: x = " + xCartesian + "  y = " + yCartesian + "\t");
-			System.out.print(fieldName + "\t");
-			System.out.println(Game01.parsethrowFieldName(fieldName));
-			//////////////////////////////////////////////////
-
-			// Writing fieldName into throwTextFields and setting focus on the next textField
-			if (currentThrow == 1) {
-				boardController.getThrowField1().setText(new String(fieldName));
-				boardController.getThrowField2().requestFocus();
-			} else if (currentThrow == 2) {
-				boardController.getThrowField2().setText(new String(fieldName));
-				boardController.getThrowField3().requestFocus();
-			} else if (currentThrow == 3)
-				boardController.getThrowField3().setText(new String(fieldName));
-
+			writeFieldNameAndSetFocus(currentThrow, fieldName);
 			players[currentPlayer - 1].setCurrentThrow(currentThrow+1);
 			saveThrowFields();
 			displayRound();
@@ -214,46 +182,17 @@ public class Game01 implements Playable, Serializable {
 	}
 
 
+
+
 	@Override
 	public void displayRound() {
-		// Displaying current round
 		int currentRound = gamesRepositoryImpl.getIndexOfRound(this)+1;
+		// Displaying current round
 		boardController.getRoundsLabel().setText("Round: "+ currentRound +"/"+Game01.roundsMaxNumber);
-
-		// Displaying throwTextFields
-		for (int i = 0; i < 3; i++) {
-			boardController.getThrowTextFieldArray()[i].setText(players[currentPlayer-1].getThrowFieldsValues()[i]);
-		}
-
-		// Displaying current player name,points and average
-		boardController.getPlayerNameLabel().setText(players[currentPlayer-1].getName());
-		boardController.getPlayerPointsLabel().setText(String.valueOf(players[currentPlayer-1].getPoints()));
-		boardController.getAverageLabel().setText("Average: "+ String.format("%.1f", players[currentPlayer-1].getAverage()));
-
-		// Displaying all players points
-		//todo most probable dont needed for this type of game, check later implementation
-		ObservableList<Node> playerVBoxes = boardController.getGame01PlayersTable().getChildren();
-		for(int i=0;i<Game01.playersQuantity;i++) {
-			Node node1 = playerVBoxes.get(i);
-			Node node2 = ((VBox) node1).getChildren().get(1);
-			((Label)node2).setText(String.valueOf(players[i].getPoints()));
-		}
-
-		// Reset players highlight
-		for(int i=0;i<Game01.playersQuantity;i++){
-			Node node = boardController.getGame01PlayersTable().getChildren().get(i);
-			((VBox)node).getChildren().get(0).setStyle(null);
-		}
-
-		// Highlight current player name
-		Node node = boardController.getGame01PlayersTable().getChildren().get(currentPlayer-1);
-		((VBox)node).getChildren().get(0).setStyle("-fx-background-color: #0388fc;");
-
-		// Display throwtextFields content
-		for (int i = 0; i < 3; i++)
-			boardController.getThrowTextFieldArray()[i].setText(players[currentPlayer-1].getThrowFieldsValues()[i]);
-
+		displayPlayerInfo();
+		displayFieldsHighlight();
 	}
+
 
 	@Override
 	public void setCurrentThrow(int throwNumber) {
@@ -270,70 +209,59 @@ public class Game01 implements Playable, Serializable {
 	@Override
 	public void calculatePoints() {
 		
-		int oldPoints;
+		int previousRoundPoints;
 		if(gamesRepositoryImpl.getIndexOfRound(this) == 0)
-			oldPoints = Game01.startingPoints;
+			previousRoundPoints = Game01.startingPoints;
 		else
-			// Point from previous round
-			oldPoints = gamesRepositoryImpl.getPreviousRound().getPlayer()[currentPlayer-1].getPoints();
-		
-		int newPoints = oldPoints;
+			previousRoundPoints = gamesRepositoryImpl.getPreviousRound().getPlayer()[currentPlayer-1].getPoints();
+		int currentRoundPoints = previousRoundPoints;
 		int totalThrownValue = 0;
 		// Each loop step for throw
 		for (int i = 0; i < 3; i++) {
-			// Parsing throw field name into ThrowValues object
-			ThrowValues throwValue = parsethrowFieldName(players[currentPlayer-1].getThrowFieldsValues()[i]);
+			ThrowValues throwValue = parsethrowFieldNameIntoThrowValues(players[currentPlayer-1].getThrowFieldsValues()[i]);
 			// Calulating thrown points value
 			int thrownPoints = throwValue.getValue() * throwValue.getMulitplier();
-			newPoints = newPoints - thrownPoints;
+			currentRoundPoints = currentRoundPoints - thrownPoints;
 			totalThrownValue += thrownPoints;
 
-			// Checking winning conditions
-			if(isWinner(newPoints,throwValue)){
-				Alert alert = new Alert(Alert.AlertType.WARNING);
-				alert.setTitle("Winner");
-				alert.setHeaderText(players[currentPlayer-1].getName()+ " Won!!!"+"\nCongratulations!");
-				alert.showAndWait();
-				soundPlayer.playSound("win");
-				boardController.getMainStackPane().setDisable(true);
+			if(isWinner(currentRoundPoints,throwValue))
 				return;
-			}
-			// Checking if over thrown
-			if(newPoints < 2){
-				players[currentPlayer-1].setPoints(oldPoints);
-				soundPlayer.playSound("overthrow");
-				Alert alert = new Alert(Alert.AlertType.WARNING);
-				alert.setTitle("Warning Dialog");
-				alert.setHeaderText("Over Throw !!!");
-				alert.showAndWait();
-
-				// Deleting throwTextFields content
-				for(int j=0;j<3;j++){
-					players[currentPlayer-1].setThrowFieldsByIndex(j,new String());
-				}
-				players[currentPlayer-1].setCurrentThrow(1);
-				boardController.getThrowField1().requestFocus();
+			if(( isOverThrow(currentRoundPoints, previousRoundPoints) || ifThrownOver180(totalThrownValue))){
+				goToNextRoundOrPlayer();
 				return;
 			}
 		}
-		// Checking if total thrown value > 180 TIP: in dart game player cant throw more than 180 in one round
-		if(totalThrownValue > 180){
-			soundPlayer.playSound("overthrow");
-			Alert alert = new Alert(Alert.AlertType.WARNING);
-			alert.setTitle("Warning Dialog");
-			alert.setHeaderText("U cant get more than 180 by 3 throws !!!");
-			alert.showAndWait();
-
-			// Deleting throwTextFields content
-			for(int i=0;i<3;i++){
-				players[currentPlayer-1].setThrowFieldsByIndex(i,new String());
-			}
-			return;
-		}
-		// If everything went good, save new points
-		players[currentPlayer-1].setPoints(newPoints);
-
+		// If everything went well, save new points
+		players[currentPlayer-1].setPoints(currentRoundPoints);
 	}
+
+
+	@Override
+	public void initAndDisplay() {
+
+        for (int i = 0; i < playersQuantity; i++) {
+            VBox vBox = new VBox();
+            vBox.setAlignment(Pos.BOTTOM_CENTER);
+            vBox.setMinWidth(100);
+
+            vBox.getChildren().addAll(createPlayerLabel( this.players[i].getName(),false),
+                    createPlayerLabel(String.valueOf(startingPoints),true));
+            boardController.getGame01PlayersTable().getChildren().add(vBox);
+
+        }
+        this.displayRound();
+        boardController.toFront();
+		boardController.getGame01PlayersTable().toFront();
+        if(Game01.isDoubleOut())
+            boardController.getDoubleOut().setVisible(true);
+        else
+			boardController.getDoubleOut().setVisible(false);
+    }
+
+
+	///////////////////////////////////////
+	// PRIVATE METHODS				   	//
+	///////////////////////////////////////
 
 	/**
 	 * This method parses dart boards field name/content eg. "SIGNLE 2" or even "44"(theres not such field but
@@ -341,9 +269,9 @@ public class Game01 implements Playable, Serializable {
 	 * @param fieldContent name of the dart board field
 	 * @return ThrowValues object, which containt field value and multiplier
 	 */
-	public static ThrowValues parsethrowFieldName(String fieldContent){
+	private ThrowValues parsethrowFieldNameIntoThrowValues(String fieldContent){
 
-		// If regular
+		// If regular integer
 		int value;
 		try{
 			value = Integer.parseInt(fieldContent);
@@ -373,43 +301,12 @@ public class Game01 implements Playable, Serializable {
 			multiplier=2;
 		else if(multiplierString.equalsIgnoreCase("triple"))
 			multiplier=3;
-		// if there's another word but not multipier nam
+			// if there's another word but not multipier nam
 		else
 			return new ThrowValues(0,0);
 
 		return new ThrowValues(value,multiplier);
 	}
-
-    public static int getStartingPoints() {
-        return startingPoints;
-    }
-
-	@Override
-	public void initAndDisplay() {
-
-        for (int i = 0; i < playersQuantity; i++) {
-            VBox vBox = new VBox();
-            vBox.setAlignment(Pos.BOTTOM_CENTER);
-            vBox.setMinWidth(100);
-
-            vBox.getChildren().addAll(createPlayerLabel( this.players[i].getName(),false),
-                    createPlayerLabel(String.valueOf(startingPoints),true));
-            boardController.getGame01PlayersTable().getChildren().add(vBox);
-
-        }
-        this.displayRound();
-        boardController.toFront();
-		boardController.getGame01PlayersTable().toFront();
-        if(Game01.isDoubleOut())
-            boardController.getDoubleOut().setVisible(true);
-        else
-			boardController.getDoubleOut().setVisible(false);
-    }
-
-
-	///////////////////////////////////////
-	// PRIVATE METHODS				   	//
-	///////////////////////////////////////
 
 	private Label createPlayerLabel(String text,boolean ifBold){
         Label playerLabel = new Label();
@@ -422,14 +319,104 @@ public class Game01 implements Playable, Serializable {
     }
 
 	private boolean isWinner(int newPoints, ThrowValues throwValue) {
-		if(doubleOut && newPoints == 0 && throwValue.getMulitplier() == 2){
-			return true;
-		}
-		else if( newPoints == 0 && !doubleOut){
+		if((doubleOut && newPoints == 0 && throwValue.getMulitplier() == 2)
+		|| newPoints == 0 && !doubleOut){
+
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setTitle("Winner");
+			alert.setHeaderText(players[currentPlayer-1].getName()+ " Won!!!"+"\nCongratulations!");
+			alert.showAndWait();
+			soundPlayer.playSound("win");
+			boardController.getMainStackPane().setDisable(true);
 			return true;
 		}
 		else
 			return false;
 	}
 
+	private void writeFieldNameAndSetFocus(int currentThrow, String fieldName) {
+		if (currentThrow == 1) {
+			boardController.getThrowField1().setText(new String(fieldName));
+			boardController.getThrowField2().requestFocus();
+		} else if (currentThrow == 2) {
+			boardController.getThrowField2().setText(new String(fieldName));
+			boardController.getThrowField3().requestFocus();
+		} else if (currentThrow == 3)
+			boardController.getThrowField3().setText(new String(fieldName));
+	}
+
+	private void displayFieldsHighlight() {
+		for(int i = 0; i< Game01.playersQuantity; i++){
+			Node node = boardController.getGame01PlayersTable().getChildren().get(i);
+			((VBox)node).getChildren().get(0).setStyle(null);
+		}
+
+		Node node = boardController.getGame01PlayersTable().getChildren().get(currentPlayer-1);
+		((VBox)node).getChildren().get(0).setStyle("-fx-background-color: #0388fc;");
+	}
+
+	private void displayPlayerInfo() {
+		// Displaying throwTextFields
+		for (int i = 0; i < 3; i++) {
+			boardController.getThrowTextFieldArray()[i].setText(players[currentPlayer-1].getThrowFieldsValues()[i]);
+		}
+
+		// Displaying current player name,points and average
+		boardController.getPlayerNameLabel().setText(players[currentPlayer-1].getName());
+		boardController.getPlayerPointsLabel().setText(String.valueOf(players[currentPlayer-1].getPoints()));
+		boardController.getAverageLabel().setText("Average: "+ String.format("%.1f", players[currentPlayer-1].getAverage()));
+
+		// Displaying all players points
+		ObservableList<Node> playerVBoxes = boardController.getGame01PlayersTable().getChildren();
+		for(int i = 0; i< Game01.playersQuantity; i++) {
+			Node node1 = playerVBoxes.get(i);
+			Node node2 = ((VBox) node1).getChildren().get(1);
+			((Label)node2).setText(String.valueOf(players[i].getPoints()));
+		}
+	}
+
+	private void goToNextRoundOrPlayer() {
+		if(gamesRepositoryImpl.getIndexOfRound(this)+1 < Game01.roundsMaxNumber || currentPlayer != playersQuantity){
+			// setting current throw to one to start from 1st throw after back round
+			players[currentPlayer - 1].setCurrentThrow(1);
+			// if last player in round
+			if (currentPlayer == Game01.playersQuantity)
+				gamesRepositoryImpl.pushRound(this.cloneRound());
+			else
+				currentPlayer++;
+
+			boardController.getThrowField1().requestFocus();
+			gamesRepositoryImpl.getCurrentRound().displayRound();
+		}
+	}
+
+	private boolean ifThrownOver180(int totalThrownValue) {
+		if(totalThrownValue >180){
+			playSoundAndDeleteThrows("U cant get more than 180 by 3 throws !!!");
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isOverThrow(int newPoints, int oldPoints) {
+		if(newPoints < 2){
+			playSoundAndDeleteThrows("Over Throw !!!");
+			return true;
+		}
+		return false;
+	}
+
+	private void playSoundAndDeleteThrows(String s) {
+		soundPlayer.playSound("overthrow");
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.setTitle("Warning Dialog");
+		alert.setHeaderText(s);
+		alert.showAndWait();
+		// Deleting throwTextFields content
+		for (int i = 0; i < 3; i++) {
+			players[currentPlayer - 1].setThrowFieldsByIndex(i, new String());
+		}
+		players[currentPlayer-1].setCurrentThrow(1);
+		boardController.getThrowField1().requestFocus();
+	}
 }

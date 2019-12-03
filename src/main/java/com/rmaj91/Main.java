@@ -23,10 +23,8 @@ import java.util.Optional;
  */
 public class Main extends Application {
 
-    /*Static*/
     public static Stage stage = null;
 
-    /*Main Method*/
     public static void main(String[] args) {
         launch(args);
     }
@@ -34,7 +32,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            /*Injecting into static field*/
             MainController.setStage(primaryStage);
 
             AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("Main.fxml"));

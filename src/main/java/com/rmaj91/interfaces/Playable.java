@@ -10,7 +10,8 @@ import javafx.scene.input.MouseEvent;
 public interface Playable {
 
     /**
-     * The next() method moves game into next player/round (it depends on which player actually have turn)
+     * The next() method moves game into next player/round (it depends on which player actually have turn). Could save
+     * thrown fields or not
      */
 	void next();
 
@@ -65,7 +66,7 @@ public interface Playable {
     public Player[] getPlayer();
 
     /**
-     * init board view and display
+     * Inits board view and display current round
      */
     public void initAndDisplay();
 

@@ -5,9 +5,7 @@ package com.rmaj91.domain;
  */
 public class ThrowValues {
 
-    //value of throwns dart field
     private int value;
-    //multiplier of thrown dart field
     private int mulitplier;
 
     /*Constructor*/

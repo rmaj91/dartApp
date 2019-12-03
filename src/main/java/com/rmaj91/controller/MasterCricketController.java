@@ -13,6 +13,9 @@ import javafx.scene.layout.VBox;
 
 public class MasterCricketController {
 
+    private WelcomeController welcomeController;
+
+
     @FXML
     private VBox newMasterPane;
 
@@ -97,14 +100,21 @@ public class MasterCricketController {
     @FXML
     private Button masterLetsButton;
 
-    @FXML
-    void backButton(ActionEvent event) {
-
-    }
 
     @FXML
     void masterField7Toggle(ActionEvent event) {
 
     }
 
+    public void toFront() {
+        newMasterPane.toFront();
+    }
+
+    public void backButtonClicked() {
+        welcomeController.toFront();
+    }
+
+    public void setWelcomeController(WelcomeController welcomeController) {
+        this.welcomeController = welcomeController;
+    }
 }
