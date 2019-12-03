@@ -1,5 +1,8 @@
 package com.rmaj91.controller;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -127,4 +130,14 @@ public class WelcomeController implements Initializable {
 	}
 
 
+    public void openGitHub() {
+
+        try {
+            Desktop.getDesktop().browse(new URL("http://www.github.com/rmaj91/dartApp").toURI());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 }

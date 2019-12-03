@@ -88,19 +88,24 @@ public class GamesRepositoryImpl implements GamesRepository {
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            // writing class name
+            dataOutputStream.writeUTF(this.getCurrentRound().getClass().getName());
             dataOutputStream.writeBoolean(Game01.isDoubleOut());
             dataOutputStream.writeInt(Game01.getPlayersQuantity());
             dataOutputStream.writeInt(Game01.getRoundsMaxNumber());
             dataOutputStream.writeInt(Game01.getStartingPoints());
 
+            //System.out.println(this.getCurrentRound().getClass().getName());
+
             // Serializing List
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(gamesList);
             dataOutputStream.close();
-        } catch (IOException exception) {
-            System.out.println(exception);
+        } catch (Exception exception) {
+            exception.printStackTrace();
             return false;
         }
+
         showInformationWindow();
 		return true;
 	}
@@ -116,20 +121,24 @@ public class GamesRepositoryImpl implements GamesRepository {
         try {
             FileInputStream inputStream = new FileInputStream(file);
             dataInputStream = new DataInputStream(inputStream);
-            Game01.setDoubleOut(dataInputStream.readBoolean());
-            Game01.setPlayersQuantity(dataInputStream.readInt());
-            Game01.setRoundsMaxNumber(dataInputStream.readInt());
-            Game01.setStartingPoints(dataInputStream.readInt());
 
-            // Reading Serialized List
-            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            gamesList = (List<Playable>)objectInputStream.readObject();
-            dataInputStream.close();
-        } catch (IOException exception) {
-            System.out.println(exception);
+
+            //reads class name
+            String className = dataInputStream.readUTF();
+            if(className.equals("com.rmaj91.domain.Game01")){
+                Game01.setDoubleOut(dataInputStream.readBoolean());
+                Game01.setPlayersQuantity(dataInputStream.readInt());
+                Game01.setRoundsMaxNumber(dataInputStream.readInt());
+                Game01.setStartingPoints(dataInputStream.readInt());
+                // Reading Serialized List
+                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                gamesList = (List<Playable>) objectInputStream.readObject();
+                dataInputStream.close();
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
             return false;
-        }catch (ClassNotFoundException exception){
-            System.out.println(exception);
         }
 
         boardController.initAndDisplay();
@@ -144,10 +153,7 @@ public class GamesRepositoryImpl implements GamesRepository {
 
     @Override
     public boolean isEmpty() {
-        if(gamesList.isEmpty())
-            return true;
-        else
-            return false;
+        return gamesList.isEmpty();
     }
 
     ///////////////////

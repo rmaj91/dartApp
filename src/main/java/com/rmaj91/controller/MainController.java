@@ -20,13 +20,25 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 public class MainController implements Initializable {
 
-	// Dependencies //
+	/*Dependencies*/
 	private SoundPlayer soundPlayer;
+	@FXML
+	private WelcomeController welcomeController;
+	@FXML
+	private Game01Controller game01Controller;
+	//@FXML
+	//private CricketController cricketController;
+	//@FXML
+	//private MasterCricketController masterCricketController;
+	@FXML
+	private BoardController boardController;
 
+	/*Controls etc.*/
 	@FXML
 	private AnchorPane rootPane;
 
@@ -34,7 +46,7 @@ public class MainController implements Initializable {
 	private StackPane mainStackPane;
 
 	@FXML
-	private AnchorPane mainTopPane;
+	private StackPane mainTopPane;
 
 	@FXML
 	private ImageView closeIcon;
@@ -66,26 +78,11 @@ public class MainController implements Initializable {
 	@FXML
 	private ImageView saveGameIcon;
 
+	/*Variables*/
 	private double xOffSet = 0;
 	private double yOffSet = 0;
-	
-	// Injecting controllers
-	@FXML
-	private WelcomeController welcomeController;
-	@FXML
-	private Game01Controller game01Controller;
-	//@FXML
-	//private CricketController cricketController;
-	//@FXML
-	//private MasterCricketController masterCricketController;
-	@FXML
-	private BoardController boardController;
 
-
-	public Slider getVolumeSlider() {
-		return volumeSlider;
-	}
-
+	/*Initalizing*/
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		makePaneDragable();
@@ -108,16 +105,20 @@ public class MainController implements Initializable {
 		volumeSlider.valueProperty().addListener((obs,oldValue,newValue)->{
 			Main.soundPlayer.setVolumeLevel(volumeSlider.getValue());
 		});
-		volumeSlider.disableProperty().addListener((obs,oldValue,newValue)->{
-			Main.soundPlayer.setSoundsActive(!volumeSlider.isDisable());
-		});
+//		volumeSlider.disableProperty().addListener((obs,oldValue,newValue)->{
+//			Main.soundPlayer.setSoundsActive(!volumeSlider.isDisable());
+//		});
 
 		//todo
 		//Stage stage = (Stage) rootPane.getScene().getWindow();
 	}
 
+	/*Getters & Setters*/
+	public Slider getVolumeSlider() {
+		return volumeSlider;
+	}
 
-
+	/*Methods*/
 	private void makePaneDragable() {
 		mainTopPane.setOnMousePressed((event) -> {
 			xOffSet = event.getSceneX();
@@ -135,11 +136,11 @@ public class MainController implements Initializable {
 		});
 	}
 
+	/*Events*/
 	public void minimallizeApplication(MouseEvent event) {
 		Main.stage.setIconified(true);
     }
-	
-	@FXML
+
 	public void closeApplication() {
 		Main.closeApplication(null);
 	}
@@ -154,20 +155,16 @@ public class MainController implements Initializable {
 				return;
 		}
 
-
 		Main.gamesRepositotyImpl.clear();
 		boardController.getGame01PlayersTable().getChildren().clear();
 		welcomeController.toFront();
 	}
 
 	public void saveGameIconClicked() {
-		// todo zapis do pliku
-		//if(boardController.getGame01ScoreTable().is)
 		Main.gamesRepositotyImpl.saveGame();
 	}
 
 	public void volumeIconClicked(){
-		// todo dodac dzwieki
 		if(volumeIcon.getOpacity() == 0.58){
 			volumeIcon.setOpacity(1);
 			volumeIcon.setImage(new Image("images/volume_up.png"));
@@ -178,7 +175,14 @@ public class MainController implements Initializable {
 			volumeIcon.setImage(new Image("images/volume_off.png"));
 			volumeSlider.setDisable(true);
 		}
+		Main.soundPlayer.setSoundsActive(!volumeSlider.isDisable());
 	}
 
+	public void paneIconHoverIn(MouseEvent event) {
+		((Pane)event.getSource()).setStyle("-fx-background-color: white;");
+	}
+	public void paneIconHoverOut(MouseEvent event) {
+		((Pane)event.getSource()).setStyle("-fx-background-color: #8f2f28;");
+	}
 
 }	

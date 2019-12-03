@@ -8,6 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
@@ -21,60 +22,6 @@
             <fx:include fx:id="game01" source="Game01.fxml" />
             <fx:include fx:id="welcome" source="Welcome.fxml" />
          </children></StackPane>
-      <AnchorPane fx:id="mainTopPane" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #8f2f28;">
-         <children>
-            <ImageView fx:id="closeIcon" fitHeight="24.0" fitWidth="24.0" layoutX="968.0" layoutY="11.0" onMouseClicked="#closeApplication" opacity="0.9" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/close.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <ImageView fx:id="maxIcon" fitHeight="24.0" fitWidth="24.0" layoutX="937.0" layoutY="10.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/max.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <ImageView fx:id="minIcon" fitHeight="24.0" fitWidth="24.0" layoutX="907.0" layoutY="11.0" onMouseClicked="#minimallizeApplication" opacity="0.9" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/min.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <ImageView fx:id="smallLogo" fitHeight="36.0" fitWidth="40.0" layoutX="378.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/dartBoard.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="gameName" layoutX="418.0" layoutY="5.0" text="Dart Maju v.1.0." textFill="#fcfcfc">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <ImageView fx:id="newGameIcon" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#newGameIconClicked" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/newGameIcon.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <ImageView fx:id="saveGameIcon" fitHeight="32.0" fitWidth="32.0" layoutX="40.0" layoutY="6.0" onMouseClicked="#saveGameIconClicked" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/save.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-         </children>
-      </AnchorPane>
       <HBox fx:id="mainBottomPane" alignment="CENTER_RIGHT" layoutY="560.0" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #8f2f28;">
          <children>
             <ImageView fx:id="volumeIcon" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#volumeIconClicked" pickOnBounds="true" preserveRatio="true">
@@ -82,10 +29,10 @@
                   <Image url="@../../images/volume_up.png" />
                </image>
                <HBox.margin>
-                  <Insets right="10.0" top="5.0" />
+                  <Insets right="10.0" top="2.0" />
                </HBox.margin>
                <cursor>
-                  <Cursor fx:constant="DEFAULT" />
+                  <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
             <Slider fx:id="volumeSlider" value="50.0">
@@ -98,5 +45,104 @@
             </Slider>
          </children>
       </HBox>
+      <StackPane fx:id="mainTopPane" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #8f2f28;">
+         <children>
+            <Pane fx:id="backgroundPaneMin" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#minimallizeApplication" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
+               <StackPane.margin>
+                  <Insets right="80.0" />
+               </StackPane.margin>
+               <children>
+                  <ImageView fx:id="minIcon" fitHeight="24.0" fitWidth="24.0" layoutX="8.0" layoutY="8.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/min.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Pane>
+            <Pane fx:id="backgroundPaneMax" maxHeight="40.0" maxWidth="40.0" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
+               <StackPane.margin>
+                  <Insets right="40.0" />
+               </StackPane.margin>
+               <children>
+                  <ImageView fx:id="maxIcon" fitHeight="24.0" fitWidth="24.0" layoutX="8.0" layoutY="8.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/max.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Pane>
+            <Pane fx:id="backgroundPaneClose" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#closeApplication" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
+               <children>
+                  <ImageView fx:id="closeIcon" fitHeight="24.0" fitWidth="24.0" layoutX="8.0" layoutY="8.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/close.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Pane>
+            <Pane fx:id="backgroundPaneSaveGame" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#saveGameIconClicked" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_LEFT">
+               <StackPane.margin>
+                  <Insets left="40.0" />
+               </StackPane.margin>
+               <children>
+                  <ImageView fx:id="saveGameIcon" fitHeight="32.0" fitWidth="32.0" layoutX="4.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/save.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Pane>
+            <Pane fx:id="backgroundPaneNewGame" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#newGameIconClicked" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_LEFT">
+               <children>
+                  <ImageView fx:id="newGameIcon" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/newGameIcon.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Pane>
+            <ImageView fx:id="smallLogo" fitHeight="36.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+               <image>
+                  <Image url="@../../images/dartBoard.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets right="210.0" />
+               </StackPane.margin>
+            </ImageView>
+            <Label fx:id="gameName" text="Dart Maju v.1.0." textFill="#fcfcfc" StackPane.alignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>

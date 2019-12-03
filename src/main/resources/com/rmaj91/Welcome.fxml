@@ -16,48 +16,6 @@
 
 <StackPane fx:id="mainStackPane" prefHeight="520.0" prefWidth="1000.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.WelcomeController">
    <children>
-      <VBox fx:id="aboutPane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #333333;">
-         <children>
-            <Label text=" Created by Maju :D" textFill="WHITE" wrapText="true">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label text="Contact: rmaj91@gmail.com" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <HBox maxWidth="300.0" prefHeight="32.0" prefWidth="280.0">
-               <children>
-                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/github.png" />
-                     </image>
-                  </ImageView>
-                  <Hyperlink text="github.com/rmaj91/dartApp" textAlignment="CENTER" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="2.0" />
-                     </padding>
-                  </Hyperlink>
-               </children>
-            </HBox>
-            <Button fx:id="aboutButton1" focusTraversable="false" mnemonicParsing="false" onAction="#backToWelcome" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Back">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <VBox.margin>
-                  <Insets top="60.0" />
-               </VBox.margin>
-            </Button>
-         </children>
-      </VBox>
       <VBox fx:id="chooseGamePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #333333;">
          <children>
             <VBox fx:id="chooseGameFrame" alignment="CENTER" maxHeight="280.0" maxWidth="250.0" prefHeight="280.0" prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 10;">
@@ -106,6 +64,48 @@
                   </HBox>
                </children>
             </VBox>
+         </children>
+      </VBox>
+      <VBox fx:id="aboutPane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #333333;">
+         <children>
+            <Label text=" Created by Maju :D" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label text="Contact: rmaj91@gmail.com" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <HBox maxWidth="300.0" prefHeight="32.0" prefWidth="280.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/github.png" />
+                     </image>
+                  </ImageView>
+                  <Hyperlink onMouseClicked="#openGitHub" text="github.com/rmaj91/dartApp" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="2.0" />
+                     </padding>
+                  </Hyperlink>
+               </children>
+            </HBox>
+            <Button fx:id="aboutButton1" focusTraversable="false" mnemonicParsing="false" onAction="#backToWelcome" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 20px;" text="Back">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <VBox.margin>
+                  <Insets top="60.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
       <VBox fx:id="welcomePane" alignment="CENTER" style="-fx-background-color: #333333;" StackPane.alignment="CENTER">
