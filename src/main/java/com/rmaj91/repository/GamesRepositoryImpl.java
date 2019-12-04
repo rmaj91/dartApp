@@ -84,86 +84,85 @@ public class GamesRepositoryImpl implements GamesRepository {
     @Override
 	public boolean saveGame() {
 
-//		if(gamesList.isEmpty())
-//			return false;
-//        //Show save file dialog
-//        FileChooser fileChooser = new FileChooser();
-//        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
-//        fileChooser.getExtensionFilters().add(extFilter);
-//        File file = fileChooser.showSaveDialog(Main.stage);
-//        try {
-//            FileOutputStream outputStream = new FileOutputStream(file);
-//            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-//            // writing class name
-//            String className = this.getCurrentRound().getClass().getName();
-//            dataOutputStream.writeUTF(className);
-//            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-//            if(className.equals("com.rmaj91.domain.Game01")){
-//                dataOutputStream.writeBoolean(Game01.isDoubleOut());
-//                dataOutputStream.writeInt(Game01.getPlayersQuantity());
-//                dataOutputStream.writeInt(Game01.getRoundsMaxNumber());
-//                dataOutputStream.writeInt(Game01.getStartingPoints());
-//            }
-//            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
+		if(gamesList.isEmpty())
+			return false;
+        //Show save file dialog
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(Main.stage);
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(gamesList);
+
+            //writing class name
+            String className = this.getCurrentRound().getClass().getName();
+            dataOutputStream.writeUTF(className);
+            if(className.equals("com.rmaj91.domain.Game01")) {
+                dataOutputStream.writeBoolean(Game01.isDoubleOut());
+                dataOutputStream.writeInt(Game01.getNumberOfPlayers());
+                dataOutputStream.writeInt(Game01.getMaxNumberOfRounds());
+            }
+            //            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
 //                dataOutputStream.writeInt(Cricket.getPlayersQuantity());
 //                dataOutputStream.writeInt(Cricket.getRoundsMaxNumber());
 //                dataOutputStream.writeInt(Cricket.getCurrentFieldToThrowIndex());
 //                objectOutputStream.writeObject(Cricket.getFieldsToHit());
-//            }
-//
-//            objectOutputStream.writeObject(gamesList);
-//            dataOutputStream.close();
-//
-//        } catch (Exception exception) {
-//            exception.printStackTrace();
-//            return false;
-//        }
-//
-//        showInformationWindow("Game Saved!","Game saved successfully :)");
+            //          }
+
+            dataOutputStream.close();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return false;
+        }
+
+        showInformationWindow("Game Saved!","Game saved successfully :)");
 		return true;
 	}
 
     @Override
 	public boolean loadGame() {
-//        FileChooser fileChooser = new FileChooser();
-//        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
-//        fileChooser.getExtensionFilters().add(extFilter);
-//        File file = fileChooser.showOpenDialog(Main.stage);
-//
-//        DataInputStream dataInputStream;
-//        FileInputStream inputStream = null;
-//        try {
-//            inputStream = new FileInputStream(file);
-//        } catch (Exception exception){
-//            return false;
-//        }
-//
-//        try{
-//            dataInputStream = new DataInputStream(inputStream);
-//            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-//            String className = dataInputStream.readUTF();
-//            if(className.equals("com.rmaj91.domain.Game01")){
-//                Game01.setDoubleOut(dataInputStream.readBoolean());
-//                Game01.setPlayersQuantity(dataInputStream.readInt());
-//                Game01.setRoundsMaxNumber(dataInputStream.readInt());
-//                Game01.setStartingPoints(dataInputStream.readInt());
-//            }
-//            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showOpenDialog(Main.stage);
+
+        DataInputStream dataInputStream;
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+        } catch (Exception exception){
+            return false;
+        }
+
+        try{
+            dataInputStream = new DataInputStream(inputStream);
+            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+            gamesList = (List<Playable>) objectInputStream.readObject();
+
+            String className = dataInputStream.readUTF();
+            if(className.equals("com.rmaj91.domain.Game01")) {
+                Game01.setDoubleOut(dataInputStream.readBoolean());
+                Game01.setNumberOfPlayers(dataInputStream.readInt());
+                Game01.setMaxNumberOfRounds(dataInputStream.readInt());
+            }
+            //            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
 //                Cricket.setPlayersQuantity(dataInputStream.readInt());
 //                Cricket.setRoundsMaxNumber(dataInputStream.readInt());
 //                Cricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
 //                Cricket.setFieldsToHit((ArrayList<Integer>) objectInputStream.readObject());
-//            }
-//
-//            gamesList = (List<Playable>) objectInputStream.readObject();
-//            dataInputStream.close();
-//
-//        } catch (Exception exception) {
-//            exception.printStackTrace();
-//            showInformationWindow("Error while loading","Game cannot be loaded!");
-//            return false;
-//        }
-//        this.getCurrentRound().setBoardViewVisible();
+            //          }
+            dataInputStream.close();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            showInformationWindow("Error while loading","Game cannot be loaded!");
+            return false;
+        }
+        this.getCurrentRound().setBoardViewVisible();
 
         return true;
 

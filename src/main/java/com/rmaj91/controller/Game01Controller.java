@@ -144,9 +144,21 @@ public class Game01Controller implements Initializable {
         setPointsOtherRadioButtonListener(game01RadioRoundsOther, game01RoundsSpinner);
         setPlayersRadioButtonsGroupListener();
         setPlayersNamesTextFieldsValidation();
-
         setSpinnersFactoriesAndValidation();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

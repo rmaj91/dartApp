@@ -64,6 +64,32 @@ public class Game01 implements Playable, Serializable {
 
     /*Getters & Setter*/
     ////////////////////
+
+
+    public static void setDoubleOut(boolean doubleOut) {
+        Game01.doubleOut = doubleOut;
+    }
+
+    public static void setNumberOfPlayers(int numberOfPlayers) {
+        Game01.numberOfPlayers = numberOfPlayers;
+    }
+
+    public static void setMaxNumberOfRounds(int maxNumberOfRounds) {
+        Game01.maxNumberOfRounds = maxNumberOfRounds;
+    }
+
+    public static boolean isDoubleOut() {
+        return doubleOut;
+    }
+
+    public static int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public static int getMaxNumberOfRounds() {
+        return maxNumberOfRounds;
+    }
+
     public static void setSoundPlayer(SoundPlayer soundPlayer) {
         Game01.soundPlayer = soundPlayer;
     }
@@ -101,12 +127,17 @@ public class Game01 implements Playable, Serializable {
         this.players = players;
     }
 
+
+
+
+
+
+
     public static void setStaticVariables(boolean doubleOut, int numberOfPlayers, int numberOfRounds) {
         Game01.doubleOut = doubleOut;
         Game01.numberOfPlayers = numberOfPlayers;
         Game01.maxNumberOfRounds = numberOfRounds;
     }
-
 
 
     /*Methods from Playable*/
