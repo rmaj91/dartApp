@@ -2,6 +2,7 @@ package com.rmaj91.repository;
 
 import com.rmaj91.Main;
 import com.rmaj91.controller.BoardController;
+import com.rmaj91.domain.Cricket;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.interfaces.Playable;
@@ -10,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -88,19 +90,25 @@ public class GamesRepositoryImpl implements GamesRepository {
             FileOutputStream outputStream = new FileOutputStream(file);
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             // writing class name
-            dataOutputStream.writeUTF(this.getCurrentRound().getClass().getName());
-            dataOutputStream.writeBoolean(Game01.isDoubleOut());
-            dataOutputStream.writeInt(Game01.getPlayersQuantity());
-            dataOutputStream.writeInt(Game01.getRoundsMaxNumber());
-            dataOutputStream.writeInt(Game01.getStartingPoints());
-
-            //todo for other games classes
-            //System.out.println(this.getCurrentRound().getClass().getName());
-
-            // Serializing List
+            String className = this.getCurrentRound().getClass().getName();
+            dataOutputStream.writeUTF(className);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            if(className.equals("com.rmaj91.domain.Game01")){
+                dataOutputStream.writeBoolean(Game01.isDoubleOut());
+                dataOutputStream.writeInt(Game01.getPlayersQuantity());
+                dataOutputStream.writeInt(Game01.getRoundsMaxNumber());
+                dataOutputStream.writeInt(Game01.getStartingPoints());
+            }
+            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
+                dataOutputStream.writeInt(Cricket.getPlayersQuantity());
+                dataOutputStream.writeInt(Cricket.getRoundsMaxNumber());
+                dataOutputStream.writeInt(Cricket.getCurrentFieldToThrowIndex());
+                objectOutputStream.writeObject(Cricket.getFieldsToHit());
+            }
+
             objectOutputStream.writeObject(gamesList);
             dataOutputStream.close();
+
         } catch (Exception exception) {
             exception.printStackTrace();
             return false;
@@ -121,21 +129,23 @@ public class GamesRepositoryImpl implements GamesRepository {
         try {
             FileInputStream inputStream = new FileInputStream(file);
             dataInputStream = new DataInputStream(inputStream);
-
-
-            //reads class name
-            //todo for other game classes
+            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             String className = dataInputStream.readUTF();
             if(className.equals("com.rmaj91.domain.Game01")){
                 Game01.setDoubleOut(dataInputStream.readBoolean());
                 Game01.setPlayersQuantity(dataInputStream.readInt());
                 Game01.setRoundsMaxNumber(dataInputStream.readInt());
                 Game01.setStartingPoints(dataInputStream.readInt());
-                // Reading Serialized List
-                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                gamesList = (List<Playable>) objectInputStream.readObject();
-                dataInputStream.close();
             }
+            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
+                Cricket.setPlayersQuantity(dataInputStream.readInt());
+                Cricket.setRoundsMaxNumber(dataInputStream.readInt());
+                Cricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
+                Cricket.setFieldsToHit((ArrayList<Integer>) objectInputStream.readObject());
+            }
+
+            gamesList = (List<Playable>) objectInputStream.readObject();
+            dataInputStream.close();
 
         } catch (Exception exception) {
             exception.printStackTrace();

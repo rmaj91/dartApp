@@ -32,11 +32,10 @@ public class Cricket implements Playable {
     private static MainController mainController;
 
     /*Static Variables*/
-    private static ArrayList<Integer> fieldsToHit;
-    //private static int[] fieldsToHit;
     private static int playersQuantity;
     private static int roundsMaxNumber;
     private static int currentFieldToThrowIndex;
+    private static ArrayList<Integer> fieldsToHit;
 
     /*Variables*/
     PlayerCricket[] players;
@@ -63,6 +62,12 @@ public class Cricket implements Playable {
     public static void setBoardController(BoardController boardController) {
         Cricket.boardController = boardController;
     }
+
+    public static int getCurrentFieldToThrowIndex() {
+        return currentFieldToThrowIndex;
+    }
+
+
 
     public static CricketController getCricketController() {
         return cricketController;
@@ -136,10 +141,27 @@ public class Cricket implements Playable {
 
     @Override
     public void back() {
+        clearThrowTextFields();
+        clearFieldsHits();
         saveThrowFields();
-        goToPreviousRoundorPlayer();
+        goToPreviousRoundOrPlayer();
     }
 
+    private void clearFieldsHits() {
+
+        if( currentPlayer != 1 && gamesRepositoryImpl.getIndexOfRound(this) != 0)
+            return;
+        if (gamesRepositoryImpl.getIndexOfRound(this) == 0){
+            for (int hittedField : players[currentPlayer-1].getHittedFields()) {
+                hittedField = 0;
+            }
+        }
+        else {
+            int[] currenRoundtHitedFields = players[currentPlayer - 1].getHittedFields();
+            int[] previousRoundHittedFields = ((PlayerCricket) gamesRepositoryImpl.getPreviousRound().getPlayers()[currentPlayer - 1]).getHittedFields();
+            currenRoundtHitedFields = previousRoundHittedFields;
+        }
+    }
 
 
     @Override
@@ -401,7 +423,6 @@ public class Cricket implements Playable {
             // if last player in round
             if (currentPlayer == Cricket.playersQuantity){
                 gamesRepositoryImpl.pushRound(this.cloneRound());
-                currentPlayer = 1;
             }
             else
                 currentPlayer++;
@@ -409,13 +430,16 @@ public class Cricket implements Playable {
             boardController.getThrowField1().requestFocus();
             gamesRepositoryImpl.getCurrentRound().displayRound();
         }
+
     }
 
-    private void goToPreviousRoundorPlayer() {
+    private void goToPreviousRoundOrPlayer() {
         // if there's not 1st player in 1s round
         if(gamesRepositoryImpl.getIndexOfRound(this) > 0 || currentPlayer != 1){
-            if(currentPlayer == 1)
+            if(currentPlayer == 1){
                 gamesRepositoryImpl.pullRound();
+                ((Cricket)gamesRepositoryImpl.getCurrentRound()).setCurrentPlayer(playersQuantity);
+            }
             else
                 currentPlayer--;
         }
@@ -453,12 +477,14 @@ public class Cricket implements Playable {
         return;
     }
 
-//    private int getCurrentFieldToThrowIndex() {
-//        for (int i = 0; i < 7; i++) {
-//            if(currentFieldToThrow == fieldsToHit[i])
-//                return i;
-//        }
-//        return -1;
-//    }
+    private void clearThrowTextFields() {
+        if( currentPlayer != 1 && gamesRepositoryImpl.getIndexOfRound(this) != 0){
+            for (int i = 0; i < 3; i++)
+                players[currentPlayer - 1].setThrowFieldsByIndex(i, new String());
+        }
+        for (int i = 0; i < 3; i++){
+            boardController.getThrowTextFieldArray()[i].setText(new String());
+        }
+    }
 
 }

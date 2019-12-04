@@ -91,7 +91,9 @@ public class Game01 implements Playable, Serializable {
 		Game01.mainController = mainController;
 	}
 
-
+	public void setCurrentPlayer(int currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
 
 	public static boolean isDoubleOut() {
 		return doubleOut;
@@ -144,9 +146,11 @@ public class Game01 implements Playable, Serializable {
 
 	@Override
 	public void back() {
+		clearThrowTextFields();
 		saveThrowFields();
 		goToPreviousRoundOrPlayer();
 	}
+
 
 
 
@@ -418,13 +422,27 @@ public class Game01 implements Playable, Serializable {
 	private void goToPreviousRoundOrPlayer() {
 		// if there's not 1st player in 1s round
 		if(gamesRepositoryImpl.getIndexOfRound(this) > 0 || currentPlayer != 1){
-			if(currentPlayer == 1)
+			if(currentPlayer == 1){
 				gamesRepositoryImpl.pullRound();
+				((Game01)gamesRepositoryImpl.getCurrentRound()).setCurrentPlayer(playersQuantity);
+			}
 			else
 				currentPlayer--;
 		}
 		else
 			return;
 		gamesRepositoryImpl.getCurrentRound().displayRound();
+	}
+
+
+	private void clearThrowTextFields() {
+		if( currentPlayer != 1 && gamesRepositoryImpl.getIndexOfRound(this) != 0){
+			for (int i = 0; i < 3; i++){
+				players[currentPlayer - 1].setThrowFieldsByIndex(i, new String());
+			}
+			for (int i = 0; i < 3; i++){
+				boardController.getThrowTextFieldArray()[i].setText(new String());
+			}
+		}
 	}
 }
