@@ -114,7 +114,7 @@ public class GamesRepositoryImpl implements GamesRepository {
             return false;
         }
 
-        showInformationWindow();
+        showInformationWindow("Game Saved!","Game saved successfully :)");
 		return true;
 	}
 
@@ -126,8 +126,14 @@ public class GamesRepositoryImpl implements GamesRepository {
         File file = fileChooser.showOpenDialog(Main.stage);
 
         DataInputStream dataInputStream;
+        FileInputStream inputStream = null;
         try {
-            FileInputStream inputStream = new FileInputStream(file);
+            inputStream = new FileInputStream(file);
+        } catch (Exception exception){
+            return false;
+        }
+
+        try{
             dataInputStream = new DataInputStream(inputStream);
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             String className = dataInputStream.readUTF();
@@ -149,6 +155,7 @@ public class GamesRepositoryImpl implements GamesRepository {
 
         } catch (Exception exception) {
             exception.printStackTrace();
+            showInformationWindow("Error while loading","Game cannot be loaded!");
             return false;
         }
         this.getCurrentRound().initAndDisplay();
@@ -168,12 +175,13 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
 
-
     /*Private Methods*/
-    private void showInformationWindow() {
+    private void showInformationWindow(String title,String header) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Saved!");
-        alert.setHeaderText("Game saved successfully :)");
+        alert.setTitle(title);
+        alert.setHeaderText(header);
         alert.showAndWait();
     }
+
+
 }

@@ -16,13 +16,14 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.rmaj91.utility.Utilities.getAngleIndex;
 import static com.rmaj91.utility.Utilities.getRadiusIndex;
 
-public class Cricket implements Playable {
+public class Cricket implements Playable, Serializable {
 
     /*Static Dependencies*/
     private static SoundPlayer soundPlayer;

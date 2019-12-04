@@ -3,9 +3,10 @@ package com.rmaj91.domain;
 import com.rmaj91.interfaces.PlayerInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class PlayerCricket implements PlayerInterface {
+public class PlayerCricket implements PlayerInterface, Serializable {
 
     /* Dependencies */
     private static GamesRepositoryImpl gamesRepositoryImpl;
