@@ -92,4 +92,9 @@ public class PlayerCricket implements PlayerInterface, Serializable {
     public void setThrowFieldsByIndex(int index, String string) {
         this.throwFieldsValues[index] = string;
     }
+
+    @Override
+    public void display() {
+
+    }
 }

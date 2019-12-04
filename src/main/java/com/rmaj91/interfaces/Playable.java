@@ -13,12 +13,12 @@ public interface Playable {
      * The next() method moves game into next player/round (it depends on which player actually have turn). Could save
      * thrown fields or not
      */
-	void next();
+	void NextButton();
 
     /**
      * The back() method moves game backwards to the previous player/round (it depends on which player actually have turn)
      */
-	void back();
+	void goToPreviousPlayerOrRound();
 
     /**
      * The throwDart() method is invoke when player clicks on a dart board. It fills the textField for the current throw
@@ -30,20 +30,20 @@ public interface Playable {
     /**
      * The displayRound() method displays state of the current round and player.
      */
-    void displayRound();
+    void displayRoundState();
 
     /**
      * The setCurrentThrow() method is invoking while clicking on a throwTextFields. Method sets the current number of throw
      * for current player
      * @param throwNumber This is the number of a throw
      */
-    void setCurrentThrow(int throwNumber);
+    void setCurrentThrowTo(int throwNumber);
 
-    /**
-     * The cloneRound() method clones the current round.
-     * @return Method returns cloned current round
-     */
-    Playable cloneRound();
+//    /**
+//     * The cloneRound() method clones the current round.
+//     * @return Method returns cloned current round
+//     */
+//    Playable cloneRound();
 
     /**
      * The saveThrowFields() method saves text from throwTextFields.
@@ -55,20 +55,16 @@ public interface Playable {
      */
     void calculatePoints();
 
-    /**
-     * This method returns number of current player.
-     */
-    int getCurrentPlayer();
+//    /**
+//     * This method returns number of current player.
+//     */
+//    int getCurrentPlayer();
 
-    /**
-     * This method returns players array of current round
-     */
-    public PlayerInterface[] getPlayers();
 
     /**
      * Inits board view and display current round
      */
-    public void initAndDisplay();
+    public void setBoardViewVisible();
 
 
 }

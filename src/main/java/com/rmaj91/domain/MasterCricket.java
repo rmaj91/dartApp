@@ -7,14 +7,15 @@ import javafx.scene.input.MouseEvent;
 public class MasterCricket implements Playable {
 
     @Override
-    public void next() {
+    public void NextButton() {
 
     }
 
     @Override
-    public void back() {
+    public void goToPreviousPlayerOrRound() {
 
     }
+
 
     @Override
     public void throwDart(MouseEvent event) {
@@ -22,19 +23,16 @@ public class MasterCricket implements Playable {
     }
 
     @Override
-    public void displayRound() {
+    public void displayRoundState() {
 
     }
 
     @Override
-    public void setCurrentThrow(int throwNumber) {
+    public void setCurrentThrowTo(int throwNumber) {
 
     }
 
-    @Override
-    public Playable cloneRound() {
-        return null;
-    }
+
 
     @Override
     public void saveThrowFields() {
@@ -46,18 +44,10 @@ public class MasterCricket implements Playable {
 
     }
 
-    @Override
-    public int getCurrentPlayer() {
-        return 0;
-    }
+
 
     @Override
-    public PlayerInterface[] getPlayers() {
-        return new Player01[0];
-    }
-
-    @Override
-    public void initAndDisplay() {
+    public void setBoardViewVisible() {
 
     }
 }

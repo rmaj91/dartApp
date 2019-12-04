@@ -12,6 +12,7 @@ public interface GamesRepository {
     boolean loadGame();
     void clear();
     boolean isEmpty();
-    int getIndexOfRound(Playable round);
+    int getNumberOfRound(Playable round);
     Playable getPreviousRound();
+    Playable getZeroRound();
 }

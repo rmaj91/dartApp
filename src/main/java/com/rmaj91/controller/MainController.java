@@ -9,6 +9,7 @@ import com.rmaj91.domain.Cricket;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.Player01;
 import com.rmaj91.domain.PlayerCricket;
+import com.rmaj91.interfaces.PlayerInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.SoundPlayer;
 import javafx.fxml.FXML;
@@ -76,14 +77,15 @@ public class MainController implements Initializable {
 		soundPlayer.setVolumeLevel(volumeSlider.getValue());
 
 		/*Injecting Dependencies*/
-		Player01.setGamesRepositoryImpl(gamesRepository);
-		Cricket.setGamesRepositoryImpl(gamesRepository);
-		Cricket.setSoundPlayer(soundPlayer);
-		Cricket.setBoardController(boardController);
+		Player01.setGamesRepository(gamesRepository);
+		Player01.setBoardController(boardController);
+//		Cricket.setGamesRepositoryImpl(gamesRepository);
+//		Cricket.setSoundPlayer(soundPlayer);
+//		Cricket.setBoardController(boardController);
 		PlayerCricket.setGamesRepositoryImpl(gamesRepository);
 
 		Game01.setSoundPlayer(soundPlayer);
-		Game01.setGamesRepositoryImpl(gamesRepository);
+		Game01.setGamesRepository(gamesRepository);
 		Game01.setGame01Controller(game01Controller);
 		Game01.setBoardController(boardController);
 		Game01.setMainController(this);

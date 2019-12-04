@@ -1,13 +1,11 @@
 package com.rmaj91.controller;
 
-import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.Point;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.SoundPlayer;
 import com.rmaj91.utility.Utilities;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -21,7 +19,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 
 import java.net.URL;
@@ -139,8 +136,8 @@ public class BoardController implements Initializable {
         return cricketsFields;
     }
 
-    public TextField[] getThrowTextFieldArray() {
-        return throwTextFieldArray;
+    public TextField getThrowTextField(int index) {
+        return throwTextFieldArray[index];
     }
 
     public StackPane getMainStackPane() {
@@ -201,11 +198,11 @@ public class BoardController implements Initializable {
 
     /*Events*/
     public void nextButtonClicked(){
-        gamesRepository.getCurrentRound().next();
+        gamesRepository.getCurrentRound().NextButton();
     }
 
     public void backButtonClicked(){
-        gamesRepository.getCurrentRound().back();
+        gamesRepository.getCurrentRound().goToPreviousPlayerOrRound();
     }
 
     public void dartBoardClicked(MouseEvent event) {
@@ -218,15 +215,15 @@ public class BoardController implements Initializable {
 
     public void onClickThrowField1(MouseEvent event){
         throwField1.selectAll();
-        gamesRepository.getCurrentRound().setCurrentThrow(1);
+        gamesRepository.getCurrentRound().setCurrentThrowTo(1);
     }
     public void onClickThrowField2(){
         throwField2.selectAll();
-        gamesRepository.getCurrentRound().setCurrentThrow(2);
+        gamesRepository.getCurrentRound().setCurrentThrowTo(2);
     }
     public void onClickThrowField3(){
         throwField3.selectAll();
-        gamesRepository.getCurrentRound().setCurrentThrow(3);
+        gamesRepository.getCurrentRound().setCurrentThrowTo(3);
     }
 
     /**

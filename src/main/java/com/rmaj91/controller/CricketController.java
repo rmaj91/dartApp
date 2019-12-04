@@ -2,12 +2,12 @@ package com.rmaj91.controller;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import com.rmaj91.domain.Cricket;
+import com.rmaj91.domain.Game01;
+import com.rmaj91.domain.Player01;
 import com.rmaj91.domain.PlayerCricket;
 import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.repository.GameFactory;
@@ -178,7 +178,7 @@ public class CricketController implements Initializable {
         fillFieldsToHitVBox(getPlayersQuantity());
         createPlayersVBoxes(getPlayersQuantity());
 
-        gamesRepository.getCurrentRound().displayRound();
+        gamesRepository.getCurrentRound().displayRoundState();
     }
 
 
@@ -237,13 +237,13 @@ public class CricketController implements Initializable {
                 fieldToHit.add(25);
         }
 
-        for (int i = 0; i < 7; i++)
-            for (int j = 0; j < 7; j++) {
-                if(fieldToHit.get(i) == fieldToHit.get(j) && i != j)
-//                    System.out.println(fieldToHit.get(i)+"\t"+fieldToHit.get(j));
-                    return false;
-            }
-        Cricket.setFieldsToHit(fieldToHit);
+//        for (int i = 0; i < 7; i++)
+//            for (int j = 0; j < 7; j++) {
+//                if(fieldToHit.get(i) =??????= fieldToHit.get(j) && i != j)
+////                    System.out.println(fieldToHit.get(i)+"\t"+fieldToHit.get(j));
+//                    return false;
+//            }
+//        Cricket.setFieldsToHit(fieldToHit);
         return true;
     }
 
@@ -255,10 +255,10 @@ public class CricketController implements Initializable {
      * @param playersQuantity quantity of setted players
      */
     private void fillFieldsToHitVBox(int playersQuantity){
-        for (int i = 0; i < 7; i++) {
-            Label label = (Label)boardController.getCricketsFields().getChildren().get(i);
-            label.setText(String.valueOf(Cricket.getFieldsToHit().get(i)));
-        }
+//        for (int i = 0; i < 7; i++) {
+//            Label label = (Label)boardController.getCricketsFields().getChildren().get(i);
+//            label.setText(String.valueOf(Cricket.getFieldsToHit().get(i)));
+//        }
     }
 
 
@@ -276,7 +276,8 @@ public class CricketController implements Initializable {
             for(int j=0;j<7;j++)
                 vBox.getChildren().add(createLabel(new String(""),false));
 
-            vBox.getChildren().addAll(createLabel(gamesRepository.getCurrentRound().getPlayers()[i].getName(),false),
+            String playerName = ((Game01) gamesRepository.getZeroRound()).getPlayers().get(i).getName();
+            vBox.getChildren().addAll(createLabel(playerName,false),
                     createLabel(new String("0"),true));
             boardController.getCricketsScoreTable().getChildren().add(vBox);
         }
@@ -290,9 +291,9 @@ public class CricketController implements Initializable {
 //     * @param playersQuantity quantity of setted players
 //     */
     private void deletesPlayersVBoxes(){
-        ObservableList<Node> children = boardController.getCricketsScoreTable().getChildren();
-        for(int i=0;i<Cricket.getPlayersQuantity();i++)
-            children.remove(1);
+//        ObservableList<Node> children = boardController.getCricketsScoreTable().getChildren();
+//        for(int i=0;i<Cricket.getPlayersQuantity();i++)
+//            children.remove(1);
     }
 
 
@@ -322,9 +323,9 @@ public class CricketController implements Initializable {
      * Method initialize Cricket.class static variables
      */
     private void initializeStaticCricketVariables(){
-        Cricket.setPlayersQuantity(getPlayersQuantity());
-        Cricket.setRoundsMaxNumber(getRounds());
-        Cricket.setCurrentFieldToThrowIndex(0);
+//        Cricket.setPlayersQuantity(getPlayersQuantity());
+//        Cricket.setRoundsMaxNumber(getRounds());
+//        Cricket.setCurrentFieldToThrowIndex(0);
     }
 
     /**
@@ -343,8 +344,8 @@ public class CricketController implements Initializable {
             playersArray[i].setName(playersNames[i]);
         }
 
-        // Injecting Array into repository
-        ((Cricket)gamesRepository.getCurrentRound()).setPlayers(playersArray);
+//        // Injecting Array into repository
+//        ((Cricket)gamesRepository.getCurrentRound()).setPlayers(playersArray);
     }
 
 

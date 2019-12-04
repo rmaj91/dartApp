@@ -1,7 +1,11 @@
 package com.rmaj91.domain;
 
+import com.rmaj91.controller.BoardController;
+import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.interfaces.PlayerInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
+
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -9,76 +13,94 @@ import java.util.Arrays;
  * The Player01 class provides player model of '01 dart game type
  */
 
-public class Player01 implements PlayerInterface,Serializable {
+
+public class Player01 implements PlayerInterface, Serializable {
 
     /* Dependencies */
-    private static GamesRepositoryImpl gamesRepositoryImpl;
+    private static GamesRepository gamesRepository;
+    private static BoardController boardController;
 
     /*Variables*/
     private String name;
     private int points;
     private double average;
-    private String[] throwFieldsValues;
+    private String[] throwFieldsContent;
     private int currentThrow;
 
     /*Constructor*/
-    public Player01() {
+    public Player01(String name, int points) {
+        this.name = name;
+        this.points = points;
         average = 0;
-        throwFieldsValues = new String[3];
-        Arrays.fill(throwFieldsValues,new String());
+        throwFieldsContent = new String[3];
+        Arrays.fill(throwFieldsContent, new String());
         currentThrow = 1;
     }
 
-    /*Getters & Setters*/
-    public String[] getThrowFieldsValues() {
-        return throwFieldsValues;
+    /*Copying Constructor*/
+    public Player01(Player01 player01) {
+        this.name = player01.name;
+        this.points = player01.points;
+
+        int startingPoints = ((Game01)gamesRepository.getZeroRound()).getCurrentPlayer().points;
+        int round = gamesRepository.getNumberOfRound(gamesRepository.getCurrentRound());
+        if(round == 0)
+            round++;
+        this.average = (startingPoints - this.points) / round;
+        this.throwFieldsContent = new String[3];
+        Arrays.fill(this.throwFieldsContent, new String());
+        this.currentThrow = 1;
     }
+
+
+    public void setThrowFieldsByIndex(int index, String throwFieldValue) {
+        this.throwFieldsContent[index] = throwFieldValue;
+    }
+
+    public String getThrowFieldContent(int index) {
+        return this.throwFieldsContent[index];
+    }
+
+    @Override
+    public void display() {
+        boardController.getAverageLabel().setText("Average: " + String.format("%.1f", average));
+        boardController.getPlayerNameLabel().setText(name);
+        boardController.getPlayerPointsLabel().setText(String.valueOf(points));
+        for (int i = 0; i < 3; i++)
+            boardController.getThrowTextField(i).setText(throwFieldsContent[i]);
+
+    }
+
 
     public int getPoints() {
         return points;
     }
 
-    public double getAverage() {
-        return average;
+    public static void setGamesRepository(GamesRepositoryImpl gamesRepository) {
+        Player01.gamesRepository = gamesRepository;
+    }
+
+    public static void setBoardController(BoardController boardController) {
+        Player01.boardController = boardController;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getCurrentThrow() {
-        return currentThrow;
-    }
-
     public void setCurrentThrow(int currentThrow) {
         this.currentThrow = currentThrow;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getThrowFieldsContentByIndex(int i) {
+        return throwFieldsContent[i];
     }
 
     public void setPoints(int points) {
         this.points = points;
     }
 
-    public static void setGamesRepositoryImpl(GamesRepositoryImpl gamesRepositoryImpl) {
-        Player01.gamesRepositoryImpl = gamesRepositoryImpl;
-    }
-
-    /*Public Methods*/
-    public Player01 clonePlayer(){
-        Player01 player = new Player01();
-        player.name = this.name;
-        player.points = this.points;
-
-        int currentRound = gamesRepositoryImpl.getIndexOfRound(gamesRepositoryImpl.getCurrentRound())+1;
-        // Calculating average
-        player.average = (double)(Game01.getStartingPoints() - player.points) / currentRound;
-        return player;
-    }
-
-    public void setThrowFieldsByIndex(int index, String string) {
-        this.throwFieldsValues[index] = string;
+    public int getCurrentThrow() {
+        return currentThrow;
     }
 }

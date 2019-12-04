@@ -1,6 +1,7 @@
 package com.rmaj91.interfaces;
 
 public interface PlayerInterface {
-    String getName();
-    int getPoints();
+    void display();
+//    String getName();
+//    int getPoints();
 }
