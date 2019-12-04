@@ -122,6 +122,8 @@ public class MainController implements Initializable {
 		MainController.stage = stage;
 	}
 
+
+
 	/*Events*/
 	public void minimalizeIconClicked(MouseEvent event) {
 		stage.setIconified(true);
@@ -178,6 +180,7 @@ public class MainController implements Initializable {
 			event.consume();
 	}
 
+
 	/*Highlighting Menu Icons Events*/
 	public void paneIconHoverIn(MouseEvent event) {
 		((Pane)event.getSource()).setStyle("-fx-background-color: white;");
@@ -196,6 +199,7 @@ public class MainController implements Initializable {
 		((Polygon)event.getSource()).setFill(Color.BLACK);
 		((Polygon)event.getSource()).setStroke(Color.BLACK);
 	}
+
 
 
 	/*Private Methods*/
