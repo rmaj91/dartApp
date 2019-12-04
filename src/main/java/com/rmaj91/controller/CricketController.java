@@ -1,6 +1,7 @@
 package com.rmaj91.controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -228,18 +229,18 @@ public class CricketController implements Initializable {
      * @return true if fields are unique or false if not
      */
     private boolean validAndSetFieldsToHit(){
-        int[] fieldToHit = new int[7];
 
-        Set<Integer> set = new LinkedHashSet<>();
+        ArrayList<Integer> fieldToHit = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            fieldToHit[i] = cricketFieldBoxes[i].getValue();
+            fieldToHit.add(cricketFieldBoxes[i].getValue());
             if(i == 6 && cricketCheckBoxField7.isSelected())
-                fieldToHit[i] = 25;
+                fieldToHit.add(25);
         }
 
         for (int i = 0; i < 7; i++)
             for (int j = 0; j < 7; j++) {
-                if(fieldToHit[i] == fieldToHit[j] && i != j)
+                if(fieldToHit.get(i) == fieldToHit.get(j) && i != j)
+//                    System.out.println(fieldToHit.get(i)+"\t"+fieldToHit.get(j));
                     return false;
             }
         Cricket.setFieldsToHit(fieldToHit);
@@ -256,7 +257,7 @@ public class CricketController implements Initializable {
     private void fillFieldsToHitVBox(int playersQuantity){
         for (int i = 0; i < 7; i++) {
             Label label = (Label)boardController.getCricketsFields().getChildren().get(i);
-            label.setText(String.valueOf(Cricket.getFieldsToHit()[i]));
+            label.setText(String.valueOf(Cricket.getFieldsToHit().get(i)));
         }
     }
 
@@ -323,6 +324,7 @@ public class CricketController implements Initializable {
     private void initializeStaticCricketVariables(){
         Cricket.setPlayersQuantity(getPlayersQuantity());
         Cricket.setRoundsMaxNumber(getRounds());
+        Cricket.setCurrentFieldToThrowIndex(0);
     }
 
     /**

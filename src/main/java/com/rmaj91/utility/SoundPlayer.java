@@ -39,6 +39,7 @@ public class SoundPlayer {
     /**
      * This method plays the ".wav" audio from /resources/sounds/ directory, it determines the name of audio
      * by passed parameter which is the dart boards field name eg. "DOUBLE 25" it tranforms it to "double25.wav"
+     * if doesnt find plays default "throw.wav"
      * @param fieldName the name of thrown field
      */
     public void playSound(String fieldName) {
@@ -48,9 +49,15 @@ public class SoundPlayer {
             previousClip.stop();
         try {
             String fileName = fieldName.toLowerCase().replaceAll("\\s","");
-            File file = new File(getClass().getClassLoader().getResource("sounds/" + fileName+ ".wav").getFile());
+            File file = null;
+            try {
+                file = new File(getClass().getClassLoader().getResource("sounds/" + fileName+ ".wav").getFile());
+            } catch (NullPointerException e) {
+                file = new File(getClass().getClassLoader().getResource("sounds/throw.wav").getFile());
+            }
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             Clip clip = AudioSystem.getClip();
+            previousClip = clip;
             clip.open(audioInputStream);
 
             // Setting volume control

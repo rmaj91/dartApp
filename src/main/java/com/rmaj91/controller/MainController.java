@@ -22,6 +22,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -75,6 +78,7 @@ public class MainController implements Initializable {
 		/*Injecting Dependencies*/
 		Player01.setGamesRepositoryImpl(gamesRepository);
 		Cricket.setGamesRepositoryImpl(gamesRepository);
+		Cricket.setSoundPlayer(soundPlayer);
 		Cricket.setBoardController(boardController);
 		PlayerCricket.setGamesRepositoryImpl(gamesRepository);
 
@@ -136,10 +140,15 @@ public class MainController implements Initializable {
 		gamesRepository.clear();
 		boardController.getGame01PlayersTable().getChildren().clear();
 		welcomeController.toFront();
+		welcomeController.getChooseGamePane().toFront();
 	}
 
 	public void saveGameIconClicked() {
 		gamesRepository.saveGame();
+	}
+
+	public void loadGameIconClicked() {
+		welcomeController.loadExistingGameButtonClicked();
 	}
 
 	public void volumeIconClicked(){
@@ -171,9 +180,21 @@ public class MainController implements Initializable {
 	public void paneIconHoverIn(MouseEvent event) {
 		((Pane)event.getSource()).setStyle("-fx-background-color: white;");
 	}
+
 	public void paneIconHoverOut(MouseEvent event) {
 		((Pane)event.getSource()).setStyle("-fx-background-color: #8f2f28;");
 	}
+
+	public void resizeIconHoverIn(MouseEvent event) {
+		((Polygon)event.getSource()).setFill(Color.rgb(30,42,200));
+		((Polygon)event.getSource()).setStroke(Color.rgb(30,42,200));
+	}
+
+	public void resizeIconHoverOut(MouseEvent event) {
+		((Polygon)event.getSource()).setFill(Color.BLACK);
+		((Polygon)event.getSource()).setStroke(Color.BLACK);
+	}
+
 
 	/*Private Methods*/
 	private void makeAppWindowDragable() {

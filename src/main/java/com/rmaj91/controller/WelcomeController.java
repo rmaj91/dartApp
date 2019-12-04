@@ -62,6 +62,9 @@ public class WelcomeController implements Initializable {
 		this.masterCricketController = masterCricketController;
 	}
 
+    public VBox getChooseGamePane() {
+        return chooseGamePane;
+    }
 
     /*Initializing*/
     @Override

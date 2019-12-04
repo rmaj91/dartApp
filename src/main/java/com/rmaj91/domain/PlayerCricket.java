@@ -87,4 +87,8 @@ public class PlayerCricket implements PlayerInterface {
 
         return player;
     }
+
+    public void setThrowFieldsByIndex(int index, String string) {
+        this.throwFieldsValues[index] = string;
+    }
 }

@@ -50,10 +50,6 @@ public class Player01 implements PlayerInterface,Serializable {
         return currentThrow;
     }
 
-    public void setThrowFieldsByIndex(int index, String string) {
-        this.throwFieldsValues[index] = string;
-    }
-
     public void setCurrentThrow(int currentThrow) {
         this.currentThrow = currentThrow;
     }
@@ -80,5 +76,9 @@ public class Player01 implements PlayerInterface,Serializable {
         // Calculating average
         player.average = (double)(Game01.getStartingPoints() - player.points) / currentRound;
         return player;
+    }
+
+    public void setThrowFieldsByIndex(int index, String string) {
+        this.throwFieldsValues[index] = string;
     }
 }

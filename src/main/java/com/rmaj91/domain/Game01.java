@@ -138,31 +138,23 @@ public class Game01 implements Playable, Serializable {
 
 	@Override
 	public void next() {
-		gamesRepositoryImpl.getCurrentRound().saveThrowFields();
+		saveThrowFields();
 		goToNextRoundOrPlayer();
 	}
 
 	@Override
 	public void back() {
-		gamesRepositoryImpl.getCurrentRound().saveThrowFields();
-		// if there's not 1st player in 1s round
-		if(gamesRepositoryImpl.getIndexOfRound(this) > 0 || currentPlayer != 1){
-			// if 1st player, pull round fro mrepository
-			if(currentPlayer == 1)
-				gamesRepositoryImpl.pullRound();
-			// inf not set current player to previous
-			else
-				currentPlayer--;
-		}
-		else
-			return;
-		gamesRepositoryImpl.getCurrentRound().displayRound();
+		saveThrowFields();
+		goToPreviousRoundOrPlayer();
 	}
+
+
 
 	@Override
 	public void throwDart(MouseEvent event) {
 		int currentThrow = players[currentPlayer - 1].getCurrentThrow();
-
+		if(currentThrow > 3)
+			return;
 		// Geting cartesian coordinates of cursor over dartboard
 		double xCartesian = event.getX() - 248;
 		double yCartesian = -(event.getY() - 248.5);
@@ -170,7 +162,8 @@ public class Game01 implements Playable, Serializable {
 		int angleIndex = getAngleIndex(xCartesian, yCartesian);
 		String fieldName = new String();
 
-		if (currentThrow <= 3 || radiusIndex != 7){
+
+		if (radiusIndex != 7){
 			for (Filters.IndexMapper indexMapper : Utilities.filters.getIndexMapperList()) {
 				if (indexMapper.hasFieldName(radiusIndex, angleIndex)) {
 					fieldName = indexMapper.getFieldName();
@@ -420,5 +413,18 @@ public class Game01 implements Playable, Serializable {
 		}
 		players[currentPlayer-1].setCurrentThrow(1);
 		boardController.getThrowField1().requestFocus();
+	}
+
+	private void goToPreviousRoundOrPlayer() {
+		// if there's not 1st player in 1s round
+		if(gamesRepositoryImpl.getIndexOfRound(this) > 0 || currentPlayer != 1){
+			if(currentPlayer == 1)
+				gamesRepositoryImpl.pullRound();
+			else
+				currentPlayer--;
+		}
+		else
+			return;
+		gamesRepositoryImpl.getCurrentRound().displayRound();
 	}
 }
