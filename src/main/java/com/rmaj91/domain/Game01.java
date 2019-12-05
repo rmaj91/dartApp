@@ -5,7 +5,6 @@ import com.rmaj91.controller.Game01Controller;
 import com.rmaj91.controller.MainController;
 import com.rmaj91.interfaces.Playable;
 import com.rmaj91.repository.GamesRepositoryImpl;
-import com.rmaj91.utility.Filters;
 import com.rmaj91.utility.IndexMapper;
 import com.rmaj91.utility.SoundPlayer;
 import com.rmaj91.utility.Utilities;
@@ -27,26 +26,36 @@ import static com.rmaj91.utility.Utilities.getRadiusIndex;
 
 public class Game01 implements Playable, Serializable {
 
-    /*Static Dependencies*/
+    //==================================================================================================
+    // Static Dependencies
+    //==================================================================================================
     private static SoundPlayer soundPlayer;
     private static BoardController boardController;
     private static Game01Controller game01Controller;
     private static GamesRepositoryImpl gamesRepository;
-    private static MainController mainController;
 
-    /*Static Variables*/
+
+    //==================================================================================================
+    // Static Properties
+    //==================================================================================================
     private static boolean doubleOut;
     private static int numberOfPlayers;
     private static int maxNumberOfRounds;
 
-    /*Variables*/
+
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     private ArrayList<Player01> players;
     private Player01 currentPlayer;
 
-    /*Constructor*/
-    public Game01() {}
 
-    /*Copying constructor*/
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
+    public Game01() {
+    }
+
     public Game01(Game01 game01) {
         this.players = new ArrayList<>();
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -57,13 +66,11 @@ public class Game01 implements Playable, Serializable {
     }
 
 
+    //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
-
-    /*Getters & Setter*/
-    ////////////////////
-
-
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public static void setDoubleOut(boolean doubleOut) {
         Game01.doubleOut = doubleOut;
     }
@@ -104,10 +111,6 @@ public class Game01 implements Playable, Serializable {
         Game01.gamesRepository = gamesRepository;
     }
 
-    public static void setMainController(MainController mainController) {
-        Game01.mainController = mainController;
-    }
-
     public Player01 getCurrentPlayer() {
         return currentPlayer;
     }
@@ -120,17 +123,15 @@ public class Game01 implements Playable, Serializable {
         currentPlayer = player01;
     }
 
-
     public void setPlayers(ArrayList<Player01> players) {
         this.players = players;
     }
+    //endregion
 
 
-
-
-
-
-
+    //==================================================================================================
+    // Static Custom Assesor
+    //==================================================================================================
     public static void setStaticVariables(boolean doubleOut, int numberOfPlayers, int numberOfRounds) {
         Game01.doubleOut = doubleOut;
         Game01.numberOfPlayers = numberOfPlayers;
@@ -138,11 +139,9 @@ public class Game01 implements Playable, Serializable {
     }
 
 
-
-
-
-    /*Methods from Playable*/
-    /////////////////////////
+    //==================================================================================================
+    // Methods from Playable interface
+    //==================================================================================================
     @Override
     public void BackButton() {
         clearThrowTextFields();
@@ -151,13 +150,11 @@ public class Game01 implements Playable, Serializable {
         goToPreviousRoundOrPlayer();
     }
 
-
     @Override
     public void throwDart(MouseEvent event) {
         int currentThrow = currentPlayer.getCurrentThrow();
         if (currentThrow > 3)
             return;
-        // Geting cartesian coordinates of cursor over dartboard
         double xCartesian = event.getX() - 248;
         double yCartesian = -(event.getY() - 248.5);
         int radiusIndex = getRadiusIndex(xCartesian, yCartesian);
@@ -180,11 +177,9 @@ public class Game01 implements Playable, Serializable {
         }
     }
 
-
     @Override
     public void setBoardViewVisible() {
         game01Controller.removeAndCreatePlayersVBoxes();
-
         this.displayRoundState();
         boardController.getMainStackPane().setDisable(false);
         boardController.getCricketsScoreTable().toBack();
@@ -206,7 +201,6 @@ public class Game01 implements Playable, Serializable {
         }
     }
 
-
     @Override
     public void calculatePoints() {
         int currentPlayerIndex = players.indexOf(currentPlayer);
@@ -216,7 +210,6 @@ public class Game01 implements Playable, Serializable {
 
         for (int i = 0; i < 3; i++) {
             ThrowValues throwValue = parseThrowFieldContentIntoThrowValues(currentPlayer.getThrowFieldsContentByIndex(i));
-            // Calulating thrown points value
             int thrownPoints = throwValue.getValue() * throwValue.getMulitplier();
             currentRoundPoints = currentRoundPoints - thrownPoints;
             totalThrownValue += thrownPoints;
@@ -228,7 +221,6 @@ public class Game01 implements Playable, Serializable {
                 return;
             }
         }
-        // If everything went well, save new points
         currentPlayer.setPoints(currentRoundPoints);
     }
 
@@ -238,9 +230,7 @@ public class Game01 implements Playable, Serializable {
         calculatePoints();
         goToNextPlayerOrRound();
         boardController.getThrowField1().requestFocus();
-
     }
-
 
     @Override
     public void displayRoundState() {
@@ -250,13 +240,15 @@ public class Game01 implements Playable, Serializable {
             boardController.getDoubleOut().setVisible(true);
         else
             boardController.getDoubleOut().setVisible(false);
-
         currentPlayer.display();
         displayAllPlayersPointsAndNames();
         displayPlayerNameHighLight();
     }
 
 
+    //==================================================================================================
+    // Private Methods
+    //==================================================================================================
     private void displayPlayerNameHighLight() {
         for (int i = 0; i < numberOfPlayers; i++) {
             Node node = boardController.getGame01PlayersTable().getChildren().get(i);
@@ -265,7 +257,6 @@ public class Game01 implements Playable, Serializable {
         Node node = boardController.getGame01PlayersTable().getChildren().get(players.indexOf(currentPlayer));
         ((VBox) node).getChildren().get(0).setStyle("-fx-background-color: #0388fc;");
     }
-
 
     private void displayAllPlayersPointsAndNames() {
         ObservableList<Node> playerVBoxes = boardController.getGame01PlayersTable().getChildren();
@@ -288,7 +279,6 @@ public class Game01 implements Playable, Serializable {
         }
         gamesRepository.getCurrentRound().displayRoundState();
     }
-
 
     private ThrowValues parseThrowFieldContentIntoThrowValues(String fieldContent) {
 
@@ -328,7 +318,6 @@ public class Game01 implements Playable, Serializable {
         return new ThrowValues(value, multiplier);
     }
 
-
     private boolean isWinner(int newPoints, ThrowValues throwValue) {
         if ((doubleOut && newPoints == 0 && throwValue.getMulitplier() == 2)
                 || newPoints == 0 && !doubleOut) {
@@ -344,7 +333,6 @@ public class Game01 implements Playable, Serializable {
             return false;
     }
 
-
     private boolean isOverThrow(int newPoints, int oldPoints) {
         if (newPoints < 2) {
             playSoundAndDeleteThrows("Over Throw !!!");
@@ -359,14 +347,10 @@ public class Game01 implements Playable, Serializable {
         alert.setTitle("Warning Dialog");
         alert.setHeaderText(s);
         alert.showAndWait();
-        // Deleting throwTextFields content
-        for (int i = 0; i < 3; i++) {
-            currentPlayer.setThrowFieldsByIndex(i, new String());
-        }
+        clearThrowTextFields();
         currentPlayer.setCurrentThrow(1);
         boardController.getThrowField1().requestFocus();
     }
-
 
     private boolean ifThrownOver180(int totalThrownValue) {
         if (totalThrownValue > 180) {
@@ -388,12 +372,12 @@ public class Game01 implements Playable, Serializable {
     }
 
     private void clearThrowTextFields() {
-            for (int i = 0; i < 3; i++) {
-                currentPlayer.setThrowFieldsByIndex(i, new String());
-            }
-            for (int i = 0; i < 3; i++) {
-                boardController.getThrowTextField(i).setText(new String());
-            }
+        for (int i = 0; i < 3; i++) {
+            currentPlayer.setThrowFieldsByIndex(i, new String());
+        }
+        for (int i = 0; i < 3; i++) {
+            boardController.getThrowTextField(i).setText(new String());
+        }
     }
 
     private void goToPreviousRoundOrPlayer() {

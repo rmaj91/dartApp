@@ -22,28 +22,37 @@ import static com.rmaj91.utility.Utilities.getRadiusIndex;
 
 public class MasterCricket implements Playable, Serializable {
 
-
-    /*Static Dependencies*/
+    //==================================================================================================
+    // Static Dependencies
+    //==================================================================================================
     private static SoundPlayer soundPlayer;
     private static BoardController boardController;
     private static CricketController cricketController;
     private static GamesRepositoryImpl gamesRepository;
 
-    /*Static Variables*/
+
+    //==================================================================================================
+    // Static Properties
+    //==================================================================================================
     private static int numberOfPlayers;
     private static int maxNumberOfRounds;
     private static int currentFieldToThrowIndex;
     private static ArrayList<Integer> fieldsToThrow;
 
-    /*Variables*/
+
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     private ArrayList<PlayerMasterCricket> players;
     private PlayerMasterCricket currentPlayer;
 
-    /*Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     public MasterCricket() {
     }
 
-    /*Copying constructor*/
     public MasterCricket(MasterCricket masterCricket) {
         this.players = new ArrayList<>();
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -54,11 +63,11 @@ public class MasterCricket implements Playable, Serializable {
     }
 
 
+    //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
-    /*Getters & Setter*/
-    ////////////////////
-
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public ArrayList<PlayerMasterCricket> getPlayers() {
         return players;
     }
@@ -118,8 +127,12 @@ public class MasterCricket implements Playable, Serializable {
     public static void setGamesRepository(GamesRepositoryImpl gamesRepository) {
         MasterCricket.gamesRepository = gamesRepository;
     }
+    //endregion
 
 
+    //==================================================================================================
+    // Static Assesor
+    //==================================================================================================
     public static void setStaticVariables(int numberOfPlayers, int maxNumberOfRounds, int currentFieldToThrowIndex) {
         MasterCricket.numberOfPlayers = numberOfPlayers;
         MasterCricket.maxNumberOfRounds = maxNumberOfRounds;
@@ -128,8 +141,11 @@ public class MasterCricket implements Playable, Serializable {
 
 
 
-    /*Methods from Playable*/
-    /////////////////////////
+    //==================================================================================================
+    // Methods from Playable interface
+    //==================================================================================================
+
+
 
     @Override
     public void displayRoundState() {
@@ -168,7 +184,6 @@ public class MasterCricket implements Playable, Serializable {
     @Override
     public void setBoardViewVisible() {
         cricketController.removeAndCreatePlayersVBoxes();
-
         this.displayRoundState();
         boardController.getMainStackPane().setDisable(false);
         boardController.getGame01ScoreTable().toBack();
@@ -176,31 +191,6 @@ public class MasterCricket implements Playable, Serializable {
         boardController.getCricketsScoreTable().toFront();
         boardController.getThrowField1().requestFocus();
     }
-
-
-    private void restorePlayerFieldsHitsFromPreviousRound() {
-        int indexOfCurrentPlayer = players.indexOf(currentPlayer);
-        int[] previousRoundHittedFields = ((MasterCricket) gamesRepository.getPreviousRound()).players.get(indexOfCurrentPlayer).getHittedFields();
-        int[] deepCopyOfHittedFields = new int[7];
-        for (int i = 0; i < 7; i++) {
-            deepCopyOfHittedFields[i] = previousRoundHittedFields[i];
-        }
-        currentPlayer.setHittedFields(deepCopyOfHittedFields);
-        setNewStaticCurrentFieldToThrow();
-    }
-
-    private void setNewStaticCurrentFieldToThrow() {
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < numberOfPlayers; j++) {
-                if (players.get(j).getHittedFieldsByIndex(i) < 3) {
-                    currentFieldToThrowIndex = i;
-                    i = 7;
-                    break;
-                }
-            }
-        }
-    }
-
 
     @Override
     public void throwDart(MouseEvent event) {
@@ -230,13 +220,11 @@ public class MasterCricket implements Playable, Serializable {
         }
     }
 
-
     @Override
     public void calculatePoints() {
         getHitsFromPreviousRound();
         getPointsFromPreviousPlayer();
         setNewStaticCurrentFieldToThrow();
-//        getCurrentThrowingFieldIndexFromPreviousPlayer();
 
         for (int i = 0; i < 3; i++) {
             ThrowValues throwValue = parsethrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
@@ -261,8 +249,6 @@ public class MasterCricket implements Playable, Serializable {
                     }
                 }
                 addPointToPlayers(currentThrowPointsToAdd);
-//                int currentPlayerPoints = currentPlayer.getPoints();
-//                currentPlayer.setPoints(currentPlayerPoints + currentThrowPointsToAdd);
             } else {
                 int currentPlayerIndex = players.indexOf(currentPlayer);
                 int currentPoints = currentPlayer.getPointsByPlayerIndex(currentPlayerIndex);
@@ -277,17 +263,37 @@ public class MasterCricket implements Playable, Serializable {
         }
     }
 
-//    private void getCurrentThrowingFieldIndexFromPreviousPlayer() {
-//        int currentPlayerIndex = players.indexOf(currentPlayer);
-//
-//        if (currentPlayerIndex == 0) {
-//            int previousFieldIndex = ((MasterCricket) gamesRepository.getPreviousRound())
-//                    .players.get(numberOfPlayers - 1).getCurrentThrownFieldIndex();
-//            currentFieldToThrowIndex = previousFieldIndex;
-//        } else
-//            currentFieldToThrowIndex = players.get(currentPlayerIndex - 1).getCurrentThrownFieldIndex();
-//
-//    }
+
+
+    //==================================================================================================
+    // Private Methods
+    //==================================================================================================
+
+
+
+    private void restorePlayerFieldsHitsFromPreviousRound() {
+        int indexOfCurrentPlayer = players.indexOf(currentPlayer);
+        int[] previousRoundHittedFields = ((MasterCricket) gamesRepository.getPreviousRound())
+                .players.get(indexOfCurrentPlayer).getHittedFields();
+        int[] deepCopyOfHittedFields = new int[7];
+        for (int i = 0; i < 7; i++) {
+            deepCopyOfHittedFields[i] = previousRoundHittedFields[i];
+        }
+        currentPlayer.setHittedFields(deepCopyOfHittedFields);
+        setNewStaticCurrentFieldToThrow();
+    }
+
+    private void setNewStaticCurrentFieldToThrow() {
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < numberOfPlayers; j++) {
+                if (players.get(j).getHittedFieldsByIndex(i) < 3) {
+                    currentFieldToThrowIndex = i;
+                    i = 7;
+                    break;
+                }
+            }
+        }
+    }
 
     private void addPointToPlayers(int currentThrowPointsToAdd) {
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -304,18 +310,18 @@ public class MasterCricket implements Playable, Serializable {
         if (currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex) >= 3) {
             throwFieldsToAddPoints = currentThrowHitsToTargetField;
         } else
-            throwFieldsToAddPoints = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex) + currentThrowHitsToTargetField - 3;
+            throwFieldsToAddPoints = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex)
+                    + currentThrowHitsToTargetField - 3;
         if (throwFieldsToAddPoints < 0)
             throwFieldsToAddPoints = 0;
         return throwFieldsToAddPoints;
     }
 
-
     private void getHitsFromPreviousRound() {
         int currentPlayerIndex = players.indexOf(currentPlayer);
         int[] previousRoundThrownFieldsByIndex = ((MasterCricket) gamesRepository.getPreviousRound())
                 .players.get(currentPlayerIndex).getHittedFields();
-        for(int i=0;i<7;i++)
+        for (int i = 0; i < 7; i++)
             currentPlayer.setHittedFieldsbyIndex(i, previousRoundThrownFieldsByIndex[i]);
     }
 
@@ -338,27 +344,6 @@ public class MasterCricket implements Playable, Serializable {
         currentPlayer.setPoints(deepCopyOfPointsFromPreviousPlayer);
     }
 
-
-//    private void copyPointsToNextPlayer() {
-//        int currentPlayerIndex = players.indexOf(currentPlayer);
-//        int[] deepCopyOfPointsFromPreviousPlayer = new int[numberOfPlayers];
-//        if(currentPlayerIndex == 0){
-//            for (int i = 0; i < numberOfPlayers; i++) {
-//                int previousPlayerPoints = ((MasterCricket) gamesRepository.getPreviousRound())
-//                        .players.get(numberOfPlayers-1).getPointsByPlayerIndex(i);
-//                deepCopyOfPointsFromPreviousPlayer[i] = previousPlayerPoints;
-//            }
-//        }
-//        else{
-//            for (int i = 0; i < numberOfPlayers; i++) {
-//                int previousPlayerPoints = players.get(currentPlayerIndex-1).getPointsByPlayerIndex(i);
-//                deepCopyOfPointsFromPreviousPlayer[i] = previousPlayerPoints;
-//            }
-//        }
-//        currentPlayer.setPoints(deepCopyOfPointsFromPreviousPlayer);
-//    }
-
-
     private boolean isFieldClosed() {
         for (int i = 0; i < numberOfPlayers; i++) {
             if (players.get(i).getHittedFieldsByIndex(currentFieldToThrowIndex) < 3)
@@ -366,7 +351,6 @@ public class MasterCricket implements Playable, Serializable {
         }
         return true;
     }
-
 
     /**
      * This method parses dart boards field name/content eg. "SIGNLE 2" or even "44"(theres not such field but
@@ -409,9 +393,9 @@ public class MasterCricket implements Playable, Serializable {
             multiplier = 2;
         else if (multiplierString.equalsIgnoreCase("triple"))
             multiplier = 3;
-            // if there's another word but not multipier nam
         else
             return new ThrowValues(0, 0);
+
 
         return new ThrowValues(value, multiplier);
     }
@@ -436,13 +420,11 @@ public class MasterCricket implements Playable, Serializable {
         boardController.getMainStackPane().setDisable(true);
     }
 
-
     private void displayPlayersInfo() {
         displayThrowFieldsContent();
         displayPlayersHits();
         displayPlayersPoints();
     }
-
 
     private void displayFieldsHighlight() {
         removePlayerHighlight();
@@ -452,17 +434,13 @@ public class MasterCricket implements Playable, Serializable {
 
     }
 
-
     private void goToNextRoundOrPlayer() {
         int currentPlayerNumber = players.indexOf(currentPlayer) + 1;
         if (gamesRepository.getNumberOfRound(this) < MasterCricket.maxNumberOfRounds || currentPlayerNumber != numberOfPlayers) {
             currentPlayer.setCurrentThrow(1);
-            if (currentPlayerNumber == MasterCricket.numberOfPlayers) {
+            if (currentPlayerNumber == MasterCricket.numberOfPlayers)
                 gamesRepository.pushRound(new MasterCricket(this));
-
-//                PlayerCricket newCurrentPlayer = ((Cricket) gamesRepository.getCurrentRound()).players.get(0);
-//                ((Cricket)gamesRepository.getCurrentRound()).currentPlayer = newCurrentPlayer;
-            } else
+            else
                 currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
 
             ((MasterCricket) gamesRepository.getCurrentRound()).currentPlayer.setCurrentThrow(1);

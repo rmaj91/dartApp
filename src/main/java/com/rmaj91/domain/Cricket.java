@@ -24,27 +24,37 @@ import static com.rmaj91.utility.Utilities.getRadiusIndex;
 
 public class Cricket implements Playable, Serializable {
 
-    /*Static Dependencies*/
+    //==================================================================================================
+    // Static Dependencies
+    //==================================================================================================
     private static SoundPlayer soundPlayer;
     private static BoardController boardController;
     private static CricketController cricketController;
     private static GamesRepositoryImpl gamesRepository;
 
-    /*Static Variables*/
+
+    //==================================================================================================
+    // Static Properties
+    //==================================================================================================
     private static int numberOfPlayers;
     private static int maxNumberOfRounds;
     private static int currentFieldToThrowIndex;
     private static ArrayList<Integer> fieldsToThrow;
 
-    /*Variables*/
+
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     private ArrayList<PlayerCricket> players;
     private PlayerCricket currentPlayer;
 
-    /*Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     public Cricket() {
     }
 
-    /*Copying constructor*/
     public Cricket(Cricket cricket) {
         this.players = new ArrayList<>();
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -56,9 +66,11 @@ public class Cricket implements Playable, Serializable {
 
 
 
+    //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    /*Getters & Setter*/
-    ////////////////////
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
 
     public ArrayList<PlayerCricket> getPlayers() {
         return players;
@@ -119,8 +131,13 @@ public class Cricket implements Playable, Serializable {
     public static void setGamesRepository(GamesRepositoryImpl gamesRepository) {
         Cricket.gamesRepository = gamesRepository;
     }
+    //endregion
 
 
+
+    //==================================================================================================
+    // Static Custom Assesor
+    //==================================================================================================
     public static void setStaticVariables(int numberOfPlayers, int maxNumberOfRounds, int currentFieldToThrowIndex) {
         Cricket.numberOfPlayers = numberOfPlayers;
         Cricket.maxNumberOfRounds = maxNumberOfRounds;
@@ -128,10 +145,9 @@ public class Cricket implements Playable, Serializable {
     }
 
 
-
-    /*Methods from Playable*/
-    /////////////////////////
-
+    //==================================================================================================
+    // Methods from Playable interface
+    //==================================================================================================
     @Override
     public void displayRoundState() {
         int currentRound = gamesRepository.getNumberOfRound(this);
@@ -158,7 +174,8 @@ public class Cricket implements Playable, Serializable {
 
     private void restorePlayerPointsFromPreviousRound() {
         int indexOfCurrentPlayer = players.indexOf(currentPlayer);
-        int previousRoundCurrentPlayerPoints = ((Cricket)gamesRepository.getPreviousRound()).players.get(indexOfCurrentPlayer).getPoints();
+        int previousRoundCurrentPlayerPoints = ((Cricket) gamesRepository.getPreviousRound())
+                .players.get(indexOfCurrentPlayer).getPoints();
         currentPlayer.setPoints(previousRoundCurrentPlayerPoints);
     }
 
@@ -176,7 +193,6 @@ public class Cricket implements Playable, Serializable {
     @Override
     public void setBoardViewVisible() {
         cricketController.removeAndCreatePlayersVBoxes();
-
         this.displayRoundState();
         boardController.getMainStackPane().setDisable(false);
         boardController.getGame01ScoreTable().toBack();
@@ -184,7 +200,6 @@ public class Cricket implements Playable, Serializable {
         boardController.getCricketsScoreTable().toFront();
         boardController.getThrowField1().requestFocus();
     }
-
 
     private void restorePlayerFieldsHitsFromPreviousRound() {
         int indexOfCurrentPlayer = players.indexOf(currentPlayer);
@@ -196,7 +211,6 @@ public class Cricket implements Playable, Serializable {
         currentPlayer.setHittedFields(deepCopyOfHittedFields);
         setNewStaticCurrentFieldToThrow();
     }
-
 
     private void setNewStaticCurrentFieldToThrow() {
         for (int i = 0; i < 7; i++) {
@@ -210,13 +224,11 @@ public class Cricket implements Playable, Serializable {
         }
     }
 
-
     @Override
     public void throwDart(MouseEvent event) {
         int currentThrow = currentPlayer.getCurrentThrow();
         if (currentThrow > 3)
             return;
-        // Geting cartesian coordinates of cursor over dartboard
         double xCartesian = event.getX() - 248;
         double yCartesian = -(event.getY() - 248.5);
         int radiusIndex = getRadiusIndex(xCartesian, yCartesian);
@@ -239,23 +251,17 @@ public class Cricket implements Playable, Serializable {
         }
     }
 
-
     @Override
     public void calculatePoints() {
         setPointAndHitsFromPreviousRound();
-
         for (int i = 0; i < 3; i++) {
             ThrowValues throwValue = parsethrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
-
             if (throwValue.getValue() == fieldsToThrow.get(currentFieldToThrowIndex)) {
-
                 int thrownFieldMultiplier = throwValue.getMulitplier();
                 int throwFieldsToAddPoints = getThrowFieldsToAddPoints(thrownFieldMultiplier);
                 int currentRoundHitsByIndex = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex);
-
                 int throwHitsToSet = thrownFieldMultiplier + currentRoundHitsByIndex;
                 currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, throwHitsToSet);
-
                 int currentThrowPointsToAdd = throwFieldsToAddPoints * throwValue.getValue();
 
                 checkIfWinner();
@@ -270,6 +276,10 @@ public class Cricket implements Playable, Serializable {
         }
     }
 
+
+    //==================================================================================================
+    // Private Methods
+    //==================================================================================================
     private int getThrowFieldsToAddPoints(int currentThrowHitsToTargetField) {
         int throwFieldsToAddPoints;
         if (currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex) >= 3) {
@@ -281,7 +291,6 @@ public class Cricket implements Playable, Serializable {
         return throwFieldsToAddPoints;
     }
 
-
     private void setPointAndHitsFromPreviousRound() {
         int currentPlayerIndex = players.indexOf(currentPlayer);
         int previousRoundThrownFieldsByIndex = ((Cricket) gamesRepository.getPreviousRound())
@@ -291,7 +300,6 @@ public class Cricket implements Playable, Serializable {
         currentPlayer.setPoints(previousRoundPoints);
     }
 
-
     private boolean isFieldClosed() {
         for (int i = 0; i < numberOfPlayers; i++) {
             if (players.get(i).getHittedFieldsByIndex(currentFieldToThrowIndex) < 3)
@@ -299,7 +307,6 @@ public class Cricket implements Playable, Serializable {
         }
         return true;
     }
-
 
     /**
      * This method parses dart boards field name/content eg. "SIGNLE 2" or even "44"(theres not such field but
@@ -346,17 +353,16 @@ public class Cricket implements Playable, Serializable {
     }
 
     private void checkIfWinner() {
-        for (int i = 0; i < 7; i++) {
-            if (currentPlayer.getHittedFieldsByIndex(i) < 3)
-                return;
-        }
-
         int currentPlayerIndex = players.indexOf(currentPlayer);
+        for (int i = 0; i < 7; i++) {
+            if (currentPlayer.getHittedFieldsByIndex(i) < 3) {
+                return;
+            }
+        }
         for (int i = 0; i < numberOfPlayers; i++) {
             if (currentPlayer.getPoints() < players.get(i).getPoints() && currentPlayerIndex != i)
                 return;
         }
-
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Winner");
         alert.setHeaderText(currentPlayer.getName() + " Won!!!" + "\nCongratulations!");
@@ -365,13 +371,11 @@ public class Cricket implements Playable, Serializable {
         boardController.getMainStackPane().setDisable(true);
     }
 
-
     private void displayPlayersInfo() {
         displayThrowFieldsContent();
         displayPlayersHits();
         displayPlayersPoints();
     }
-
 
     private void displayFieldsHighlight() {
         removePlayerHighlight();
@@ -380,7 +384,6 @@ public class Cricket implements Playable, Serializable {
         highlightCurrentCricketField();
 
     }
-
 
     private void goToNextRoundOrPlayer() {
         int currentPlayerNumber = players.indexOf(currentPlayer) + 1;
@@ -391,7 +394,7 @@ public class Cricket implements Playable, Serializable {
                 gamesRepository.pushRound(new Cricket(this));
 
                 PlayerCricket newCurrentPlayer = ((Cricket) gamesRepository.getCurrentRound()).players.get(0);
-                ((Cricket)gamesRepository.getCurrentRound()).currentPlayer = newCurrentPlayer;
+                ((Cricket) gamesRepository.getCurrentRound()).currentPlayer = newCurrentPlayer;
             } else
                 currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
             ((Cricket) gamesRepository.getCurrentRound()).currentPlayer.setCurrentThrow(1);
@@ -424,7 +427,6 @@ public class Cricket implements Playable, Serializable {
         } else if (currentThrow == 3)
             boardController.getThrowField3().setText(new String(fieldName));
     }
-
 
     private void clearThrowTextFields() {
         for (int i = 0; i < 3; i++) {
@@ -464,7 +466,6 @@ public class Cricket implements Playable, Serializable {
             ((VBox) node).getChildren().get(7).setStyle(null);
         }
     }
-
 
     private void displayPlayersPoints() {
         ObservableList<Node> playerVBoxes = boardController.getCricketsScoreTable().getChildren();

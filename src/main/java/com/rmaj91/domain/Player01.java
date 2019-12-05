@@ -4,29 +4,34 @@ import com.rmaj91.controller.BoardController;
 import com.rmaj91.interfaces.PlayerInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
 
-
 import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * The Player01 class provides player model of '01 dart game type
  */
-
-
 public class Player01 implements PlayerInterface, Serializable {
 
-    /* Dependencies */
+    //==================================================================================================
+    // Dependencies
+    //==================================================================================================
     private static com.rmaj91.interfaces.GamesRepository gamesRepository;
     private static BoardController boardController;
 
-    /*Variables*/
+
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     private String name;
     private int points;
     private double average;
     private String[] throwFieldsContent;
     private int currentThrow;
 
-    /*Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     public Player01(String name, int points) {
         this.name = name;
         this.points = points;
@@ -36,7 +41,6 @@ public class Player01 implements PlayerInterface, Serializable {
         currentThrow = 1;
     }
 
-    /*Copying Constructor*/
     public Player01(Player01 player01) {
         this.name = player01.name;
         this.points = player01.points;
@@ -47,6 +51,9 @@ public class Player01 implements PlayerInterface, Serializable {
     }
 
 
+    //==================================================================================================
+    // Public Methods
+    //==================================================================================================
     public String getThrowFieldsContentByIndex(int i) {
         return throwFieldsContent[i];
     }
@@ -65,10 +72,14 @@ public class Player01 implements PlayerInterface, Serializable {
 
     }
 
+
+    //==================================================================================================
+    // Private Methods
+    //==================================================================================================
     private void calculateAverage() {
-        int startingPoints = ((Game01)gamesRepository.getZeroRound()).getCurrentPlayer().points;
+        int startingPoints = ((Game01) gamesRepository.getZeroRound()).getCurrentPlayer().points;
         int round = gamesRepository.getNumberOfRound(gamesRepository.getCurrentRound());
-        if(round == 0)
+        if (round == 0)
             round++;
         this.average = (startingPoints - this.points) / round;
     }

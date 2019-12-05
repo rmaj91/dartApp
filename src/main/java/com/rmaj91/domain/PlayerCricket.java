@@ -9,18 +9,26 @@ import java.util.Arrays;
 
 public class PlayerCricket implements PlayerInterface, Serializable {
 
-    /* Dependencies */
+    //==================================================================================================
+    // Dependencies
+    //==================================================================================================
     private static GamesRepositoryImpl gamesRepository;
     private static BoardController boardController;
 
-    /*Variables*/
+
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     private String name;
     private int points;
     private int[] hittedFields;
     private String[] throwFieldsContent;
     private int currentThrow;
 
-    /*Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     public PlayerCricket(String name) {
         this.name = name;
         points = 0;
@@ -31,7 +39,6 @@ public class PlayerCricket implements PlayerInterface, Serializable {
         currentThrow = 1;
     }
 
-    /*Copying Constructor*/
     public PlayerCricket(PlayerCricket playerCricket) {
         this.name = playerCricket.name;
         this.points = playerCricket.points;
@@ -44,6 +51,10 @@ public class PlayerCricket implements PlayerInterface, Serializable {
         currentThrow = 1;
     }
 
+
+    //==================================================================================================
+    // Custom Assesors
+    //==================================================================================================
     public void setHittedFields(int[] hittedFields) {
         this.hittedFields = hittedFields;
     }
@@ -64,6 +75,10 @@ public class PlayerCricket implements PlayerInterface, Serializable {
         return hittedFields[index];
     }
 
+
+    //==================================================================================================
+    // Public Methods
+    //==================================================================================================
     @Override
     public void display() {
         for (int i = 0; i < 3; i++)
@@ -71,10 +86,11 @@ public class PlayerCricket implements PlayerInterface, Serializable {
     }
 
 
+    //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
-
-    /*Getters & Setters*/
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
 
     public static void setBoardController(BoardController boardController) {
         PlayerCricket.boardController = boardController;
@@ -115,5 +131,7 @@ public class PlayerCricket implements PlayerInterface, Serializable {
     public static void setGamesRepository(GamesRepositoryImpl gamesRepository) {
         PlayerCricket.gamesRepository = gamesRepository;
     }
+    //endregion
+
 
 }

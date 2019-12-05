@@ -8,11 +8,17 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class PlayerMasterCricket implements Serializable, PlayerInterface {
-    /* Dependencies */
+
+    //==================================================================================================
+    // Dependencies
+    //==================================================================================================
     private static GamesRepositoryImpl gamesRepository;
     private static BoardController boardController;
 
-    /*Variables*/
+
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     private String name;
     private int[] points;
     private int[] hittedFields;
@@ -20,7 +26,10 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
     private int currentThrow;
     private int currentThrownFieldIndex;
 
-    /*Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     public PlayerMasterCricket(String name) {
         this.name = name;
         points = new int[MasterCricket.getNumberOfPlayers()];
@@ -32,7 +41,6 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
         currentThrownFieldIndex = 0;
     }
 
-    /*Copying Constructor*/
     public PlayerMasterCricket(PlayerMasterCricket playerMasterCricket) {
         this.name = playerMasterCricket.name;
         points = new int[MasterCricket.getNumberOfPlayers()];
@@ -49,54 +57,19 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
         this.currentThrownFieldIndex = playerMasterCricket.currentThrownFieldIndex;
     }
 
+
+    //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public void setHittedFields(int[] hittedFields) {
         this.hittedFields = hittedFields;
-    }
-
-    public String getThrowFieldContent(int index) {
-        return this.throwFieldsContent[index];
-    }
-
-    public void setThrowFieldsByIndex(int index, String string) {
-        this.throwFieldsContent[index] = string;
-    }
-
-    public void setHittedFieldsbyIndex(int index, int newValue) {
-        this.hittedFields[index] = newValue;
-    }
-
-    public int getHittedFieldsByIndex(int index) {
-        return hittedFields[index];
     }
 
     public void setCurrentThrownFieldIndex(int currentThrownFieldIndex) {
         this.currentThrownFieldIndex = currentThrownFieldIndex;
     }
-
-    public int getCurrentThrownFieldIndex() {
-        return currentThrownFieldIndex;
-    }
-
-    @Override
-    public void display() {
-        for (int i = 0; i < 3; i++)
-            boardController.getThrowTextField(i).setText(throwFieldsContent[i]);
-    }
-
-    public int getPointsByPlayerIndex(int index) {
-        return points[index];
-    }
-
-    public void setPointsByPlayerIndex(int index, int points) {
-        this.points[index] = points;
-    }
-
-
-
-
-
-
-    /*Getters & Setters*/
 
     public void setPoints(int[] points) {
         this.points = points;
@@ -132,5 +105,45 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
 
     public static void setGamesRepository(GamesRepositoryImpl gamesRepository) {
         PlayerMasterCricket.gamesRepository = gamesRepository;
+    }
+    //endregion=====
+
+
+    //==================================================================================================
+    // Custom Assesors
+    //==================================================================================================
+
+    public String getThrowFieldContent(int index) {
+        return this.throwFieldsContent[index];
+    }
+
+    public void setHittedFieldsbyIndex(int index, int newValue) {
+        this.hittedFields[index] = newValue;
+    }
+
+    public int getHittedFieldsByIndex(int index) {
+        return hittedFields[index];
+    }
+
+    public void setThrowFieldsByIndex(int index, String string) {
+        this.throwFieldsContent[index] = string;
+    }
+
+    public int getPointsByPlayerIndex(int index) {
+        return points[index];
+    }
+
+    public void setPointsByPlayerIndex(int index, int points) {
+        this.points[index] = points;
+    }
+
+
+    //==================================================================================================
+    // Public Methods
+    //==================================================================================================
+    @Override
+    public void display() {
+        for (int i = 0; i < 3; i++)
+            boardController.getThrowTextField(i).setText(throwFieldsContent[i]);
     }
 }

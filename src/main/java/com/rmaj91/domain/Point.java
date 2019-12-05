@@ -5,20 +5,29 @@ package com.rmaj91.domain;
  */
 public class Point {
 
-    /*Variables*/
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     private int xCoordinate;
     private int yCoordinate;
 
-    /*Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     public Point(int xCoordinate, int yCoordinate) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
     }
 
-    /*Getters*/
+
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public int getxCoordinate() {
         return xCoordinate;
     }
+
     public int getyCoordinate() {
         return yCoordinate;
     }
