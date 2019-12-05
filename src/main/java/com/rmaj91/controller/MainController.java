@@ -5,10 +5,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-import com.rmaj91.domain.Cricket;
-import com.rmaj91.domain.Game01;
-import com.rmaj91.domain.Player01;
-import com.rmaj91.domain.PlayerCricket;
+import com.rmaj91.domain.*;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.SoundPlayer;
 import javafx.fxml.FXML;
@@ -65,11 +62,9 @@ public class MainController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		/*injecting sound controller ettc functions*/
-
-
 		gamesRepository = new GamesRepositoryImpl();
 		gamesRepository.setBoardController(boardController);
+
 		soundPlayer = new SoundPlayer();
 		soundPlayer.setSoundsActive(!volumeSlider.isDisable());
 		soundPlayer.setVolumeLevel(volumeSlider.getValue());
@@ -79,17 +74,23 @@ public class MainController implements Initializable {
 		Cricket.setSoundPlayer(soundPlayer);
 		Cricket.setBoardController(boardController);
 		Cricket.setCricketController(cricketController);
-		Cricket.setMainController(this);
+
+		MasterCricket.setGamesRepository(gamesRepository);
+		MasterCricket.setSoundPlayer(soundPlayer);
+		MasterCricket.setBoardController(boardController);
+		MasterCricket.setCricketController(cricketController);
+
+		Player01.setGamesRepository(gamesRepository);
+		Player01.setBoardController(boardController);
 		PlayerCricket.setGamesRepository(gamesRepository);
 		PlayerCricket.setBoardController(boardController);
+		PlayerMasterCricket.setGamesRepository(gamesRepository);
+		PlayerMasterCricket.setBoardController(boardController);
 
 		Game01.setSoundPlayer(soundPlayer);
 		Game01.setGamesRepository(gamesRepository);
 		Game01.setGame01Controller(game01Controller);
 		Game01.setBoardController(boardController);
-		Game01.setMainController(this);
-		Player01.setGamesRepository(gamesRepository);
-		Player01.setBoardController(boardController);
 
 		welcomeController.setMainController(this);
 		welcomeController.setGame01Controller(game01Controller);
@@ -101,14 +102,15 @@ public class MainController implements Initializable {
 		game01Controller.setGamesRepository(gamesRepository);
 		game01Controller.setBoardController(boardController);
 
-		boardController.setGamesRepository(gamesRepository);
-
 		cricketController.setWelcomeController(welcomeController);
 		cricketController.setBoardController(boardController);
 		cricketController.setGamesRepository(gamesRepository);
 
 		masterCricketController.setWelcomeController(welcomeController);
+		masterCricketController.setBoardController(boardController);
+		masterCricketController.setGamesRepository(gamesRepository);
 
+		boardController.setGamesRepository(gamesRepository);
 		/*Initializing stuff*/
 		stage.setOnCloseRequest((e)->{closeApplication(e);});
 		makeAppWindowDragable();
@@ -184,6 +186,7 @@ public class MainController implements Initializable {
 
 	/*Highlighting Menu Icons Events*/
 	public void paneIconHoverIn(MouseEvent event) {
+
 		((Pane)event.getSource()).setStyle("-fx-background-color: white;");
 	}
 

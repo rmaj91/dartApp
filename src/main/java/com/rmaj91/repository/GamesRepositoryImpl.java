@@ -34,6 +34,8 @@ public class GamesRepositoryImpl implements GamesRepository {
         this.boardController = boardController;
     }
 
+
+
     //////////////////
     /*Public Methods*/
     //////////////////
@@ -117,10 +119,10 @@ public class GamesRepositoryImpl implements GamesRepository {
                 dataOutputStream.writeInt(Cricket.getCurrentFieldToThrowIndex());
                 objectOutputStream.writeObject(Cricket.getFieldsToThrow());
             } else if (className.equals("com.rmaj91.domain.MasterCricket")) {
-//                dataOutputStream.writeInt(MasterCricket.getNumberOfPlayers());
-//                dataOutputStream.writeInt(MasterCricket.getMaxNumberOfRounds());
-//                dataOutputStream.writeInt(MasterCricket.getCurrentFieldToThrowIndex());
-//                objectOutputStream.writeObject(MasterCricket.getFieldsToThrow());
+                dataOutputStream.writeInt(MasterCricket.getNumberOfPlayers());
+                dataOutputStream.writeInt(MasterCricket.getMaxNumberOfRounds());
+                dataOutputStream.writeInt(MasterCricket.getCurrentFieldToThrowIndex());
+                objectOutputStream.writeObject(MasterCricket.getFieldsToThrow());
             }
 
             dataOutputStream.close();
@@ -165,10 +167,10 @@ public class GamesRepositoryImpl implements GamesRepository {
                 Cricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
                 Cricket.setFieldsToThrow((ArrayList<Integer>) objectInputStream.readObject());
             }else if (className.equals("com.rmaj91.domain.MasterCricket")) {
-//                MasterCricket.setNumberOfPlayers(dataInputStream.readInt());
-//                MasterCricket.setMaxNumberOfRounds(dataInputStream.readInt());
-//                MasterCricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
-//                MasterCricket.setFieldsToThrow((ArrayList<Integer>) objectInputStream.readObject());
+                MasterCricket.setNumberOfPlayers(dataInputStream.readInt());
+                MasterCricket.setMaxNumberOfRounds(dataInputStream.readInt());
+                MasterCricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
+                MasterCricket.setFieldsToThrow((ArrayList<Integer>) objectInputStream.readObject());
             }
 
             dataInputStream.close();

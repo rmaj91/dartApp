@@ -133,19 +133,14 @@ public class Game01Controller implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-
-        game01PlayerNamesTextFields = new TextField[4];
-        game01PlayerNamesTextFields[0] = game01PlayerNameTextField1;
-        game01PlayerNamesTextFields[1] = game01PlayerNameTextField2;
-        game01PlayerNamesTextFields[2] = game01PlayerNameTextField3;
-        game01PlayerNamesTextFields[3] = game01PlayerNameTextField4;
-
+        initGame01PlayersNamesArray();
         setPointsOtherRadioButtonListener(game01RadioPointsOther, game01PointsSpinner);
         setPointsOtherRadioButtonListener(game01RadioRoundsOther, game01RoundsSpinner);
         setPlayersRadioButtonsGroupListener();
         setPlayersNamesTextFieldsValidation();
         setSpinnersFactoriesAndValidation();
     }
+
 
 
 
@@ -271,14 +266,15 @@ public class Game01Controller implements Initializable {
         ((Game01) gamesRepository.getZeroRound()).setCurrentPlayer(players.get(0));
     }
 
-    /**
-     * Method displays on game01PlayersTable if double out option is setted if not label its not visible
-     */
-    private void displayDoubleOutLabel() {
-        if (isDoubleOut())
-            boardController.getDoubleOut().setVisible(true);
-        else
-            boardController.getDoubleOut().setVisible(false);
+
+
+
+    private void initGame01PlayersNamesArray() {
+        game01PlayerNamesTextFields = new TextField[4];
+        game01PlayerNamesTextFields[0] = game01PlayerNameTextField1;
+        game01PlayerNamesTextFields[1] = game01PlayerNameTextField2;
+        game01PlayerNamesTextFields[2] = game01PlayerNameTextField3;
+        game01PlayerNamesTextFields[3] = game01PlayerNameTextField4;
     }
 
     private void setSpinnersFactoriesAndValidation() {

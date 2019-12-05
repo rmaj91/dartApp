@@ -47,7 +47,7 @@ public class Utilities {
      * @return index of angle scope
      */
     public static int getAngleIndex(double xCoordinate, double yCoordinate) {
-        for (Filters.AngleScope angleScope : filters.getAngleMapperList()) {
+        for (AngleScope angleScope : filters.getAngleMapperList()) {
             if (angleScope.isInRange(getAngle(xCoordinate, yCoordinate)))
                 return filters.getAngleMapperList().indexOf(angleScope);
         }
@@ -60,7 +60,7 @@ public class Utilities {
      * @return index of radius scope
      */
     public static int getRadiusIndex(double x, double y) {
-        for (Filters.RadiusScope radiusScope : filters.getRadiusMapperList()) {
+        for (RadiusScope radiusScope : filters.getRadiusMapperList()) {
             if (radiusScope.isInRange(getRadius(x, y)))
                 return filters.getRadiusMapperList().indexOf(radiusScope);
         }
@@ -74,7 +74,7 @@ public class Utilities {
      * @return index number of angle scope of passed angle
      */
     public static int getAngleScope(double angle) {
-        for (Filters.AngleScope angleScope : filters.getAngleMapperList()) {
+        for (AngleScope angleScope : filters.getAngleMapperList()) {
             if (angleScope.isInRange(angle))
                 return filters.getAngleMapperList().indexOf(angleScope);
         }
@@ -88,7 +88,7 @@ public class Utilities {
      * @return index number of radius scope of passed radius
      */
     public static int getRadiusScope(int radius) {
-        for (Filters.RadiusScope radiusScope : filters.getRadiusMapperList()) {
+        for (RadiusScope radiusScope : filters.getRadiusMapperList()) {
             if (radiusScope.isInRange(radius))
                 return filters.getRadiusMapperList().indexOf(radiusScope);
         }

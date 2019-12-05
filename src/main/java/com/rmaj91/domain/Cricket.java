@@ -6,6 +6,7 @@ import com.rmaj91.controller.MainController;
 import com.rmaj91.interfaces.Playable;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.Filters;
+import com.rmaj91.utility.IndexMapper;
 import com.rmaj91.utility.SoundPlayer;
 import com.rmaj91.utility.Utilities;
 import javafx.collections.ObservableList;
@@ -28,7 +29,6 @@ public class Cricket implements Playable, Serializable {
     private static BoardController boardController;
     private static CricketController cricketController;
     private static GamesRepositoryImpl gamesRepository;
-    private static MainController mainController;
 
     /*Static Variables*/
     private static int numberOfPlayers;
@@ -120,10 +120,6 @@ public class Cricket implements Playable, Serializable {
         Cricket.gamesRepository = gamesRepository;
     }
 
-    public static void setMainController(MainController mainController) {
-        Cricket.mainController = mainController;
-    }
-
 
     public static void setStaticVariables(int numberOfPlayers, int maxNumberOfRounds, int currentFieldToThrowIndex) {
         Cricket.numberOfPlayers = numberOfPlayers;
@@ -150,22 +146,26 @@ public class Cricket implements Playable, Serializable {
         calculatePoints();
         goToNextRoundOrPlayer();
         boardController.getThrowField1().requestFocus();
-
-    }
-
-    @Override
-    public void saveThrowFields() {
-        for (int i = 0; i < 3; i++)
-            currentPlayer.setThrowFieldsByIndex(i, new String(boardController.getThrowTextField(i).getText()));
     }
 
     @Override
     public void BackButton() {
         clearThrowTextFields();
         restorePlayerFieldsHitsFromPreviousRound();
-        saveThrowFields();
-        calculatePoints();
+        restorePlayerPointsFromPreviousRound();
         goToPreviousRoundOrPlayer();
+    }
+
+    private void restorePlayerPointsFromPreviousRound() {
+        int indexOfCurrentPlayer = players.indexOf(currentPlayer);
+        int previousRoundCurrentPlayerPoints = ((Cricket)gamesRepository.getPreviousRound()).players.get(indexOfCurrentPlayer).getPoints();
+        currentPlayer.setPoints(previousRoundCurrentPlayerPoints);
+    }
+
+    @Override
+    public void saveThrowFields() {
+        for (int i = 0; i < 3; i++)
+            currentPlayer.setThrowFieldsByIndex(i, new String(boardController.getThrowTextField(i).getText()));
     }
 
     @Override
@@ -187,13 +187,18 @@ public class Cricket implements Playable, Serializable {
 
 
     private void restorePlayerFieldsHitsFromPreviousRound() {
-        int[] previousRoundHittedFields = ((Cricket) gamesRepository.getPreviousRound()).currentPlayer.getHittedFields();
+        int indexOfCurrentPlayer = players.indexOf(currentPlayer);
+        int[] previousRoundHittedFields = ((Cricket) gamesRepository.getPreviousRound()).players.get(indexOfCurrentPlayer).getHittedFields();
         int[] deepCopyOfHittedFields = new int[7];
         for (int i = 0; i < 7; i++) {
             deepCopyOfHittedFields[i] = previousRoundHittedFields[i];
         }
         currentPlayer.setHittedFields(deepCopyOfHittedFields);
+        setNewStaticCurrentFieldToThrow();
+    }
 
+
+    private void setNewStaticCurrentFieldToThrow() {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < numberOfPlayers; j++) {
                 if (players.get(j).getHittedFieldsByIndex(i) < 3) {
@@ -219,7 +224,7 @@ public class Cricket implements Playable, Serializable {
         String fieldName = new String();
 
         if (radiusIndex != 7) {
-            for (Filters.IndexMapper indexMapper : Utilities.filters.getIndexMapperList()) {
+            for (IndexMapper indexMapper : Utilities.filters.getIndexMapperList()) {
                 if (indexMapper.hasFieldName(radiusIndex, angleIndex)) {
                     fieldName = indexMapper.getFieldName();
                     break;
@@ -237,46 +242,53 @@ public class Cricket implements Playable, Serializable {
 
     @Override
     public void calculatePoints() {
-        int currentPlayerIndex = players.indexOf(currentPlayer);
+        setPointAndHitsFromPreviousRound();
 
+        for (int i = 0; i < 3; i++) {
+            ThrowValues throwValue = parsethrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
+
+            if (throwValue.getValue() == fieldsToThrow.get(currentFieldToThrowIndex)) {
+
+                int thrownFieldMultiplier = throwValue.getMulitplier();
+                int throwFieldsToAddPoints = getThrowFieldsToAddPoints(thrownFieldMultiplier);
+                int currentRoundHitsByIndex = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex);
+
+                int throwHitsToSet = thrownFieldMultiplier + currentRoundHitsByIndex;
+                currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, throwHitsToSet);
+
+                int currentThrowPointsToAdd = throwFieldsToAddPoints * throwValue.getValue();
+
+                checkIfWinner();
+                if (isFieldClosed()) {
+                    if (currentFieldToThrowIndex < 6)
+                        currentFieldToThrowIndex++;
+                    currentThrowPointsToAdd = 0;
+                }
+                int pointsToAdd = currentPlayer.getPoints() + currentThrowPointsToAdd;
+                currentPlayer.setPoints(pointsToAdd);
+            }
+        }
+    }
+
+    private int getThrowFieldsToAddPoints(int currentThrowHitsToTargetField) {
+        int throwFieldsToAddPoints;
+        if (currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex) >= 3) {
+            throwFieldsToAddPoints = currentThrowHitsToTargetField;
+        } else
+            throwFieldsToAddPoints = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex) + currentThrowHitsToTargetField - 3;
+        if (throwFieldsToAddPoints < 0)
+            throwFieldsToAddPoints = 0;
+        return throwFieldsToAddPoints;
+    }
+
+
+    private void setPointAndHitsFromPreviousRound() {
+        int currentPlayerIndex = players.indexOf(currentPlayer);
         int previousRoundThrownFieldsByIndex = ((Cricket) gamesRepository.getPreviousRound())
                 .players.get(currentPlayerIndex).getHittedFieldsByIndex(currentFieldToThrowIndex);
         int previousRoundPoints = ((Cricket) gamesRepository.getPreviousRound()).players.get(currentPlayerIndex).getPoints();
         currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, previousRoundThrownFieldsByIndex);
         currentPlayer.setPoints(previousRoundPoints);
-
-        for (int i = 0; i < 3; i++) {
-            int currentThrowHitsToTargetField = 0;
-            int currentThrowPointsToAdd = 0;
-            ThrowValues throwValue = parsethrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
-
-            if (throwValue.getValue() == fieldsToThrow.get(currentFieldToThrowIndex)) {
-
-                currentThrowHitsToTargetField = throwValue.getMulitplier();
-                int throwFieldsToAddPoints = 0;
-                if (currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex) >= 3) {
-                    throwFieldsToAddPoints = currentThrowHitsToTargetField;
-                } else
-                    throwFieldsToAddPoints = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex) + currentThrowHitsToTargetField - 3;
-                if (throwFieldsToAddPoints < 0)
-                    throwFieldsToAddPoints = 0;
-
-                int currentRoundHitsByIndex = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex);
-
-                int throwHitsToAdd = currentThrowHitsToTargetField + currentRoundHitsByIndex;
-                currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, throwHitsToAdd);
-                currentThrowPointsToAdd = throwFieldsToAddPoints * throwValue.getValue();
-                checkIfWinner();
-
-                if (isFieldClosed()) {
-                    if(currentFieldToThrowIndex < 6)
-                        currentFieldToThrowIndex++;
-                    currentThrowPointsToAdd = 0;
-                }
-                int currentPlayerPoints = currentPlayer.getPoints();
-                currentPlayer.setPoints(currentPlayerPoints + currentThrowPointsToAdd);
-            }
-        }
     }
 
 
@@ -312,7 +324,6 @@ public class Cricket implements Playable, Serializable {
         // Deleting digits and letters
         String stringValue = fieldContent.replaceAll("[^0-9]", "");
         String multiplierString = fieldContent.replaceAll("[^a-zA-Z]", "");
-
         // If stringValue has digits, parse to int
         if (!stringValue.equals("")) {
             value = Integer.parseInt(stringValue);
@@ -373,32 +384,33 @@ public class Cricket implements Playable, Serializable {
 
     private void goToNextRoundOrPlayer() {
         int currentPlayerNumber = players.indexOf(currentPlayer) + 1;
+
         if (gamesRepository.getNumberOfRound(this) < Cricket.maxNumberOfRounds || currentPlayerNumber != numberOfPlayers) {
             currentPlayer.setCurrentThrow(1);
             if (currentPlayerNumber == Cricket.numberOfPlayers) {
                 gamesRepository.pushRound(new Cricket(this));
 
-//                PlayerCricket newCurrentPlayer = ((Cricket) gamesRepository.getCurrentRound()).players.get(0);
-//                ((Cricket)gamesRepository.getCurrentRound()).currentPlayer = newCurrentPlayer;
+                PlayerCricket newCurrentPlayer = ((Cricket) gamesRepository.getCurrentRound()).players.get(0);
+                ((Cricket)gamesRepository.getCurrentRound()).currentPlayer = newCurrentPlayer;
             } else
                 currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
+            ((Cricket) gamesRepository.getCurrentRound()).currentPlayer.setCurrentThrow(1);
         }
         gamesRepository.getCurrentRound().displayRoundState();
     }
 
     private void goToPreviousRoundOrPlayer() {
-        int currentPlayerIndex = players.indexOf(currentPlayer);
-        if (gamesRepository.getNumberOfRound(this) > 1 || currentPlayerIndex != 0) {
-            if (currentPlayerIndex == 0) {
+        int indexOfCurrentPlayer = players.indexOf(currentPlayer);
+
+        if (gamesRepository.getNumberOfRound(this) > 1 || indexOfCurrentPlayer != 0) {
+            if (indexOfCurrentPlayer == 0) {
                 gamesRepository.pullRound();
                 PlayerCricket playerFromPreviousRound = ((Cricket) gamesRepository.getCurrentRound()).getPlayers().get(numberOfPlayers - 1);
                 ((Cricket) gamesRepository.getCurrentRound()).setCurrentPlayer(playerFromPreviousRound);
             } else {
-                //clearThrowTextFields();
-                currentPlayer = players.get(currentPlayerIndex - 1);
+                currentPlayer = players.get(indexOfCurrentPlayer - 1);
             }
-        } else
-            return;
+        }
         gamesRepository.getCurrentRound().displayRoundState();
     }
 

@@ -6,6 +6,7 @@ import com.rmaj91.controller.MainController;
 import com.rmaj91.interfaces.Playable;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.Filters;
+import com.rmaj91.utility.IndexMapper;
 import com.rmaj91.utility.SoundPlayer;
 import com.rmaj91.utility.Utilities;
 import javafx.collections.ObservableList;
@@ -164,7 +165,7 @@ public class Game01 implements Playable, Serializable {
         String fieldName = new String();
 
         if (radiusIndex != 7) {
-            for (Filters.IndexMapper indexMapper : Utilities.filters.getIndexMapperList()) {
+            for (IndexMapper indexMapper : Utilities.filters.getIndexMapperList()) {
                 if (indexMapper.hasFieldName(radiusIndex, angleIndex)) {
                     fieldName = indexMapper.getFieldName();
                     break;

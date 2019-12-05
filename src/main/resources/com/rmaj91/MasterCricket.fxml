@@ -56,9 +56,9 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="300.0">
                            <children>
-                              <RadioButton fx:id="masterRadioPlayers1" mnemonicParsing="false" selected="true" text="1">
+                              <RadioButton fx:id="masterRadioPlayers1" disable="true" mnemonicParsing="false" selected="true" text="1">
                                  <toggleGroup>
-                                    <ToggleGroup fx:id="group01_31" />
+                                    <ToggleGroup fx:id="masterRadioGroupForPlayers" />
                                  </toggleGroup>
                                  <HBox.margin>
                                     <Insets left="5.0" />
@@ -67,17 +67,17 @@
                                     <Insets left="5.0" />
                                  </padding>
                               </RadioButton>
-                              <RadioButton fx:id="masterRadioPlayers2" mnemonicParsing="false" text="2" toggleGroup="$group01_31">
+                              <RadioButton fx:id="masterRadioPlayers2" mnemonicParsing="false" selected="true" text="2" toggleGroup="$masterRadioGroupForPlayers">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <RadioButton fx:id="masterRadioPlayers3" mnemonicParsing="false" text="3" toggleGroup="$group01_31">
+                              <RadioButton fx:id="masterRadioPlayers3" mnemonicParsing="false" text="3" toggleGroup="$masterRadioGroupForPlayers">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <RadioButton fx:id="masterRadioPlayers4" mnemonicParsing="false" text="4" toggleGroup="$group01_31">
+                              <RadioButton fx:id="masterRadioPlayers4" mnemonicParsing="false" text="4" toggleGroup="$masterRadioGroupForPlayers">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
@@ -179,7 +179,7 @@
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="masterLetsButton" focusTraversable="false" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Let's play!">
+            <Button fx:id="masterLetsButton" focusTraversable="false" mnemonicParsing="false" onAction="#letsPlayButtonClicked" prefHeight="35.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Let's play!">
                <font>
                   <Font size="16.0" />
                </font>

@@ -13,7 +13,9 @@ public class SoundPlayer {
 
     /*Variables*/
     private boolean soundsActive;
-    // This is global control of application volume, scope from 0.0 to 1.0
+    /**
+     * This is global control parameter ofor application volume, scope from 0.0 to 1.0
+     */
     private final double volumeScale = 0.75;
     private double volumeLevel;
     private Clip previousClip = null;

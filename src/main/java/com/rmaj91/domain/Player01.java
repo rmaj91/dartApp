@@ -47,14 +47,12 @@ public class Player01 implements PlayerInterface, Serializable {
     }
 
 
-
+    public String getThrowFieldsContentByIndex(int i) {
+        return throwFieldsContent[i];
+    }
 
     public void setThrowFieldsByIndex(int index, String throwFieldValue) {
         this.throwFieldsContent[index] = throwFieldValue;
-    }
-
-    public String getThrowFieldContent(int index) {
-        return this.throwFieldsContent[index];
     }
 
     @Override
@@ -79,10 +77,7 @@ public class Player01 implements PlayerInterface, Serializable {
 
 
 
-
-
-
-
+    /*Getters & Setter*/
 
     public int getPoints() {
         return points;
@@ -104,9 +99,6 @@ public class Player01 implements PlayerInterface, Serializable {
         this.currentThrow = currentThrow;
     }
 
-    public String getThrowFieldsContentByIndex(int i) {
-        return throwFieldsContent[i];
-    }
 
     public void setPoints(int points) {
         this.points = points;
