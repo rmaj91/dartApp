@@ -179,13 +179,17 @@ public class MasterCricket implements Playable, Serializable {
 
 
     private void restorePlayerFieldsHitsFromPreviousRound() {
-        int[] previousRoundHittedFields = ((MasterCricket) gamesRepository.getPreviousRound()).currentPlayer.getHittedFields();
+        int indexOfCurrentPlayer = players.indexOf(currentPlayer);
+        int[] previousRoundHittedFields = ((MasterCricket) gamesRepository.getPreviousRound()).players.get(indexOfCurrentPlayer).getHittedFields();
         int[] deepCopyOfHittedFields = new int[7];
         for (int i = 0; i < 7; i++) {
             deepCopyOfHittedFields[i] = previousRoundHittedFields[i];
         }
         currentPlayer.setHittedFields(deepCopyOfHittedFields);
+        setNewStaticCurrentFieldToThrow();
+    }
 
+    private void setNewStaticCurrentFieldToThrow() {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < numberOfPlayers; j++) {
                 if (players.get(j).getHittedFieldsByIndex(i) < 3) {
@@ -231,26 +235,30 @@ public class MasterCricket implements Playable, Serializable {
     public void calculatePoints() {
         getHitsFromPreviousRound();
         getPointsFromPreviousPlayer();
-        getCurrentThrowingFieldIndexFromPreviousPlayer();
+        setNewStaticCurrentFieldToThrow();
+//        getCurrentThrowingFieldIndexFromPreviousPlayer();
+
         for (int i = 0; i < 3; i++) {
             ThrowValues throwValue = parsethrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
+
             if (throwValue.getValue() == fieldsToThrow.get(currentFieldToThrowIndex)) {
 
                 int currentThrowHitsToTargetField = throwValue.getMulitplier();
                 int throwFieldsToAddPoints = getThrowFieldsToAddPoints(currentThrowHitsToTargetField);
 
-                int currentRoundHitsByIndex = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex);
-                int throwHitsToAdd = currentThrowHitsToTargetField + currentRoundHitsByIndex;
+                int currentHitsByIndex = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex);
+                int throwHitsToAdd = currentThrowHitsToTargetField + currentHitsByIndex;
                 currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, throwHitsToAdd);
+
                 int currentThrowPointsToAdd = throwFieldsToAddPoints * throwValue.getValue();
 
                 checkIfWinner();
                 if (isFieldClosed()) {
+                    currentThrowPointsToAdd = 0;
                     if (currentFieldToThrowIndex < 6) {
                         currentFieldToThrowIndex++;
                         currentPlayer.setCurrentThrownFieldIndex(currentFieldToThrowIndex);
                     }
-                    currentThrowPointsToAdd = 0;
                 }
                 addPointToPlayers(currentThrowPointsToAdd);
 //                int currentPlayerPoints = currentPlayer.getPoints();
@@ -269,17 +277,17 @@ public class MasterCricket implements Playable, Serializable {
         }
     }
 
-    private void getCurrentThrowingFieldIndexFromPreviousPlayer() {
-        int currentPlayerIndex = players.indexOf(currentPlayer);
-
-        if (currentPlayerIndex == 0) {
-            int previousFieldIndex = ((MasterCricket) gamesRepository.getPreviousRound())
-                    .players.get(numberOfPlayers - 1).getCurrentThrownFieldIndex();
-            currentFieldToThrowIndex = previousFieldIndex;
-        } else
-            currentFieldToThrowIndex = players.get(currentPlayerIndex - 1).getCurrentThrownFieldIndex();
-
-    }
+//    private void getCurrentThrowingFieldIndexFromPreviousPlayer() {
+//        int currentPlayerIndex = players.indexOf(currentPlayer);
+//
+//        if (currentPlayerIndex == 0) {
+//            int previousFieldIndex = ((MasterCricket) gamesRepository.getPreviousRound())
+//                    .players.get(numberOfPlayers - 1).getCurrentThrownFieldIndex();
+//            currentFieldToThrowIndex = previousFieldIndex;
+//        } else
+//            currentFieldToThrowIndex = players.get(currentPlayerIndex - 1).getCurrentThrownFieldIndex();
+//
+//    }
 
     private void addPointToPlayers(int currentThrowPointsToAdd) {
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -305,14 +313,16 @@ public class MasterCricket implements Playable, Serializable {
 
     private void getHitsFromPreviousRound() {
         int currentPlayerIndex = players.indexOf(currentPlayer);
-        int previousRoundThrownFieldsByIndex = ((MasterCricket) gamesRepository.getPreviousRound())
-                .players.get(currentPlayerIndex).getHittedFieldsByIndex(currentFieldToThrowIndex);
-        currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, previousRoundThrownFieldsByIndex);
+        int[] previousRoundThrownFieldsByIndex = ((MasterCricket) gamesRepository.getPreviousRound())
+                .players.get(currentPlayerIndex).getHittedFields();
+        for(int i=0;i<7;i++)
+            currentPlayer.setHittedFieldsbyIndex(i, previousRoundThrownFieldsByIndex[i]);
     }
 
     private void getPointsFromPreviousPlayer() {
         int currentPlayerIndex = players.indexOf(currentPlayer);
         int[] deepCopyOfPointsFromPreviousPlayer = new int[numberOfPlayers];
+
         if (currentPlayerIndex == 0) {
             for (int i = 0; i < numberOfPlayers; i++) {
                 int previousPlayerPoints = ((MasterCricket) gamesRepository.getPreviousRound())
@@ -454,7 +464,7 @@ public class MasterCricket implements Playable, Serializable {
 //                ((Cricket)gamesRepository.getCurrentRound()).currentPlayer = newCurrentPlayer;
             } else
                 currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
-            //todo testy
+
             ((MasterCricket) gamesRepository.getCurrentRound()).currentPlayer.setCurrentThrow(1);
         }
         ((MasterCricket) gamesRepository.getCurrentRound()).getPointsFromPreviousPlayer();
@@ -472,7 +482,7 @@ public class MasterCricket implements Playable, Serializable {
                 //clearThrowTextFields();
                 currentPlayer = players.get(currentPlayerIndex - 1);
             }
-        } else
+        }
         gamesRepository.getCurrentRound().displayRoundState();
     }
 

@@ -61,63 +61,96 @@ public class MainController implements Initializable {
 	/*Initalizing*/
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		createGameRepository();
+		createSoundPlayer();
 
-		gamesRepository = new GamesRepositoryImpl();
-		gamesRepository.setBoardController(boardController);
+		injectGame01Dependencies();
+		injectCricketDependencies();
+		injectMasterCricketDependencies();
+		injectPlayersDependencies();
 
-		soundPlayer = new SoundPlayer();
-		soundPlayer.setSoundsActive(!volumeSlider.isDisable());
-		soundPlayer.setVolumeLevel(volumeSlider.getValue());
+		injectWelcomeControllerDependencies();
+		injectGame01ControllerDependencies();
+		injectCricketControllerDependencies();
+		injectMasterCricketControllerDependencies();
 
-		/*Injecting Dependencies*/
-		Cricket.setGamesRepository(gamesRepository);
-		Cricket.setSoundPlayer(soundPlayer);
-		Cricket.setBoardController(boardController);
-		Cricket.setCricketController(cricketController);
+		boardController.setGamesRepository(gamesRepository);
+		stage.setOnCloseRequest((e)->{closeApplication(e);});
+		makeAppWindowDragable();
+		setVolumeSliderListener();
+	}
 
-		MasterCricket.setGamesRepository(gamesRepository);
-		MasterCricket.setSoundPlayer(soundPlayer);
-		MasterCricket.setBoardController(boardController);
-		MasterCricket.setCricketController(cricketController);
+	private void setVolumeSliderListener() {
+		volumeSlider.valueProperty().addListener((obs,oldValue,newValue)->{
+			soundPlayer.setVolumeLevel(volumeSlider.getValue());
+		});
+	}
 
+	private void injectMasterCricketControllerDependencies() {
+		masterCricketController.setWelcomeController(welcomeController);
+		masterCricketController.setBoardController(boardController);
+		masterCricketController.setGamesRepository(gamesRepository);
+	}
+
+	private void injectCricketControllerDependencies() {
+		cricketController.setWelcomeController(welcomeController);
+		cricketController.setBoardController(boardController);
+		cricketController.setGamesRepository(gamesRepository);
+	}
+
+	private void injectGame01ControllerDependencies() {
+		game01Controller.setWelcomeController(welcomeController);
+		game01Controller.setGamesRepository(gamesRepository);
+		game01Controller.setBoardController(boardController);
+	}
+
+	private void injectWelcomeControllerDependencies() {
+		welcomeController.setMainController(this);
+		welcomeController.setGame01Controller(game01Controller);
+		welcomeController.setGamesRepository(gamesRepository);
+		welcomeController.setCricketController(cricketController);
+		welcomeController.setMasterCricketController(masterCricketController);
+	}
+
+	private void injectGame01Dependencies() {
+		Game01.setSoundPlayer(soundPlayer);
+		Game01.setGamesRepository(gamesRepository);
+		Game01.setGame01Controller(game01Controller);
+		Game01.setBoardController(boardController);
+	}
+
+	private void injectPlayersDependencies() {
 		Player01.setGamesRepository(gamesRepository);
 		Player01.setBoardController(boardController);
 		PlayerCricket.setGamesRepository(gamesRepository);
 		PlayerCricket.setBoardController(boardController);
 		PlayerMasterCricket.setGamesRepository(gamesRepository);
 		PlayerMasterCricket.setBoardController(boardController);
+	}
 
-		Game01.setSoundPlayer(soundPlayer);
-		Game01.setGamesRepository(gamesRepository);
-		Game01.setGame01Controller(game01Controller);
-		Game01.setBoardController(boardController);
+	private void injectMasterCricketDependencies() {
+		MasterCricket.setGamesRepository(gamesRepository);
+		MasterCricket.setSoundPlayer(soundPlayer);
+		MasterCricket.setBoardController(boardController);
+		MasterCricket.setCricketController(cricketController);
+	}
 
-		welcomeController.setMainController(this);
-		welcomeController.setGame01Controller(game01Controller);
-		welcomeController.setGamesRepository(gamesRepository);
-		welcomeController.setCricketController(cricketController);
-		welcomeController.setMasterCricketController(masterCricketController);
+	private void injectCricketDependencies() {
+		Cricket.setGamesRepository(gamesRepository);
+		Cricket.setSoundPlayer(soundPlayer);
+		Cricket.setBoardController(boardController);
+		Cricket.setCricketController(cricketController);
+	}
 
-		game01Controller.setWelcomeController(welcomeController);
-		game01Controller.setGamesRepository(gamesRepository);
-		game01Controller.setBoardController(boardController);
+	private void createSoundPlayer() {
+		soundPlayer = new SoundPlayer();
+		soundPlayer.setSoundsActive(!volumeSlider.isDisable());
+		soundPlayer.setVolumeLevel(volumeSlider.getValue());
+	}
 
-		cricketController.setWelcomeController(welcomeController);
-		cricketController.setBoardController(boardController);
-		cricketController.setGamesRepository(gamesRepository);
-
-		masterCricketController.setWelcomeController(welcomeController);
-		masterCricketController.setBoardController(boardController);
-		masterCricketController.setGamesRepository(gamesRepository);
-
-		boardController.setGamesRepository(gamesRepository);
-		/*Initializing stuff*/
-		stage.setOnCloseRequest((e)->{closeApplication(e);});
-		makeAppWindowDragable();
-		// Volume slider listener
-		volumeSlider.valueProperty().addListener((obs,oldValue,newValue)->{
-			soundPlayer.setVolumeLevel(volumeSlider.getValue());
-		});
+	private void createGameRepository() {
+		gamesRepository = new GamesRepositoryImpl();
+		gamesRepository.setBoardController(boardController);
 	}
 
 	/*Getters & Setters*/
