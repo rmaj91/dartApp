@@ -1,7 +1,6 @@
 package com.rmaj91.domain;
 
 import com.rmaj91.controller.BoardController;
-import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.interfaces.PlayerInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
 
@@ -17,7 +16,7 @@ import java.util.Arrays;
 public class Player01 implements PlayerInterface, Serializable {
 
     /* Dependencies */
-    private static GamesRepository gamesRepository;
+    private static com.rmaj91.interfaces.GamesRepository gamesRepository;
     private static BoardController boardController;
 
     /*Variables*/
@@ -41,16 +40,13 @@ public class Player01 implements PlayerInterface, Serializable {
     public Player01(Player01 player01) {
         this.name = player01.name;
         this.points = player01.points;
-
-        int startingPoints = ((Game01)gamesRepository.getZeroRound()).getCurrentPlayer().points;
-        int round = gamesRepository.getNumberOfRound(gamesRepository.getCurrentRound());
-        if(round == 0)
-            round++;
-        this.average = (startingPoints - this.points) / round;
+        calculateAverage();
         this.throwFieldsContent = new String[3];
         Arrays.fill(this.throwFieldsContent, new String());
         this.currentThrow = 1;
     }
+
+
 
 
     public void setThrowFieldsByIndex(int index, String throwFieldValue) {
@@ -70,6 +66,22 @@ public class Player01 implements PlayerInterface, Serializable {
             boardController.getThrowTextField(i).setText(throwFieldsContent[i]);
 
     }
+
+    private void calculateAverage() {
+        int startingPoints = ((Game01)gamesRepository.getZeroRound()).getCurrentPlayer().points;
+        int round = gamesRepository.getNumberOfRound(gamesRepository.getCurrentRound());
+        if(round == 0)
+            round++;
+        this.average = (startingPoints - this.points) / round;
+    }
+
+
+
+
+
+
+
+
 
 
     public int getPoints() {

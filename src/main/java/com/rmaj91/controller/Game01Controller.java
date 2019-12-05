@@ -115,9 +115,9 @@ public class Game01Controller implements Initializable {
         //Creating zero'th game
         gamesRepository.createNewGame(GameFactory.getGame("'01 Game"));
         Game01.setStaticVariables(isDoubleOut(), getNumberOfPlayers(), getRounds());
-        initializeGame01PlayersArrayAndCurrentPlayer();
 
-        removeAndCreatePlayersVBoxes(getNumberOfPlayers());
+        initializeGame01PlayersArrayAndCurrentPlayer();
+        removeAndCreatePlayersVBoxes();
 
         // copy round
         Game01 firstRound = new Game01((Game01) gamesRepository.getCurrentRound());
@@ -223,13 +223,12 @@ public class Game01Controller implements Initializable {
     /**
      * Method creates VBoxes for players in game01PlayersTable at board view,
      * VBoxes contains labels with name and amount of points
-     *
-     * @param numberOfPlayers quantity of setted players
      */
-    public void removeAndCreatePlayersVBoxes(int numberOfPlayers) {
-
+    public void removeAndCreatePlayersVBoxes() {
         while(boardController.getGame01PlayersTable().getChildren().size() >1 )
             boardController.getGame01PlayersTable().getChildren().remove(1);
+
+        int numberOfPlayers = ((Game01)gamesRepository.getZeroRound()).getPlayers().size();
         for (int i = 0; i < numberOfPlayers; i++) {
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.BOTTOM_CENTER);

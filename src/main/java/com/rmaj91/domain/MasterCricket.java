@@ -12,7 +12,7 @@ public class MasterCricket implements Playable {
     }
 
     @Override
-    public void goToPreviousPlayerOrRound() {
+    public void BackButton() {
 
     }
 

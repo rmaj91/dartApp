@@ -7,7 +7,6 @@ import java.util.function.UnaryOperator;
 
 import com.rmaj91.domain.Cricket;
 import com.rmaj91.domain.Game01;
-import com.rmaj91.domain.Player01;
 import com.rmaj91.domain.PlayerCricket;
 import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.repository.GameFactory;
@@ -31,6 +30,7 @@ public class CricketController implements Initializable {
 
     private BoardController boardController;
     private GamesRepository gamesRepository;
+    private WelcomeController welcomeController;
 
     @FXML
     private VBox newCricketPane;
@@ -117,27 +117,28 @@ public class CricketController implements Initializable {
     private Button cricketLetsButton;
 
     private TextField[] cricketPlayerNamesTextFields;
-    private Spinner<Integer>[] cricketFieldBoxes;
+    private Spinner<Integer>[] cricketFieldsSpinners;
 
+
+    /*Setters & Getters*/
+    public void setWelcomeController(WelcomeController welcomeController) {
+        this.welcomeController = welcomeController;
+    }
     public void setBoardController(BoardController boardController) {
         this.boardController = boardController;
     }
-
-
-    public void toFront() {
-    	newCricketPane.toFront();
-    }
-
     public void setGamesRepository(GamesRepository gamesRepository) {
         this.gamesRepository = gamesRepository;
     }
 
-    private WelcomeController welcomeController;
 
-	public void setWelcomeController(WelcomeController welcomeController) {
-		this.welcomeController = welcomeController;
-	}
 
+
+    /*Events*/
+    //////////
+    public void toFront() {
+    	newCricketPane.toFront();
+    }
 
 	public void backButton() {
     	welcomeController.toFront();
@@ -150,43 +151,68 @@ public class CricketController implements Initializable {
 		cricketBoxField7.setDisable(false);
 	}
 
+
     /**
      * Method Initialize board view and games repository
      */
     public void letsPlayButtonClicked() {
-        if(!validAndSetFieldsToHit()){
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning Dialog");
-            alert.setHeaderText("Cricket Fields must be unique");
-            alert.showAndWait();
+        if(!validFieldsToThrowIfUniqueAndSet())
             return;
-        }
+        //Creating zero'th game
+        gamesRepository.createNewGame(GameFactory.getGame("Cricket"));
+        Cricket.setStaticVariables(getNumberOfPlayers(), getMaxNumberOfRounds(),0);
 
-        deletesPlayersVBoxes();
-        // In case of startig new game after winning previous
+        initializeCricketPlayersArray();
+        removeAndCreatePlayersVBoxes();
+        fillFieldsToThrowVBox();
+
+        // copy round
+        Cricket firstRound = new Cricket((Cricket) gamesRepository.getCurrentRound());
+        gamesRepository.pushRound(firstRound);
+        gamesRepository.getCurrentRound().displayRoundState();
+
         boardController.getMainStackPane().setDisable(false);
         boardController.toFront();
         boardController.getCricketsScoreTable().toFront();
         boardController.getThrowField1().requestFocus();
-
-
-        gamesRepository.createNewGame(GameFactory.getGame("Cricket"));
-
-        initializeStaticCricketVariables();
-        initializeCricketPlayers();
-        validAndSetFieldsToHit();
-        fillFieldsToHitVBox(getPlayersQuantity());
-        createPlayersVBoxes(getPlayersQuantity());
-
-        gamesRepository.getCurrentRound().displayRoundState();
     }
 
 
-    /*Private Methods*/
+
+
+
+    /*Initialize*/
+    //////////////
+    //////////////
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        cricketPlayerNamesTextFields = new TextField[4];
+        cricketPlayerNamesTextFields[0] = cricketNamePlayer1;
+        cricketPlayerNamesTextFields[1] = cricketNamePlayer2;
+        cricketPlayerNamesTextFields[2] = cricketNamePlayer3;
+        cricketPlayerNamesTextFields[3] = cricketNamePlayer4;
+
+        cricketFieldsSpinners = new Spinner[7];
+        cricketFieldsSpinners[0] = cricketBoxField1;
+        cricketFieldsSpinners[1] = cricketBoxField2;
+        cricketFieldsSpinners[2] = cricketBoxField3;
+        cricketFieldsSpinners[3] = cricketBoxField4;
+        cricketFieldsSpinners[4] = cricketBoxField5;
+        cricketFieldsSpinners[5] = cricketBoxField6;
+        cricketFieldsSpinners[6] = cricketBoxField7;
+
+        setRadioRoundsOthersSelectListener();
+        setPlayersNamesRadioButtonSelectedListener();
+        setPlayersNamesLengthValidation();
+        setSpinnersFactoriesAndFilters();
+    }
+
+
     /**
      * Method defines number of rounds selected by radio buttons and returns it.
      */
-    private int getRounds(){
+    private int getMaxNumberOfRounds(){
         if(cricketRadioRoundsOther.isSelected())
             return cricketRoundsBox.getValue();
         else
@@ -196,7 +222,7 @@ public class CricketController implements Initializable {
     /**
      * Method defines number of players selected by radio buttons and returns it.
      * */
-    private int getPlayersQuantity(){
+    private int getNumberOfPlayers(){
         int playersQuantity = Integer.parseInt(((RadioButton) radioPlayersGroup.getSelectedToggle()).getText());
         return playersQuantity;
     }
@@ -204,9 +230,9 @@ public class CricketController implements Initializable {
     /**
      * Method gets players names from textFieldsArray and returns it.
      * */
-    private String[] getPlayersNames(int playersQuantity){
-        String[] playersNames = new String[playersQuantity];
-        for (int i = 0; i < playersQuantity; i++) {
+    private String[] getPlayersNames(int numberOfPlayers){
+        String[] playersNames = new String[numberOfPlayers];
+        for (int i = 0; i < numberOfPlayers; i++) {
             playersNames[i] = getPlayerName(cricketPlayerNamesTextFields[i]);
         }
         return playersNames;
@@ -223,84 +249,67 @@ public class CricketController implements Initializable {
         else
             return textField.getText();
     }
-
+//
     /**
      * Method validate(in fields are unique) and sets(if values are unique) fields to hit in Criket.class
      * @return true if fields are unique or false if not
      */
-    private boolean validAndSetFieldsToHit(){
+    private boolean validFieldsToThrowIfUniqueAndSet(){
 
-        ArrayList<Integer> fieldToHit = new ArrayList<>();
+        ArrayList<Integer> fieldToThrow = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            fieldToHit.add(cricketFieldBoxes[i].getValue());
+            fieldToThrow.add(cricketFieldsSpinners[i].getValue());
             if(i == 6 && cricketCheckBoxField7.isSelected())
-                fieldToHit.add(25);
+                fieldToThrow.add(25);
         }
 
-//        for (int i = 0; i < 7; i++)
-//            for (int j = 0; j < 7; j++) {
-//                if(fieldToHit.get(i) =??????= fieldToHit.get(j) && i != j)
-////                    System.out.println(fieldToHit.get(i)+"\t"+fieldToHit.get(j));
-//                    return false;
-//            }
-//        Cricket.setFieldsToHit(fieldToHit);
+        for (int i = 0; i < 7; i++)
+            for (int j = 0; j < 7; j++) {
+                if(fieldToThrow.get(i) == fieldToThrow.get(j) && i != j){
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning Dialog");
+                    alert.setHeaderText("Cricket Fields must be unique");
+                    alert.showAndWait();
+                    return false;
+                }
+            }
+        Cricket.setFieldsToThrow(fieldToThrow);
         return true;
     }
 
-
-
     /**
-     * Method creates VBoxes for field to hit in a cricket game,
-     * VBoxes contains labels with name and amount of points
-     * @param playersQuantity quantity of setted players
+     * Method creates fills VBoxes for field to hit in a cricket game,
      */
-    private void fillFieldsToHitVBox(int playersQuantity){
-//        for (int i = 0; i < 7; i++) {
-//            Label label = (Label)boardController.getCricketsFields().getChildren().get(i);
-//            label.setText(String.valueOf(Cricket.getFieldsToHit().get(i)));
-//        }
+    private void fillFieldsToThrowVBox(){
+        for (int i = 0; i < 7; i++) {
+            Label label = (Label)boardController.getCricketsFields().getChildren().get(i);
+            label.setText(String.valueOf(Cricket.getFieldsToThrow().get(i)));
+        }
     }
-
-
 
     /**
      * Method creates VBoxes for players in cricketScoreTable at board view,
-     * VBoxes contains labels with name and amount of points
-     * @param playersQuantity quantity of setted players
+     * VBoxes contains labels with name and amount of points and fields hits
      */
-    private void createPlayersVBoxes(int playersQuantity){
-        for(int i=0;i<playersQuantity;i++){
+    public void removeAndCreatePlayersVBoxes(){
+        ObservableList<Node> children = boardController.getCricketsScoreTable().getChildren();
+        while(children.size() > 1)
+            children.remove(1);
+
+        int numberOfPlayers = ((Cricket)gamesRepository.getZeroRound()).getPlayers().size();
+        for(int i=0;i<numberOfPlayers;i++){
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.BOTTOM_CENTER);
             vBox.setMinWidth(100);
             for(int j=0;j<7;j++)
                 vBox.getChildren().add(createLabel(new String(""),false));
 
-            String playerName = ((Game01) gamesRepository.getZeroRound()).getPlayers().get(i).getName();
+            String playerName = ((Cricket) gamesRepository.getZeroRound()).getPlayers().get(i).getName();
             vBox.getChildren().addAll(createLabel(playerName,false),
                     createLabel(new String("0"),true));
             boardController.getCricketsScoreTable().getChildren().add(vBox);
         }
     }
-
-
-
-//    /**
-//     * Method creates VBoxes for players in cricketScoreTable at board view,
-//     * VBoxes contains labels with name and amount of points
-//     * @param playersQuantity quantity of setted players
-//     */
-    private void deletesPlayersVBoxes(){
-//        ObservableList<Node> children = boardController.getCricketsScoreTable().getChildren();
-//        for(int i=0;i<Cricket.getPlayersQuantity();i++)
-//            children.remove(1);
-    }
-
-
-
-
-
-
 
 
     /**
@@ -320,86 +329,76 @@ public class CricketController implements Initializable {
     }
 
     /**
-     * Method initialize Cricket.class static variables
-     */
-    private void initializeStaticCricketVariables(){
-//        Cricket.setPlayersQuantity(getPlayersQuantity());
-//        Cricket.setRoundsMaxNumber(getRounds());
-//        Cricket.setCurrentFieldToThrowIndex(0);
-    }
-
-    /**
      * Method initialize players array in Cricket object at games repository with Player.class objects
      */
-    private void initializeCricketPlayers(){
-        // Getting players names
-        String[] playersNames = getPlayersNames(getPlayersQuantity());
-        // Getting blank players Array
-        PlayerCricket[] playersArray = new PlayerCricket[getPlayersQuantity()];
-        for(int i=0;i<getPlayersQuantity();i++){
-            playersArray[i] = new PlayerCricket();
+    private void initializeCricketPlayersArray(){
+        String[] playersNames = getPlayersNames(getNumberOfPlayers());
+        ArrayList<PlayerCricket> players = new ArrayList<>();
+        for (String playersName : playersNames) {
+            players.add(new PlayerCricket(playersName));
         }
-        // Init players names
-        for(int i=0;i<getPlayersQuantity();i++){
-            playersArray[i].setName(playersNames[i]);
-        }
-
-//        // Injecting Array into repository
-//        ((Cricket)gamesRepository.getCurrentRound()).setPlayers(playersArray);
+        ((Cricket) gamesRepository.getZeroRound()).setPlayers(players);
+        ((Cricket) gamesRepository.getZeroRound()).setCurrentPlayer(players.get(0));
     }
 
 
+    private void setSpinnersFactoriesAndFilters() {
+        SpinnerValueFactory<Integer> svfRounds = new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_ROUNDS,MAX_ROUNDS, DEFAULT_ROUNDS);
+        cricketRoundsBox.setValueFactory(svfRounds);
+        StringConverter<Integer> roundsConverter = getRoundsConverter();
+        svfRounds.setConverter(roundsConverter);
+        cricketRoundsBox.getEditor().setTextFormatter(new TextFormatter<>(roundsConverter,DEFAULT_ROUNDS, getRoundsFilter()));
+
+        for(int i=20,j=0;j<7;i--,j++){
+            cricketFieldsSpinners[j].setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, i));
+        }
+    }
+
+    private UnaryOperator<TextFormatter.Change> getRoundsFilter() {
+        return new UnaryOperator<TextFormatter.Change>() {
+
+                @Override
+                public TextFormatter.Change apply(TextFormatter.Change t) {
+
+                    String newText = t.getControlNewText() ;
+                    if (newText.matches("[0-9]*")) {
+                        return t ;
+                    }
+                    return null ;
+                }
+            };
+    }
+
+    private StringConverter<Integer> getRoundsConverter() {
+        return new StringConverter<>() {
+
+                @Override
+                public Integer fromString(String string) {
+                    if(string.isEmpty())
+                        return DEFAULT_ROUNDS;
+                    else
+                        return Integer.parseInt(string);
+                }
+
+                @Override
+                public String toString(Integer object) {
+                    return object.toString();
+                }
+
+            };
+    }
 
 
+    private void setPlayersNamesLengthValidation() {
+        for (TextField game01PlayerNamesTextField : cricketPlayerNamesTextFields) {
+            game01PlayerNamesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.length() > MainController.PLAYERS_NAME_MAX_LENGTH)
+                    game01PlayerNamesTextField.setText(newValue.substring(0, MainController.PLAYERS_NAME_MAX_LENGTH));
+            });
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-
-        cricketPlayerNamesTextFields = new TextField[4];
-        cricketPlayerNamesTextFields[0] = cricketNamePlayer1;
-        cricketPlayerNamesTextFields[1] = cricketNamePlayer2;
-        cricketPlayerNamesTextFields[2] = cricketNamePlayer3;
-        cricketPlayerNamesTextFields[3] = cricketNamePlayer4;
-
-        cricketFieldBoxes = new Spinner[7];
-        cricketFieldBoxes[0] = cricketBoxField1;
-        cricketFieldBoxes[1] = cricketBoxField2;
-        cricketFieldBoxes[2] = cricketBoxField3;
-        cricketFieldBoxes[3] = cricketBoxField4;
-        cricketFieldBoxes[4] = cricketBoxField5;
-        cricketFieldBoxes[5] = cricketBoxField6;
-        cricketFieldBoxes[6] = cricketBoxField7;
-
-        // rounds box
-        cricketRadioRoundsOther.selectedProperty().addListener((ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) -> {
-            if (isNowSelected) {
-                cricketRoundsBox.setDisable(false);
-            } else {
-                cricketRoundsBox.setDisable(true);
-            }
-        });
-
-        // initializing radio button listeners
+    private void setPlayersNamesRadioButtonSelectedListener() {
         radioPlayersGroup.selectedToggleProperty().addListener((obs, oldValue, newValue) -> {
             String radioButtonText = ((RadioButton) radioPlayersGroup.getSelectedToggle()).getText();
             int playersQuantity = Integer.parseInt(radioButtonText);
@@ -410,73 +409,15 @@ public class CricketController implements Initializable {
             for (int i = 0; i < playersQuantity; i++)
                 cricketPlayerNamesTextFields[i].setDisable(false);
         });
-
-        // Players names length validation
-        for (TextField game01PlayerNamesTextField : cricketPlayerNamesTextFields) {
-            game01PlayerNamesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue.length() > MainController.PLAYERS_NAME_MAX_LENGTH)
-                    game01PlayerNamesTextField.setText(newValue.substring(0, MainController.PLAYERS_NAME_MAX_LENGTH));
-            });
-        }
-
-        // Spinners Factories
-        SpinnerValueFactory<Integer> svfRounds = new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_ROUNDS,MAX_ROUNDS, DEFAULT_ROUNDS);
-        cricketRoundsBox.setValueFactory(svfRounds);
-
-        // Spinner rounds validation
-        StringConverter<Integer> roundsConverter = new StringConverter<>() {
-
-            @Override
-            public Integer fromString(String string) {
-                if(string.isEmpty())
-                    return DEFAULT_ROUNDS;
-                else
-                    return Integer.parseInt(string);
-            }
-
-            @Override
-            public String toString(Integer object) {
-                return object.toString();
-            }
-
-        };
-
-        UnaryOperator<TextFormatter.Change> roundsFilter = new UnaryOperator<TextFormatter.Change>() {
-
-            @Override
-            public TextFormatter.Change apply(TextFormatter.Change t) {
-
-                String newText = t.getControlNewText() ;
-                if (newText.matches("[0-9]*")) {
-                    return t ;
-                }
-                return null ;
-            }
-        };
-
-        // Setting converters and filters
-        svfRounds.setConverter(roundsConverter);
-        cricketRoundsBox.getEditor().setTextFormatter(new TextFormatter<>(roundsConverter,DEFAULT_ROUNDS,roundsFilter));
-
-
-
-
-        for(int i=20,j=0;j<7;i--,j++){
-            cricketFieldBoxes[j].setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, i));
-        }
-//        cricketFieldBoxes[6].getValueFactory().setValue();
-//        for (Spinner<Integer> cricketFieldBox : cricketFieldBoxes) {
-//            cricketFieldBox.setValueFactory(svfFieldsChoose);
-//            cricketFieldBox.getValueFactory().setValue(firstValue--);
-//        }
-
-
-
-
     }
 
-
-
-
-
+    private void setRadioRoundsOthersSelectListener() {
+        cricketRadioRoundsOther.selectedProperty().addListener((ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) -> {
+            if (isNowSelected) {
+                cricketRoundsBox.setDisable(false);
+            } else {
+                cricketRoundsBox.setDisable(true);
+            }
+        });
+    }
 }

@@ -9,7 +9,6 @@ import com.rmaj91.domain.Cricket;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.Player01;
 import com.rmaj91.domain.PlayerCricket;
-import com.rmaj91.interfaces.PlayerInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.SoundPlayer;
 import javafx.fxml.FXML;
@@ -24,7 +23,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -67,28 +65,31 @@ public class MainController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		// todo make smaller functions
-		//Creating repository
+		/*injecting sound controller ettc functions*/
+
+
 		gamesRepository = new GamesRepositoryImpl();
 		gamesRepository.setBoardController(boardController);
-		// Creating Sound player
 		soundPlayer = new SoundPlayer();
 		soundPlayer.setSoundsActive(!volumeSlider.isDisable());
 		soundPlayer.setVolumeLevel(volumeSlider.getValue());
 
 		/*Injecting Dependencies*/
-		Player01.setGamesRepository(gamesRepository);
-		Player01.setBoardController(boardController);
-//		Cricket.setGamesRepositoryImpl(gamesRepository);
-//		Cricket.setSoundPlayer(soundPlayer);
-//		Cricket.setBoardController(boardController);
-		PlayerCricket.setGamesRepositoryImpl(gamesRepository);
+		Cricket.setGamesRepository(gamesRepository);
+		Cricket.setSoundPlayer(soundPlayer);
+		Cricket.setBoardController(boardController);
+		Cricket.setCricketController(cricketController);
+		Cricket.setMainController(this);
+		PlayerCricket.setGamesRepository(gamesRepository);
+		PlayerCricket.setBoardController(boardController);
 
 		Game01.setSoundPlayer(soundPlayer);
 		Game01.setGamesRepository(gamesRepository);
 		Game01.setGame01Controller(game01Controller);
 		Game01.setBoardController(boardController);
 		Game01.setMainController(this);
+		Player01.setGamesRepository(gamesRepository);
+		Player01.setBoardController(boardController);
 
 		welcomeController.setMainController(this);
 		welcomeController.setGame01Controller(game01Controller);

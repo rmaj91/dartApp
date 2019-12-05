@@ -73,7 +73,7 @@ public class WelcomeController implements Initializable {
 		chooseGameComboBox.getSelectionModel().selectFirst();
 	}
 
-	
+
 	/*Events*/
     public void aboutButtonClicked() {
     	aboutPane.toFront();

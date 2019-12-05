@@ -145,16 +145,17 @@ public class GamesRepositoryImpl implements GamesRepository {
 
             String className = dataInputStream.readUTF();
             if(className.equals("com.rmaj91.domain.Game01")) {
+//                Game01.setStaticVariables(dataInputStream.readBoolean(),dataInputStream.readInt(),dataInputStream.readInt());
                 Game01.setDoubleOut(dataInputStream.readBoolean());
                 Game01.setNumberOfPlayers(dataInputStream.readInt());
                 Game01.setMaxNumberOfRounds(dataInputStream.readInt());
             }
-            //            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
+//            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
 //                Cricket.setPlayersQuantity(dataInputStream.readInt());
 //                Cricket.setRoundsMaxNumber(dataInputStream.readInt());
 //                Cricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
 //                Cricket.setFieldsToHit((ArrayList<Integer>) objectInputStream.readObject());
-            //          }
+//          }
             dataInputStream.close();
 
         } catch (Exception exception) {

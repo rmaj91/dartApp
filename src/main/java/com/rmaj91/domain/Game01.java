@@ -43,9 +43,7 @@ public class Game01 implements Playable, Serializable {
     private Player01 currentPlayer;
 
     /*Constructor*/
-    public Game01() {
-
-    }
+    public Game01() {}
 
     /*Copying constructor*/
     public Game01(Game01 game01) {
@@ -55,7 +53,6 @@ public class Game01 implements Playable, Serializable {
             this.players.add(player01);
         }
         currentPlayer = this.players.get(0);
-
     }
 
 
@@ -140,12 +137,16 @@ public class Game01 implements Playable, Serializable {
     }
 
 
+
+
+
     /*Methods from Playable*/
     /////////////////////////
     @Override
-    public void goToPreviousPlayerOrRound() {
+    public void BackButton() {
         clearThrowTextFields();
         saveThrowFields();
+        calculatePoints();
         goToPreviousRoundOrPlayer();
     }
 
@@ -173,6 +174,7 @@ public class Game01 implements Playable, Serializable {
             writeFieldNameAndSetFocus(currentThrow, fieldName);
             currentPlayer.setCurrentThrow(currentThrow + 1);
             saveThrowFields();
+            calculatePoints();
             displayRoundState();
         }
     }
@@ -180,7 +182,7 @@ public class Game01 implements Playable, Serializable {
 
     @Override
     public void setBoardViewVisible() {
-        game01Controller.removeAndCreatePlayersVBoxes(game01Controller.getNumberOfPlayers());
+        game01Controller.removeAndCreatePlayersVBoxes();
 
         this.displayRoundState();
         boardController.toFront();
@@ -200,7 +202,6 @@ public class Game01 implements Playable, Serializable {
             String textFielContent = new String(boardController.getThrowTextField(i).getText());
             currentPlayer.setThrowFieldsByIndex(i, textFielContent);
         }
-        calculatePoints();
     }
 
 
@@ -217,7 +218,7 @@ public class Game01 implements Playable, Serializable {
             int thrownPoints = throwValue.getValue() * throwValue.getMulitplier();
             currentRoundPoints = currentRoundPoints - thrownPoints;
             totalThrownValue += thrownPoints;
-
+            
             if (isWinner(currentRoundPoints, throwValue))
                 return;
             if ((isOverThrow(currentRoundPoints, previousRoundPoints) || ifThrownOver180(totalThrownValue))) {
@@ -232,9 +233,9 @@ public class Game01 implements Playable, Serializable {
     @Override
     public void NextButton() {
         saveThrowFields();
+        calculatePoints();
         goToNextPlayerOrRound();
         boardController.getThrowField1().requestFocus();
-        gamesRepository.getCurrentRound().displayRoundState();
 
     }
 
@@ -283,6 +284,7 @@ public class Game01 implements Playable, Serializable {
             else
                 currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
         }
+        gamesRepository.getCurrentRound().displayRoundState();
     }
 
 
@@ -384,15 +386,12 @@ public class Game01 implements Playable, Serializable {
     }
 
     private void clearThrowTextFields() {
-        int currentPlayerNumber = players.indexOf(currentPlayer) + 1;
-        if (!(currentPlayerNumber == 1 && gamesRepository.getNumberOfRound(this) == 1)) {
             for (int i = 0; i < 3; i++) {
                 currentPlayer.setThrowFieldsByIndex(i, new String());
             }
             for (int i = 0; i < 3; i++) {
                 boardController.getThrowTextField(i).setText(new String());
             }
-        }
     }
 
     private void goToPreviousRoundOrPlayer() {
@@ -404,13 +403,12 @@ public class Game01 implements Playable, Serializable {
                 Player01 playerFromPreviousRound = ((Game01) gamesRepository.getCurrentRound()).getPlayers().get(numberOfPlayers - 1);
                 ((Game01) gamesRepository.getCurrentRound()).setCurrentPlayer(playerFromPreviousRound);
             } else {
-                clearThrowTextFields();
+                //clearThrowTextFields();
                 currentPlayer = players.get(currentPlayerIndex - 1);
             }
         } else
             return;
         gamesRepository.getCurrentRound().displayRoundState();
-        System.out.println(players.indexOf(currentPlayer));
     }
 
 

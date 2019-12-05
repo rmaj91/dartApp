@@ -202,7 +202,7 @@ public class BoardController implements Initializable {
     }
 
     public void backButtonClicked() {
-        gamesRepository.getCurrentRound().goToPreviousPlayerOrRound();
+        gamesRepository.getCurrentRound().BackButton();
     }
 
     public void dartBoardClicked(MouseEvent event) {

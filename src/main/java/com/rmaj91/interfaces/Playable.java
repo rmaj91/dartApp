@@ -18,7 +18,7 @@ public interface Playable {
     /**
      * The back() method moves game backwards to the previous player/round (it depends on which player actually have turn)
      */
-	void goToPreviousPlayerOrRound();
+	void BackButton();
 
     /**
      * The throwDart() method is invoke when player clicks on a dart board. It fills the textField for the current throw
@@ -39,11 +39,6 @@ public interface Playable {
      */
     void setCurrentThrowTo(int throwNumber);
 
-//    /**
-//     * The cloneRound() method clones the current round.
-//     * @return Method returns cloned current round
-//     */
-//    Playable cloneRound();
 
     /**
      * The saveThrowFields() method saves text from throwTextFields.
@@ -54,11 +49,6 @@ public interface Playable {
      * This method calculates players points
      */
     void calculatePoints();
-
-//    /**
-//     * This method returns number of current player.
-//     */
-//    int getCurrentPlayer();
 
 
     /**
