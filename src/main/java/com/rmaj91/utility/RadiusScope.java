@@ -3,19 +3,27 @@ package com.rmaj91.utility;
 /**
  * RadiusScope class provides container for radius scope of dart board
  */
-public class RadiusScope{
+public class RadiusScope {
 
-    /*Variables*/
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     private int smallRadius;
     private int bigRadius;
 
-    /*Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     public RadiusScope(int smallRadius, int bigRadius) {
         this.smallRadius = smallRadius;
         this.bigRadius = bigRadius;
     }
 
-    /*Getters*/
+
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public int getSmallRadius() {
         return smallRadius;
     }
@@ -24,15 +32,19 @@ public class RadiusScope{
         return bigRadius;
     }
 
-    /*Public Methods*/
+
+    //==================================================================================================
+    // Public Methods
+    //==================================================================================================
 
     /**
      * This methods checks if radius passed through parameter are in a object specified radius scope
+     *
      * @param radius Radius (pixels)
      * @return Returns true if radius is in scope and false if not.
      */
     public boolean isInRange(int radius) {
-        if(radius >= smallRadius && radius < bigRadius)
+        if (radius >= smallRadius && radius < bigRadius)
             return true;
         else
             return false;

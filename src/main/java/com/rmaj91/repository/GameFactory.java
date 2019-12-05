@@ -13,16 +13,17 @@ import java.util.ArrayList;
  */
 public class GameFactory {
 
-	private GameFactory() {}
+    private GameFactory() {
+    }
 
-	public static Playable getGame(String gameName) {
-		if(gameName == "'01 Game")
-			return new Game01();
-		else if(gameName == "Cricket")
-			return new Cricket();
-		else if(gameName == "Master Cricket")
-			return new MasterCricket();
-		else
-			return null;
-	}
+    public static Playable getGame(String gameName) {
+        if (gameName == "'01 Game")
+            return new Game01();
+        else if (gameName == "Cricket")
+            return new Cricket();
+        else if (gameName == "Master Cricket")
+            return new MasterCricket();
+        else
+            return null;
+    }
 }

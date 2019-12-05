@@ -6,14 +6,22 @@ package com.rmaj91.utility;
  */
 public class Utilities {
 
-    /*Variables*/
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     public static final Filters filters = new Filters();
 
-    /*Private Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     private Utilities() {
     }
 
-    /*Public Static Methods*/
+
+    //==================================================================================================
+    // Public Static Methods
+    //==================================================================================================
 
     /**
      * This method calculates radius. method use pythagorean theorem
@@ -41,7 +49,9 @@ public class Utilities {
         return angle;
     }
 
-    /** This method uses cartesian x and y coordinates and returns index of angle scope(mapped in Filters)
+    /**
+     * This method uses cartesian x and y coordinates and returns index of angle scope(mapped in Filters)
+     *
      * @param xCoordinate Cartesian x coordinate
      * @param yCoordinate Cartesian y coordinate
      * @return index of angle scope
@@ -54,7 +64,9 @@ public class Utilities {
         return 20;
     }
 
-    /** This method uses cartesian x and y coordinate and returns index of radius scope(mapped in Filters)
+    /**
+     * This method uses cartesian x and y coordinate and returns index of radius scope(mapped in Filters)
+     *
      * @param x Cartesian x coordinate
      * @param y Cartesian y coordinate
      * @return index of radius scope

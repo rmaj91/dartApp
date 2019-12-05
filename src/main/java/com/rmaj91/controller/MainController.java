@@ -26,9 +26,13 @@ import javafx.stage.WindowEvent;
 
 public class MainController implements Initializable {
 
+	/*Constansts*///////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static final int PLAYERS_NAME_MAX_LENGTH = 8;
 
-	/*Dependencies*/
+
+	/*Dependencies*/////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private GamesRepositoryImpl gamesRepository;
 	private SoundPlayer soundPlayer;
 	private static Stage stage;
@@ -44,7 +48,8 @@ public class MainController implements Initializable {
 	private BoardController boardController;
 
 
-	/*JavaFX elements*/
+	/*JavaFX elements*//////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@FXML
 	private StackPane mainTopPane;
 
@@ -54,14 +59,18 @@ public class MainController implements Initializable {
 	@FXML
 	private Slider volumeSlider;
 
-	/*Variables*/
+
+	/*Variables*////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private double xOffSet = 0;
 	private double yOffSet = 0;
 
-	/*Initalizing*/
+
+	/*Initalizing*//////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		createGameRepository();
+		gamesRepository = new GamesRepositoryImpl();
 		createSoundPlayer();
 
 		injectGame01Dependencies();
@@ -78,6 +87,103 @@ public class MainController implements Initializable {
 		stage.setOnCloseRequest((e)->{closeApplication(e);});
 		makeAppWindowDragable();
 		setVolumeSliderListener();
+	}
+
+
+	/*Events*///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void minimalizeIconClicked(MouseEvent event) {
+		stage.setIconified(true);
+    }
+
+	public void closeIconClicked(MouseEvent event) {
+		closeApplication(null);
+	}
+
+	public void newGameIconClicked(){
+		if(!gamesRepository.isEmpty()){
+			Alert a = new Alert(Alert.AlertType.NONE, "Are you sure you want to abandon game?", ButtonType.YES,
+					ButtonType.NO);
+			Optional<ButtonType> confirm = a.showAndWait();
+			if (confirm.isPresent() && confirm.get() == ButtonType.NO)
+				return;
+		}
+		gamesRepository.clear();
+		boardController.getGame01PlayersTable().getChildren().clear();
+		welcomeController.toFront();
+		welcomeController.getChooseGamePane().toFront();
+	}
+
+	public void saveGameIconClicked() {
+		gamesRepository.saveGame();
+	}
+
+	public void loadGameIconClicked() {
+		welcomeController.loadExistingGameButtonClicked();
+	}
+
+	public void volumeIconClicked(){
+		if(volumeIcon.getOpacity() == 0.58){
+			volumeIcon.setOpacity(1);
+			volumeIcon.setImage(new Image("images/volume_up.png"));
+			volumeSlider.setDisable(false);
+		}
+		else{
+			volumeIcon.setOpacity(0.58);
+			volumeIcon.setImage(new Image("images/volume_off.png"));
+			volumeSlider.setDisable(true);
+		}
+		soundPlayer.setSoundsActive(!volumeSlider.isDisable());
+	}
+
+	public void closeApplication(WindowEvent event) {
+		Alert alert = new Alert(Alert.AlertType.NONE, "Are you sure you want to quit?", ButtonType.YES,
+				ButtonType.NO);
+		Optional<ButtonType> confirm = alert.showAndWait();
+		if (confirm.isPresent() && confirm.get() == ButtonType.YES) {
+			stage.close();
+		}
+		else if (event != null)
+			event.consume();
+	}
+
+	public void paneIconHoverIn(MouseEvent event) {
+
+		((Pane)event.getSource()).setStyle("-fx-background-color: white;");
+	}
+
+	public void paneIconHoverOut(MouseEvent event) {
+		((Pane)event.getSource()).setStyle("-fx-background-color: #8f2f28;");
+	}
+
+	public void resizeIconHoverIn(MouseEvent event) {
+		((Polygon)event.getSource()).setFill(Color.rgb(30,42,200));
+		((Polygon)event.getSource()).setStroke(Color.rgb(30,42,200));
+	}
+
+	public void resizeIconHoverOut(MouseEvent event) {
+		((Polygon)event.getSource()).setFill(Color.BLACK);
+		((Polygon)event.getSource()).setStroke(Color.BLACK);
+	}
+
+
+	/*Private Methods*//////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private void makeAppWindowDragable() {
+		mainTopPane.setOnMousePressed((event) -> {
+			xOffSet = event.getSceneX();
+			yOffSet = event.getSceneY();
+			mainTopPane.setCursor(Cursor.CLOSED_HAND);
+		});
+		mainTopPane.setOnMouseDragged((event) -> {
+			stage.setX(event.getScreenX() - xOffSet);
+			stage.setY(event.getScreenY() - yOffSet);
+			stage.setOpacity(0.92);
+		});
+		mainTopPane.setOnMouseReleased((event) -> {
+			mainTopPane.setCursor(Cursor.DEFAULT);
+			stage.setOpacity(1.0);
+		});
 	}
 
 	private void setVolumeSliderListener() {
@@ -148,112 +254,10 @@ public class MainController implements Initializable {
 		soundPlayer.setVolumeLevel(volumeSlider.getValue());
 	}
 
-	private void createGameRepository() {
-		gamesRepository = new GamesRepositoryImpl();
-		gamesRepository.setBoardController(boardController);
-	}
 
-	/*Getters & Setters*/
+	/*Getters & Setters*////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static void setStage(Stage stage) {
 		MainController.stage = stage;
-	}
-
-
-
-	/*Events*/
-	public void minimalizeIconClicked(MouseEvent event) {
-		stage.setIconified(true);
-    }
-
-	public void closeIconClicked(MouseEvent event) {
-		closeApplication(null);
-	}
-
-	public void newGameIconClicked(){
-		if(!gamesRepository.isEmpty()){
-			Alert a = new Alert(Alert.AlertType.NONE, "Are you sure you want to abandon game?", ButtonType.YES,
-					ButtonType.NO);
-			Optional<ButtonType> confirm = a.showAndWait();
-			if (confirm.isPresent() && confirm.get() == ButtonType.NO)
-				return;
-		}
-		gamesRepository.clear();
-		boardController.getGame01PlayersTable().getChildren().clear();
-		welcomeController.toFront();
-		welcomeController.getChooseGamePane().toFront();
-	}
-
-	public void saveGameIconClicked() {
-		gamesRepository.saveGame();
-	}
-
-	public void loadGameIconClicked() {
-		welcomeController.loadExistingGameButtonClicked();
-	}
-
-	public void volumeIconClicked(){
-		if(volumeIcon.getOpacity() == 0.58){
-			volumeIcon.setOpacity(1);
-			volumeIcon.setImage(new Image("images/volume_up.png"));
-			volumeSlider.setDisable(false);
-		}
-		else{
-			volumeIcon.setOpacity(0.58);
-			volumeIcon.setImage(new Image("images/volume_off.png"));
-			volumeSlider.setDisable(true);
-		}
-		soundPlayer.setSoundsActive(!volumeSlider.isDisable());
-	}
-
-	public void closeApplication(WindowEvent event) {
-		Alert alert = new Alert(Alert.AlertType.NONE, "Are you sure you want to quit?", ButtonType.YES,
-				ButtonType.NO);
-		Optional<ButtonType> confirm = alert.showAndWait();
-		if (confirm.isPresent() && confirm.get() == ButtonType.YES) {
-			stage.close();
-		}
-		else if (event != null)
-			event.consume();
-	}
-
-
-	/*Highlighting Menu Icons Events*/
-	public void paneIconHoverIn(MouseEvent event) {
-
-		((Pane)event.getSource()).setStyle("-fx-background-color: white;");
-	}
-
-	public void paneIconHoverOut(MouseEvent event) {
-		((Pane)event.getSource()).setStyle("-fx-background-color: #8f2f28;");
-	}
-
-	public void resizeIconHoverIn(MouseEvent event) {
-		((Polygon)event.getSource()).setFill(Color.rgb(30,42,200));
-		((Polygon)event.getSource()).setStroke(Color.rgb(30,42,200));
-	}
-
-	public void resizeIconHoverOut(MouseEvent event) {
-		((Polygon)event.getSource()).setFill(Color.BLACK);
-		((Polygon)event.getSource()).setStroke(Color.BLACK);
-	}
-
-
-
-	/*Private Methods*/
-	private void makeAppWindowDragable() {
-		mainTopPane.setOnMousePressed((event) -> {
-			xOffSet = event.getSceneX();
-			yOffSet = event.getSceneY();
-			mainTopPane.setCursor(Cursor.CLOSED_HAND);
-		});
-		mainTopPane.setOnMouseDragged((event) -> {
-			stage.setX(event.getScreenX() - xOffSet);
-			stage.setY(event.getScreenY() - yOffSet);
-			stage.setOpacity(0.92);
-		});
-		mainTopPane.setOnMouseReleased((event) -> {
-			mainTopPane.setCursor(Cursor.DEFAULT);
-			stage.setOpacity(1.0);
-		});
 	}
 }	

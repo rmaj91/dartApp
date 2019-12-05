@@ -1,7 +1,6 @@
 package com.rmaj91.repository;
 
 import com.rmaj91.Main;
-import com.rmaj91.controller.BoardController;
 import com.rmaj91.domain.Cricket;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.MasterCricket;
@@ -18,27 +17,23 @@ import java.util.List;
 
 public class GamesRepositoryImpl implements GamesRepository {
 
-    /*Dependencies*/
-    private BoardController boardController;
-
-    /*Variables*/
+    //==================================================================================================
+    // Games Collection
+    //==================================================================================================
     private List<Playable> gamesList;
 
-    /*Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     public GamesRepositoryImpl() {
         gamesList = new LinkedList<>();
     }
 
-    /*Setters & Getters*/
-    public void setBoardController(BoardController boardController) {
-        this.boardController = boardController;
-    }
 
-
-
-    //////////////////
-    /*Public Methods*/
-    //////////////////
+    //==================================================================================================
+    // Public Methods from GamesRepository interface
+    //==================================================================================================
     @Override
     public void pushRound(Playable round) {
         gamesList.add(round);
@@ -88,15 +83,14 @@ public class GamesRepositoryImpl implements GamesRepository {
 
         if (gamesList.isEmpty())
             return false;
-        //Show save file dialog
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(Main.stage);
         FileOutputStream outputStream;
-        try{
+        try {
             outputStream = new FileOutputStream(file);
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
 
@@ -106,28 +100,20 @@ public class GamesRepositoryImpl implements GamesRepository {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(gamesList);
 
-            //writing class name
             String className = this.getCurrentRound().getClass().getName();
             dataOutputStream.writeUTF(className);
             if (className.equals("com.rmaj91.domain.Game01")) {
-                dataOutputStream.writeBoolean(Game01.isDoubleOut());
-                dataOutputStream.writeInt(Game01.getNumberOfPlayers());
-                dataOutputStream.writeInt(Game01.getMaxNumberOfRounds());
+                writeGame01StaticVariables(dataOutputStream);
             } else if (className.equals("com.rmaj91.domain.Cricket")) {
-                dataOutputStream.writeInt(Cricket.getNumberOfPlayers());
-                dataOutputStream.writeInt(Cricket.getMaxNumberOfRounds());
-                dataOutputStream.writeInt(Cricket.getCurrentFieldToThrowIndex());
+                writeCricketStaticVariables(dataOutputStream);
                 objectOutputStream.writeObject(Cricket.getFieldsToThrow());
             } else if (className.equals("com.rmaj91.domain.MasterCricket")) {
-                dataOutputStream.writeInt(MasterCricket.getNumberOfPlayers());
-                dataOutputStream.writeInt(MasterCricket.getMaxNumberOfRounds());
-                dataOutputStream.writeInt(MasterCricket.getCurrentFieldToThrowIndex());
+                writeMasterCricketStaticVariables(dataOutputStream);
                 objectOutputStream.writeObject(MasterCricket.getFieldsToThrow());
             }
 
             dataOutputStream.close();
         } catch (Exception exception) {
-            exception.printStackTrace();
             return false;
         }
 
@@ -156,33 +142,23 @@ public class GamesRepositoryImpl implements GamesRepository {
             gamesList = (List<Playable>) objectInputStream.readObject();
 
             String className = dataInputStream.readUTF();
-            if (className.equals("com.rmaj91.domain.Game01")) {
-//                Game01.setStaticVariables(dataInputStream.readBoolean(),dataInputStream.readInt(),dataInputStream.readInt());
-                Game01.setDoubleOut(dataInputStream.readBoolean());
-                Game01.setNumberOfPlayers(dataInputStream.readInt());
-                Game01.setMaxNumberOfRounds(dataInputStream.readInt());
-            } else if (className.equals("com.rmaj91.domain.Cricket")) {
-                Cricket.setNumberOfPlayers(dataInputStream.readInt());
-                Cricket.setMaxNumberOfRounds(dataInputStream.readInt());
-                Cricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
-                Cricket.setFieldsToThrow((ArrayList<Integer>) objectInputStream.readObject());
-            }else if (className.equals("com.rmaj91.domain.MasterCricket")) {
-                MasterCricket.setNumberOfPlayers(dataInputStream.readInt());
-                MasterCricket.setMaxNumberOfRounds(dataInputStream.readInt());
-                MasterCricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
-                MasterCricket.setFieldsToThrow((ArrayList<Integer>) objectInputStream.readObject());
-            }
+            if (className.equals("com.rmaj91.domain.Game01"))
+                loadGame01StaticVariables(dataInputStream);
+            else if (className.equals("com.rmaj91.domain.Cricket"))
+                loadCricketStaticVariables(dataInputStream, objectInputStream);
+            else if (className.equals("com.rmaj91.domain.MasterCricket"))
+                loadMasterCricketStaticVariables(dataInputStream, objectInputStream);
+
 
             dataInputStream.close();
         } catch (Exception exception) {
-            exception.printStackTrace();
             showInformationWindow("Error while loading", "Game cannot be loaded!");
             return false;
         }
         this.getCurrentRound().setBoardViewVisible();
-
         return true;
     }
+
 
     @Override
     public void clear() {
@@ -195,12 +171,53 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
 
-    /*Private Methods*/
+    //==================================================================================================
+    // Private Methods
+    //==================================================================================================
     private void showInformationWindow(String title, String header) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.showAndWait();
+    }
+
+
+    private void writeMasterCricketStaticVariables(DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeInt(MasterCricket.getNumberOfPlayers());
+        dataOutputStream.writeInt(MasterCricket.getMaxNumberOfRounds());
+        dataOutputStream.writeInt(MasterCricket.getCurrentFieldToThrowIndex());
+    }
+
+    private void writeCricketStaticVariables(DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeInt(Cricket.getNumberOfPlayers());
+        dataOutputStream.writeInt(Cricket.getMaxNumberOfRounds());
+        dataOutputStream.writeInt(Cricket.getCurrentFieldToThrowIndex());
+    }
+
+    private void writeGame01StaticVariables(DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeBoolean(Game01.isDoubleOut());
+        dataOutputStream.writeInt(Game01.getNumberOfPlayers());
+        dataOutputStream.writeInt(Game01.getMaxNumberOfRounds());
+    }
+
+    private void loadMasterCricketStaticVariables(DataInputStream dataInputStream, ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        MasterCricket.setNumberOfPlayers(dataInputStream.readInt());
+        MasterCricket.setMaxNumberOfRounds(dataInputStream.readInt());
+        MasterCricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
+        MasterCricket.setFieldsToThrow((ArrayList<Integer>) objectInputStream.readObject());
+    }
+
+    private void loadCricketStaticVariables(DataInputStream dataInputStream, ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        Cricket.setNumberOfPlayers(dataInputStream.readInt());
+        Cricket.setMaxNumberOfRounds(dataInputStream.readInt());
+        Cricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
+        Cricket.setFieldsToThrow((ArrayList<Integer>) objectInputStream.readObject());
+    }
+
+    private void loadGame01StaticVariables(DataInputStream dataInputStream) throws IOException {
+        Game01.setDoubleOut(dataInputStream.readBoolean());
+        Game01.setNumberOfPlayers(dataInputStream.readInt());
+        Game01.setMaxNumberOfRounds(dataInputStream.readInt());
     }
 
 

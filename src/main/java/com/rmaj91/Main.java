@@ -24,7 +24,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             MainController.setStage(primaryStage);
-
             AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("Main.fxml"));
             Scene scene = new Scene(root);
 //            scene.getStylesheets().add(getClass().getResource("css/main.css").toExternalForm());

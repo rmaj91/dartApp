@@ -11,7 +11,9 @@ import java.io.File;
  */
 public class SoundPlayer {
 
-    /*Variables*/
+    //==================================================================================================
+    // Properties
+    //==================================================================================================
     private boolean soundsActive;
     /**
      * This is global control parameter ofor application volume, scope from 0.0 to 1.0
@@ -20,12 +22,18 @@ public class SoundPlayer {
     private double volumeLevel;
     private Clip previousClip = null;
 
-    /*Constructor*/
+
+    //==================================================================================================
+    // Constructors
+    //==================================================================================================
     public SoundPlayer() {
         soundsActive = true;
     }
 
-    /*Getters & Setters*/
+
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public void setSoundsActive(boolean soundsActive) {
         this.soundsActive = soundsActive;
     }
@@ -36,24 +44,28 @@ public class SoundPlayer {
             this.volumeLevel = 0;
     }
 
-    /*Public Methods*/
+
+    //==================================================================================================
+    // Public Methods
+    //==================================================================================================
 
     /**
      * This method plays the ".wav" audio from /resources/sounds/ directory, it determines the name of audio
      * by passed parameter which is the dart boards field name eg. "DOUBLE 25" it tranforms it to "double25.wav"
      * if doesnt find plays default "throw.wav"
+     *
      * @param fieldName the name of thrown field
      */
     public void playSound(String fieldName) {
-        if(!soundsActive)
+        if (!soundsActive)
             return;
-        if(previousClip != null)
+        if (previousClip != null)
             previousClip.stop();
         try {
-            String fileName = fieldName.toLowerCase().replaceAll("\\s","");
+            String fileName = fieldName.toLowerCase().replaceAll("\\s", "");
             File file = null;
             try {
-                file = new File(getClass().getClassLoader().getResource("sounds/" + fileName+ ".wav").getFile());
+                file = new File(getClass().getClassLoader().getResource("sounds/" + fileName + ".wav").getFile());
             } catch (NullPointerException e) {
                 file = new File(getClass().getClassLoader().getResource("sounds/throw.wav").getFile());
             }
@@ -62,14 +74,11 @@ public class SoundPlayer {
             previousClip = clip;
             clip.open(audioInputStream);
 
-            // Setting volume control
-            FloatControl control = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            // determining the allowed range of volume control
-            float range = (control.getMaximum() - control.getMinimum());
+            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            float volumeControlRange = (volumeControl.getMaximum() - volumeControl.getMinimum());
 
-            // calculating resultVolume
-            double resultVolume = (range * volumeLevel * volumeScale + control.getMinimum());
-            control.setValue((float) resultVolume);
+            double resultVolume = (volumeControlRange * volumeLevel * volumeScale + volumeControl.getMinimum());
+            volumeControl.setValue((float) resultVolume);
             clip.start();
         } catch (Exception exception) {
             System.out.println(exception);
