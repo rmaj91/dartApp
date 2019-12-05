@@ -64,6 +64,26 @@ public class Cricket implements Playable, Serializable {
         return players;
     }
 
+    public static void setNumberOfPlayers(int numberOfPlayers) {
+        Cricket.numberOfPlayers = numberOfPlayers;
+    }
+
+    public static void setMaxNumberOfRounds(int maxNumberOfRounds) {
+        Cricket.maxNumberOfRounds = maxNumberOfRounds;
+    }
+
+    public static int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public static int getMaxNumberOfRounds() {
+        return maxNumberOfRounds;
+    }
+
+    public static int getCurrentFieldToThrowIndex() {
+        return currentFieldToThrowIndex;
+    }
+
     public static void setFieldsToThrow(ArrayList<Integer> fieldsToThrow) {
         Cricket.fieldsToThrow = fieldsToThrow;
     }
@@ -158,8 +178,9 @@ public class Cricket implements Playable, Serializable {
         cricketController.removeAndCreatePlayersVBoxes();
 
         this.displayRoundState();
-        boardController.toFront();
         boardController.getMainStackPane().setDisable(false);
+        boardController.getGame01ScoreTable().toBack();
+        boardController.toFront();
         boardController.getCricketsScoreTable().toFront();
         boardController.getThrowField1().requestFocus();
     }
@@ -248,7 +269,8 @@ public class Cricket implements Playable, Serializable {
                 checkIfWinner();
 
                 if (isFieldClosed()) {
-                    currentFieldToThrowIndex++;
+                    if(currentFieldToThrowIndex < 6)
+                        currentFieldToThrowIndex++;
                     currentThrowPointsToAdd = 0;
                 }
                 int currentPlayerPoints = currentPlayer.getPoints();

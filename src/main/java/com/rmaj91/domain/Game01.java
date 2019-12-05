@@ -185,8 +185,9 @@ public class Game01 implements Playable, Serializable {
         game01Controller.removeAndCreatePlayersVBoxes();
 
         this.displayRoundState();
-        boardController.toFront();
         boardController.getMainStackPane().setDisable(false);
+        boardController.getCricketsScoreTable().toBack();
+        boardController.toFront();
         boardController.getGame01PlayersTable().toFront();
         boardController.getThrowField1().requestFocus();
     }
@@ -218,7 +219,7 @@ public class Game01 implements Playable, Serializable {
             int thrownPoints = throwValue.getValue() * throwValue.getMulitplier();
             currentRoundPoints = currentRoundPoints - thrownPoints;
             totalThrownValue += thrownPoints;
-            
+
             if (isWinner(currentRoundPoints, throwValue))
                 return;
             if ((isOverThrow(currentRoundPoints, previousRoundPoints) || ifThrownOver180(totalThrownValue))) {

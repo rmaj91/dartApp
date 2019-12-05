@@ -4,6 +4,7 @@ import com.rmaj91.Main;
 import com.rmaj91.controller.BoardController;
 import com.rmaj91.domain.Cricket;
 import com.rmaj91.domain.Game01;
+import com.rmaj91.domain.MasterCricket;
 import com.rmaj91.interfaces.GamesRepository;
 import com.rmaj91.interfaces.Playable;
 
@@ -36,45 +37,44 @@ public class GamesRepositoryImpl implements GamesRepository {
     //////////////////
     /*Public Methods*/
     //////////////////
-	@Override
-	public void pushRound(Playable round) {
-		gamesList.add(round);
-	}
+    @Override
+    public void pushRound(Playable round) {
+        gamesList.add(round);
+    }
 
-	@Override
-	public Playable getCurrentRound() {
-		return gamesList.get(gamesList.size()-1);
-	}
+    @Override
+    public Playable getCurrentRound() {
+        return gamesList.get(gamesList.size() - 1);
+    }
 
-	@Override
-	public boolean pullRound() {
-		if(gamesList.size()>2){
-			Playable round = gamesList.get(gamesList.size()-1);
-			gamesList.remove(round);
-			return true;
-		}
-		else
-			return false;
-	}
+    @Override
+    public boolean pullRound() {
+        if (gamesList.size() > 2) {
+            Playable round = gamesList.get(gamesList.size() - 1);
+            gamesList.remove(round);
+            return true;
+        } else
+            return false;
+    }
 
-	@Override
-	public void createNewGame(Playable round) {
-		gamesList = new LinkedList<>();
-		gamesList.add(round);
-	}
+    @Override
+    public void createNewGame(Playable round) {
+        gamesList = new LinkedList<>();
+        gamesList.add(round);
+    }
 
-	@Override
-	public int getNumberOfRound(Playable round) {
-		return gamesList.indexOf(round);
-	}
+    @Override
+    public int getNumberOfRound(Playable round) {
+        return gamesList.indexOf(round);
+    }
 
-	@Override
-	public Playable getPreviousRound() {
-		if(gamesList.size() == 1)
-			return null;
-		else
-			return gamesList.get(gamesList.size()-2);
-	}
+    @Override
+    public Playable getPreviousRound() {
+        if (gamesList.size() == 1)
+            return null;
+        else
+            return gamesList.get(gamesList.size() - 2);
+    }
 
     @Override
     public Playable getZeroRound() {
@@ -82,17 +82,24 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
     @Override
-	public boolean saveGame() {
+    public boolean saveGame() {
 
-		if(gamesList.isEmpty())
-			return false;
+        if (gamesList.isEmpty())
+            return false;
         //Show save file dialog
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(Main.stage);
+        FileOutputStream outputStream;
+        try{
+            outputStream = new FileOutputStream(file);
+        }catch (Exception e){
+            return false;
+        }
+
         try {
-            FileOutputStream outputStream = new FileOutputStream(file);
+            outputStream = new FileOutputStream(file);
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(gamesList);
@@ -100,31 +107,34 @@ public class GamesRepositoryImpl implements GamesRepository {
             //writing class name
             String className = this.getCurrentRound().getClass().getName();
             dataOutputStream.writeUTF(className);
-            if(className.equals("com.rmaj91.domain.Game01")) {
+            if (className.equals("com.rmaj91.domain.Game01")) {
                 dataOutputStream.writeBoolean(Game01.isDoubleOut());
                 dataOutputStream.writeInt(Game01.getNumberOfPlayers());
                 dataOutputStream.writeInt(Game01.getMaxNumberOfRounds());
+            } else if (className.equals("com.rmaj91.domain.Cricket")) {
+                dataOutputStream.writeInt(Cricket.getNumberOfPlayers());
+                dataOutputStream.writeInt(Cricket.getMaxNumberOfRounds());
+                dataOutputStream.writeInt(Cricket.getCurrentFieldToThrowIndex());
+                objectOutputStream.writeObject(Cricket.getFieldsToThrow());
+            } else if (className.equals("com.rmaj91.domain.MasterCricket")) {
+//                dataOutputStream.writeInt(MasterCricket.getNumberOfPlayers());
+//                dataOutputStream.writeInt(MasterCricket.getMaxNumberOfRounds());
+//                dataOutputStream.writeInt(MasterCricket.getCurrentFieldToThrowIndex());
+//                objectOutputStream.writeObject(MasterCricket.getFieldsToThrow());
             }
-            //            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
-//                dataOutputStream.writeInt(Cricket.getPlayersQuantity());
-//                dataOutputStream.writeInt(Cricket.getRoundsMaxNumber());
-//                dataOutputStream.writeInt(Cricket.getCurrentFieldToThrowIndex());
-//                objectOutputStream.writeObject(Cricket.getFieldsToHit());
-            //          }
 
             dataOutputStream.close();
-
         } catch (Exception exception) {
             exception.printStackTrace();
             return false;
         }
 
-        showInformationWindow("Game Saved!","Game saved successfully :)");
-		return true;
-	}
+        showInformationWindow("Game Saved!", "Game saved successfully :)");
+        return true;
+    }
 
     @Override
-	public boolean loadGame() {
+    public boolean loadGame() {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Drt files (*.drt)", "*.drt");
         fileChooser.getExtensionFilters().add(extFilter);
@@ -134,40 +144,43 @@ public class GamesRepositoryImpl implements GamesRepository {
         FileInputStream inputStream = null;
         try {
             inputStream = new FileInputStream(file);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             return false;
         }
 
-        try{
+        try {
             dataInputStream = new DataInputStream(inputStream);
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             gamesList = (List<Playable>) objectInputStream.readObject();
 
             String className = dataInputStream.readUTF();
-            if(className.equals("com.rmaj91.domain.Game01")) {
+            if (className.equals("com.rmaj91.domain.Game01")) {
 //                Game01.setStaticVariables(dataInputStream.readBoolean(),dataInputStream.readInt(),dataInputStream.readInt());
                 Game01.setDoubleOut(dataInputStream.readBoolean());
                 Game01.setNumberOfPlayers(dataInputStream.readInt());
                 Game01.setMaxNumberOfRounds(dataInputStream.readInt());
+            } else if (className.equals("com.rmaj91.domain.Cricket")) {
+                Cricket.setNumberOfPlayers(dataInputStream.readInt());
+                Cricket.setMaxNumberOfRounds(dataInputStream.readInt());
+                Cricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
+                Cricket.setFieldsToThrow((ArrayList<Integer>) objectInputStream.readObject());
+            }else if (className.equals("com.rmaj91.domain.MasterCricket")) {
+//                MasterCricket.setNumberOfPlayers(dataInputStream.readInt());
+//                MasterCricket.setMaxNumberOfRounds(dataInputStream.readInt());
+//                MasterCricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
+//                MasterCricket.setFieldsToThrow((ArrayList<Integer>) objectInputStream.readObject());
             }
-//            else if(className.equals("com.rmaj91.domain.Cricket") || className.equals("com.rmaj91.domain.MasterCricket")){
-//                Cricket.setPlayersQuantity(dataInputStream.readInt());
-//                Cricket.setRoundsMaxNumber(dataInputStream.readInt());
-//                Cricket.setCurrentFieldToThrowIndex(dataInputStream.readInt());
-//                Cricket.setFieldsToHit((ArrayList<Integer>) objectInputStream.readObject());
-//          }
-            dataInputStream.close();
 
+            dataInputStream.close();
         } catch (Exception exception) {
             exception.printStackTrace();
-            showInformationWindow("Error while loading","Game cannot be loaded!");
+            showInformationWindow("Error while loading", "Game cannot be loaded!");
             return false;
         }
         this.getCurrentRound().setBoardViewVisible();
 
         return true;
-
-	}
+    }
 
     @Override
     public void clear() {
@@ -181,7 +194,7 @@ public class GamesRepositoryImpl implements GamesRepository {
 
 
     /*Private Methods*/
-    private void showInformationWindow(String title,String header) {
+    private void showInformationWindow(String title, String header) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
