@@ -17,6 +17,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -59,6 +60,12 @@ public class MainController implements Initializable {
     private ImageView volumeIcon;
     @FXML
     private Slider volumeSlider;
+    @FXML
+    private Polygon resizeButton;
+    @FXML
+    private StackPane mainStackPane;
+    @FXML
+    private AnchorPane rootPane;
 
 
     //==================================================================================================
@@ -99,6 +106,7 @@ public class MainController implements Initializable {
             closeApplication(e);
         });
         makeAppWindowDragable();
+        makeAppWindowResizable();
         setVolumeSliderListener();
     }
 
@@ -106,6 +114,13 @@ public class MainController implements Initializable {
     //==================================================================================================
     // Events Methods
     //==================================================================================================
+    public void maximalizeIconClicked(MouseEvent event) {
+        if(stage.isFullScreen())
+            stage.setFullScreen(false);
+        else
+            stage.setFullScreen(true);
+    }
+
     public void minimalizeIconClicked(MouseEvent event) {
         stage.setIconified(true);
     }
@@ -196,6 +211,25 @@ public class MainController implements Initializable {
         mainTopPane.setOnMouseReleased((event) -> {
             mainTopPane.setCursor(Cursor.DEFAULT);
             stage.setOpacity(1.0);
+        });
+    }
+
+    public void makeAppWindowResizable(){
+        resizeButton.setOnMousePressed((event) -> {
+            xOffSet = event.getSceneX();
+            yOffSet = event.getSceneY();
+            resizeButton.setCursor(Cursor.MOVE);
+        });
+        resizeButton.setOnMouseDragged((event) -> {
+//            double scaleX = xOffSet;
+            rootPane.setScaleX(0.8);
+            rootPane.setScaleY(0.8);
+
+//            stage.setX(event.getScreenX() - xOffSet);
+//            stage.setY(event.getScreenY() - yOffSet);
+        });
+        resizeButton.setOnMouseReleased((event) -> {
+            resizeButton.setCursor(Cursor.SE_RESIZE);
         });
     }
 

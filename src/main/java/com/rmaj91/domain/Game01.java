@@ -259,9 +259,9 @@ public class Game01 implements Playable, Serializable {
     }
 
     private void displayAllPlayersPointsAndNames() {
-        ObservableList<Node> playerVBoxes = boardController.getGame01PlayersTable().getChildren();
+        ObservableList<Node> playersVBoxes = boardController.getGame01PlayersTable().getChildren();
         for (int i = 0; i < numberOfPlayers; i++) {
-            Node node1 = playerVBoxes.get(i);
+            Node node1 = playersVBoxes.get(i);
             Node node2 = ((VBox) node1).getChildren().get(1);
             ((Label) node2).setText(String.valueOf(players.get(i).getPoints()));
         }

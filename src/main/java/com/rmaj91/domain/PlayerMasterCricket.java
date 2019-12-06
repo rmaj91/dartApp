@@ -24,7 +24,7 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
     private int[] hittedFields;
     private String[] throwFieldsContent;
     private int currentThrow;
-    private int currentThrownFieldIndex;
+//    private int currentThrownFieldIndex;
 
 
     //==================================================================================================
@@ -38,7 +38,6 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
         throwFieldsContent = new String[3];
         Arrays.fill(throwFieldsContent, new String());
         currentThrow = 1;
-        currentThrownFieldIndex = 0;
     }
 
     public PlayerMasterCricket(PlayerMasterCricket playerMasterCricket) {
@@ -54,7 +53,6 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
         throwFieldsContent = new String[3];
         Arrays.fill(throwFieldsContent, new String());
         currentThrow = 1;
-        this.currentThrownFieldIndex = playerMasterCricket.currentThrownFieldIndex;
     }
 
 
@@ -67,9 +65,9 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
         this.hittedFields = hittedFields;
     }
 
-    public void setCurrentThrownFieldIndex(int currentThrownFieldIndex) {
-        this.currentThrownFieldIndex = currentThrownFieldIndex;
-    }
+//    public void setCurrentThrownFieldIndex(int currentThrownFieldIndex) {
+//        this.currentThrownFieldIndex = currentThrownFieldIndex;
+//    }
 
     public void setPoints(int[] points) {
         this.points = points;

@@ -150,8 +150,8 @@ public class Game01Controller implements Initializable {
      * VBoxes contains labels with name and amount of points
      */
     public void removeAndCreatePlayersVBoxes() {
-        while (boardController.getGame01PlayersTable().getChildren().size() > 1)
-            boardController.getGame01PlayersTable().getChildren().remove(1);
+        while (boardController.getGame01PlayersTable().getChildren().size() > 0)
+            boardController.getGame01PlayersTable().getChildren().remove(0);
 
         int numberOfPlayers = ((Game01) gamesRepository.getZeroRound()).getPlayers().size();
         for (int i = 0; i < numberOfPlayers; i++) {

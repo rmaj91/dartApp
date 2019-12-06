@@ -23,7 +23,7 @@
             <fx:include fx:id="game01" source="Game01.fxml" />
             <fx:include fx:id="welcome" source="Welcome.fxml" />
          </children></StackPane>
-      <HBox fx:id="mainBottomPane" alignment="CENTER_RIGHT" layoutY="560.0" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #8f2f28;">
+      <HBox fx:id="mainBottomPane" alignment="CENTER_RIGHT" layoutY="560.0" maxHeight="40.0" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #8f2f28;">
          <children>
             <ImageView fx:id="volumeIcon" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#volumeIconClicked" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -44,17 +44,17 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Slider>
-            <Polygon onMouseEntered="#resizeIconHoverIn" onMouseExited="#resizeIconHoverOut" points="-18.0, 40.0, 0.0, 40.0, 0.0, 20.5" stroke="BLACK" strokeType="INSIDE">
+            <Polygon fx:id="resizeButton" onMouseEntered="#resizeIconHoverIn" onMouseExited="#resizeIconHoverOut" points="-18.0, 40.0, 0.0, 40.0, 0.0, 20.5" stroke="BLACK" strokeType="INSIDE">
                <HBox.margin>
                   <Insets top="20.0" />
                </HBox.margin>
                <cursor>
-                  <Cursor fx:constant="NW_RESIZE" />
+                  <Cursor fx:constant="SE_RESIZE" />
                </cursor>
             </Polygon>
          </children>
       </HBox>
-      <StackPane fx:id="mainTopPane" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #8f2f28;">
+      <StackPane fx:id="mainTopPane" maxHeight="40.0" prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #8f2f28;">
          <children>
             <Pane fx:id="backgroundPaneMin" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#minimalizeIconClicked" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
                <StackPane.margin>
@@ -74,7 +74,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Pane>
-            <Pane fx:id="backgroundPaneMax" maxHeight="40.0" maxWidth="40.0" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
+            <Pane fx:id="backgroundPaneMax" maxHeight="40.0" maxWidth="40.0" onMouseClicked="#maximalizeIconClicked" onMouseEntered="#paneIconHoverIn" onMouseExited="#paneIconHoverOut" opacity="0.65" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
                <StackPane.margin>
                   <Insets right="40.0" />
                </StackPane.margin>

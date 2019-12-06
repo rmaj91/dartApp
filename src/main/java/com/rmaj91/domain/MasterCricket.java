@@ -243,10 +243,8 @@ public class MasterCricket implements Playable, Serializable {
                 checkIfWinner();
                 if (isFieldClosed()) {
                     currentThrowPointsToAdd = 0;
-                    if (currentFieldToThrowIndex < 6) {
+                    if (currentFieldToThrowIndex < 6)
                         currentFieldToThrowIndex++;
-                        currentPlayer.setCurrentThrownFieldIndex(currentFieldToThrowIndex);
-                    }
                 }
                 addPointToPlayers(currentThrowPointsToAdd);
             } else {
