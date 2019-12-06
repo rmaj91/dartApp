@@ -23,68 +23,72 @@ import javafx.util.StringConverter;
 
 public class CricketController implements Initializable {
 
+    //==================================================================================================
+    // Constants
+    //==================================================================================================
     public final static int MIN_ROUNDS = 1;
     public final static int MAX_ROUNDS = 99;
     public final static int DEFAULT_ROUNDS = 25;
 
+
+    //==================================================================================================
+    // Dependencies
+    //==================================================================================================
     private BoardController boardController;
     private GamesRepository gamesRepository;
     private WelcomeController welcomeController;
 
+
+    //region JavaFX elements @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    //==================================================================================================
+    // JavaFX elements
+    //==================================================================================================
     @FXML
     private VBox newCricketPane;
-
     @FXML
     private Spinner<Integer> cricketRoundsBox;
-
     @FXML
     private RadioButton cricketRadioRoundsOther;
-
     @FXML
     private ToggleGroup radioPlayersGroup;
-
     @FXML
     private TextField cricketNamePlayer1;
-
     @FXML
     private TextField cricketNamePlayer2;
-
     @FXML
     private TextField cricketNamePlayer3;
-
     @FXML
     private TextField cricketNamePlayer4;
-
     @FXML
     private Spinner<Integer> cricketBoxField1;
-
     @FXML
     private Spinner<Integer> cricketBoxField2;
-
     @FXML
     private Spinner<Integer> cricketBoxField3;
-
     @FXML
     private Spinner<Integer> cricketBoxField4;
-
     @FXML
     private Spinner<Integer> cricketBoxField5;
-
     @FXML
     private Spinner<Integer> cricketBoxField6;
-
     @FXML
     private CheckBox cricketCheckBoxField7;
-
     @FXML
     private Spinner<Integer> cricketBoxField7;
+    //endregion
 
+
+    //==================================================================================================
+    // Arrays of elements
+    //==================================================================================================
     private TextField[] cricketPlayerNamesTextFields;
     private Spinner<Integer>[] cricketFieldsSpinners;
 
 
-
-    /*Setters & Getters*/
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public void setWelcomeController(WelcomeController welcomeController) {
         this.welcomeController = welcomeController;
     }
@@ -98,9 +102,9 @@ public class CricketController implements Initializable {
     }
 
 
-
-    /*Events*/
-    //////////
+    //==================================================================================================
+    // Events Methods
+    //==================================================================================================
     public void toFront() {
         newCricketPane.toFront();
     }
@@ -115,7 +119,6 @@ public class CricketController implements Initializable {
         else
             cricketBoxField7.setDisable(false);
     }
-
 
     /**
      * Method Initialize board view and games repository
@@ -134,7 +137,6 @@ public class CricketController implements Initializable {
         Cricket firstRound = new Cricket((Cricket) gamesRepository.getCurrentRound());
         gamesRepository.pushRound(firstRound);
         gamesRepository.getCurrentRound().displayRoundState();
-
         boardController.getMainStackPane().setDisable(false);
         boardController.toFront();
         boardController.getCricketsScoreTable().toFront();
@@ -142,13 +144,9 @@ public class CricketController implements Initializable {
     }
 
 
-
-
-
-    /*Initialize*/
-    //////////////
-    //////////////
-
+    //==================================================================================================
+    // Initializing
+    //==================================================================================================
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initCricketPlayerNamesTextFieldsArray();
@@ -160,7 +158,37 @@ public class CricketController implements Initializable {
     }
 
 
+    //==================================================================================================
+    // Public Methods
+    //==================================================================================================
+    /**
+     * Method creates VBoxes for players in cricketScoreTable at board view,
+     * VBoxes contains labels with name and amount of points and fields hits
+     */
+    public void removeAndCreatePlayersVBoxes() {
+        ObservableList<Node> children = boardController.getCricketsScoreTable().getChildren();
+        while (children.size() > 1)
+            children.remove(1);
 
+        int numberOfPlayers = ((Cricket) gamesRepository.getZeroRound()).getPlayers().size();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            VBox vBox = new VBox();
+            vBox.setAlignment(Pos.BOTTOM_CENTER);
+            vBox.setMinWidth(100);
+            for (int j = 0; j < 7; j++)
+                vBox.getChildren().add(createLabel(new String(""), false));
+
+            String playerName = ((Cricket) gamesRepository.getZeroRound()).getPlayers().get(i).getName();
+            vBox.getChildren().addAll(createLabel(playerName, false),
+                    createLabel(new String("0"), true));
+            boardController.getCricketsScoreTable().getChildren().add(vBox);
+        }
+    }
+
+
+    //==================================================================================================
+    // Private Methods
+    //==================================================================================================
     /**
      * Method defines number of rounds selected by radio buttons and returns it.
      */
@@ -239,32 +267,6 @@ public class CricketController implements Initializable {
             label.setText(String.valueOf(Cricket.getFieldsToThrow().get(i)));
         }
     }
-
-    /**
-     * Method creates VBoxes for players in cricketScoreTable at board view,
-     * VBoxes contains labels with name and amount of points and fields hits
-     */
-    public void removeAndCreatePlayersVBoxes() {
-        ObservableList<Node> children = boardController.getCricketsScoreTable().getChildren();
-        while (children.size() > 1)
-            children.remove(1);
-
-        int numberOfPlayers = ((Cricket) gamesRepository.getZeroRound()).getPlayers().size();
-        for (int i = 0; i < numberOfPlayers; i++) {
-            VBox vBox = new VBox();
-            vBox.setAlignment(Pos.BOTTOM_CENTER);
-            vBox.setMinWidth(100);
-            for (int j = 0; j < 7; j++)
-                vBox.getChildren().add(createLabel(new String(""), false));
-
-            String playerName = ((Cricket) gamesRepository.getZeroRound()).getPlayers().get(i).getName();
-            vBox.getChildren().addAll(createLabel(playerName, false),
-                    createLabel(new String("0"), true));
-            boardController.getCricketsScoreTable().getChildren().add(vBox);
-        }
-    }
-
-
 
     /**
      * Method created label for criketPlayersTable VBoxes

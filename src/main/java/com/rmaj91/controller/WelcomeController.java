@@ -19,30 +19,34 @@ import javafx.scene.layout.VBox;
 
 public class WelcomeController implements Initializable {
 
-    /*Dependencies*/
+    //==================================================================================================
+    // Dependencies
+    //==================================================================================================
     private GamesRepository gamesRepository;
     private Game01Controller game01Controller;
     private MainController mainController;
     private CricketController cricketController;
     private MasterCricketController masterCricketController;
 
-    /*JavaFX elements*/
+
+    //==================================================================================================
+    // JavaFX elements
+    //==================================================================================================
     @FXML
     private StackPane mainStackPane;
-
     @FXML
     private VBox aboutPane;
-
     @FXML
     private VBox chooseGamePane;
-
     @FXML
     private ComboBox<String> chooseGameComboBox;
-
     @FXML
     private VBox welcomePane;
 
-    /*Getters & Setters*/
+
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
@@ -55,40 +59,46 @@ public class WelcomeController implements Initializable {
         this.game01Controller = game01Controller;
     }
 
-	public void setCricketController(CricketController cricketController) {
-		this.cricketController = cricketController;
-	}
-	public void setMasterCricketController(MasterCricketController masterCricketController) {
-		this.masterCricketController = masterCricketController;
-	}
+    public void setCricketController(CricketController cricketController) {
+        this.cricketController = cricketController;
+    }
+
+    public void setMasterCricketController(MasterCricketController masterCricketController) {
+        this.masterCricketController = masterCricketController;
+    }
 
     public VBox getChooseGamePane() {
         return chooseGamePane;
     }
 
-    /*Initializing*/
+
+    //==================================================================================================
+    // Initialization
+    //==================================================================================================
     @Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		chooseGameComboBox.getItems().addAll("'01 Game","Cricket","Master Cricket");
-		chooseGameComboBox.getSelectionModel().selectFirst();
-	}
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        chooseGameComboBox.getItems().addAll("'01 Game", "Cricket", "Master Cricket");
+        chooseGameComboBox.getSelectionModel().selectFirst();
+    }
 
 
-	/*Events*/
+    //==================================================================================================
+    // Events Methods
+    //==================================================================================================
     public void aboutButtonClicked() {
-    	aboutPane.toFront();
+        aboutPane.toFront();
     }
 
     public void exitButtonClicked() {
-    	mainController.closeApplication(null);
+        mainController.closeApplication(null);
     }
 
     public void backToWelcomeButtonClicked() {
-    	welcomePane.toFront();
+        welcomePane.toFront();
     }
 
     public void createNewGameButtonClicked() {
-    	chooseGamePane.toFront();
+        chooseGamePane.toFront();
     }
 
     public void loadExistingGameButtonClicked() {
@@ -96,19 +106,18 @@ public class WelcomeController implements Initializable {
     }
 
     public void letsPlayButtonClicked() {
-    	if(chooseGameComboBox.getValue() == "'01 Game") {
-    		game01Controller.toFront();
-    	}    		
-    	else if(chooseGameComboBox.getValue() == "Cricket")
-    		cricketController.toFront();
-    	else if(chooseGameComboBox.getValue() == "Master Cricket")
-    		masterCricketController.toFront();
-    	
+        if (chooseGameComboBox.getValue() == "'01 Game") {
+            game01Controller.toFront();
+        } else if (chooseGameComboBox.getValue() == "Cricket")
+            cricketController.toFront();
+        else if (chooseGameComboBox.getValue() == "Master Cricket")
+            masterCricketController.toFront();
+
     }
 
-	public void toFront() {
-		mainStackPane.toFront();
-	}
+    public void toFront() {
+        mainStackPane.toFront();
+    }
 
     public void openGitHub() {
         try {

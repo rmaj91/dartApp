@@ -8,10 +8,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -19,7 +17,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,112 +29,79 @@ import static com.rmaj91.utility.Utilities.getAngle;
 
 public class BoardController implements Initializable {
 
-    /*Dependencies*/
+    //==================================================================================================
+    // Dependencies
+    //==================================================================================================
     private SoundPlayer soundPlayer;
     private GamesRepositoryImpl gamesRepository;
 
-    /*Javafx stuff*/
-    @FXML
-    private StackPane mainStackPane;
 
-    @FXML
-    private HBox gamePane;
-
-    @FXML
-    private StackPane boardPane;
-
-    @FXML
-    private AnchorPane pointsAreaPane;
-
-    @FXML
-    private Label roundsLabel;
-
-    @FXML
-    private HBox throwsPoints;
-
-    @FXML
-    private TextField throwField1;
-
-    @FXML
-    private TextField throwField2;
-
-    @FXML
-    private TextField throwField3;
-
-    @FXML
-    private Button nextRoundButton;
-
-    @FXML
-    private Button backRoundButton;
-
-    @FXML
-    private HBox cricketsScoreTable;
-
-    @FXML
-    private VBox cricketsFields;
-
-    @FXML
-    private VBox statusPlayer1;
-
-    @FXML
-    private VBox statusPlayer2;
-
-    @FXML
-    private VBox statusPlayer3;
-
-    @FXML
-    private VBox statusPlayer4;
-
-    @FXML
-    private AnchorPane game01ScoreTable;
-
-    @FXML
-    private Label averageLabel;
-
-    @FXML
-    private Label playerNameLabel;
-
-    @FXML
-    private Label playerPointsLabel;
-
-    @FXML
-    private Label doubleOut;
-
-    @FXML
-    private HBox game01PlayersTable;
-
-    @FXML
-    private ImageView dartBoard;
-
-    @FXML
-    private Canvas canvas;
-
-    @FXML
-    private Canvas drawedBoard;
-
-    TextField[] throwTextFieldArray;
+    //==================================================================================================
+    // Propeties
+    //==================================================================================================
     private GraphicsContext graphicsContext2DHighlight;
     private PixelWriter pixelWriterHighlight;
     private GraphicsContext graphicsContext2DDrawed;
     private PixelWriter pixelWriterDrawed;
-
-    // Variables for dart boards highlighting
     private int currentRadiusIndex = 7;
     private int currentAngleIndex = 20;
+
+
+    //region JavaFX elements @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //==================================================================================================
+    // JavaFX elements
+    //==================================================================================================
+    @FXML
+    private StackPane mainStackPane;
+    @FXML
+    private Label roundsLabel;
+    @FXML
+    private TextField throwField1;
+    @FXML
+    private TextField throwField2;
+    @FXML
+    private TextField throwField3;
+    @FXML
+    private HBox cricketsScoreTable;
+    @FXML
+    private VBox cricketsFields;
+    @FXML
+    private AnchorPane game01ScoreTable;
+    @FXML
+    private Label averageLabel;
+    @FXML
+    private Label playerNameLabel;
+    @FXML
+    private Label playerPointsLabel;
+    @FXML
+    private Label doubleOut;
+    @FXML
+    private HBox game01PlayersTable;
+    @FXML
+    private Canvas canvas;
+    @FXML
+    private Canvas drawedBoard;
+    //endregion
+
+
+    //==================================================================================================
+    // Arrays od elements
+    //==================================================================================================
+    TextField[] throwTextFieldArray;
     List<Point> pointList = new ArrayList<>();
 
-    /*Getters & Setters*/
 
+    //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public HBox getCricketsScoreTable() {
         return cricketsScoreTable;
     }
 
     public VBox getCricketsFields() {
         return cricketsFields;
-    }
-
-    public TextField getThrowTextField(int index) {
-        return throwTextFieldArray[index];
     }
 
     public StackPane getMainStackPane() {
@@ -188,15 +152,23 @@ public class BoardController implements Initializable {
         this.soundPlayer = soundPlayer;
     }
 
-    public VBox getStatusPlayer1() {
-        return statusPlayer1;
-    }
-
     public void setGamesRepository(GamesRepositoryImpl gamesRepository) {
         this.gamesRepository = gamesRepository;
     }
+    //endregion
 
-    /*Events*/
+
+    //==================================================================================================
+    // Custom Assesors
+    //==================================================================================================
+    public TextField getThrowTextField(int index) {
+        return throwTextFieldArray[index];
+    }
+
+
+    //==================================================================================================
+    // Events MEthods
+    //==================================================================================================
     public void nextButtonClicked() {
         gamesRepository.getCurrentRound().NextButton();
     }
@@ -257,28 +229,34 @@ public class BoardController implements Initializable {
     }
 
 
-    /**
-     * Initializing: drawing dart board and some variables init.
-     */
+    //==================================================================================================
+    // Initializing
+    //==================================================================================================
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        throwTextFieldArray = new TextField[3];
-        throwTextFieldArray[0] = throwField1;
-        throwTextFieldArray[1] = throwField2;
-        throwTextFieldArray[2] = throwField3;
-
+        initThrowTextFieldArray();
+        initGraphicTools();
         throwTextFieldValidation();
         drawDartBoard();
     }
 
 
+    //==================================================================================================
+    // Private Methods
+    //==================================================================================================
+    private void initGraphicTools() {
+        this.graphicsContext2DHighlight = canvas.getGraphicsContext2D();
+        this.pixelWriterHighlight = graphicsContext2DHighlight.getPixelWriter();
+        this.graphicsContext2DDrawed = drawedBoard.getGraphicsContext2D();
+        this.pixelWriterDrawed = graphicsContext2DDrawed.getPixelWriter();
+    }
 
-
-
-    /*Private Methods*/
-    ///////////////////
-    ///////////////////
-    ///////////////////
+    private void initThrowTextFieldArray() {
+        throwTextFieldArray = new TextField[3];
+        throwTextFieldArray[0] = throwField1;
+        throwTextFieldArray[1] = throwField2;
+        throwTextFieldArray[2] = throwField3;
+    }
 
     private void filterPixelsAndDrawHighlight(MouseEvent event, int hoverRadiusIndex, int hoverAngleIndex) {
         pointList.stream()
@@ -289,7 +267,6 @@ public class BoardController implements Initializable {
                     return filters.getRadiusMapperList().get(hoverRadiusIndex).isInRange(radius);
                 })
                 .filter(point -> {
-                    // id cursor is out of this radius, filter is off
                     if (getRadius(getX(event), getY(event)) < 19 || getRadius(getX(event), getY(event)) > 205)
                         return true;
                     else {
@@ -328,36 +305,24 @@ public class BoardController implements Initializable {
         return -(event.getY() - 248.5);
     }
 
-
     private void throwTextFieldValidation() {
         for (int i = 0; i < 3; i++) {
             throwTextFieldArray[i].textProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue.length() > 10)
                     throwField1.setText(newValue.substring(0, 10));
-                //gamesRepository.getCurrentRound().calculatePoints();
             });
         }
     }
 
-
     private void drawDartBoard() {
         canvas.setOpacity(0.75);
-        this.graphicsContext2DHighlight = canvas.getGraphicsContext2D();
-        this.pixelWriterHighlight = graphicsContext2DHighlight.getPixelWriter();
-
-        this.graphicsContext2DDrawed = drawedBoard.getGraphicsContext2D();
-        this.pixelWriterDrawed = graphicsContext2DDrawed.getPixelWriter();
-
-        // Points list init
-        for (int y = 0; y < canvas.getHeight(); y++) {
-            for (int x = 0; x < canvas.getWidth(); x++)
-                pointList.add(new Point(x, y));
-        }
-
+        initPixelsCollection();
         Color redColor = Color.rgb(229, 9, 9);
         Color greenColor = Color.rgb(25, 137, 9);
+        drawDartBoardFields(redColor, greenColor);
+    }
 
-        /*Drawing dart board*/
+    private void drawDartBoardFields(Color redColor, Color greenColor) {
         drawDartBoardCircles(Color.WHITE, 204);
         drawDartBoardAngleWhiteFragments();
         drawDartBoardCircles(greenColor, 19);
@@ -373,6 +338,12 @@ public class BoardController implements Initializable {
         fixAngleFragmentsBorders();
     }
 
+    private void initPixelsCollection() {
+        for (int y = 0; y < canvas.getHeight(); y++) {
+            for (int x = 0; x < canvas.getWidth(); x++)
+                pointList.add(new Point(x, y));
+        }
+    }
 
     private void fixAngleFragmentsBorders() {
         pointList.stream()
@@ -406,7 +377,6 @@ public class BoardController implements Initializable {
                     .forEach(point -> pixelWriterDrawed.setColor(point.getxCoordinate(), point.getyCoordinate(), Color.BLACK));
         }
     }
-
 
     private void drawDartBoardAngleWhiteFragments() {
         pointList.stream()

@@ -24,104 +24,84 @@ import java.util.function.UnaryOperator;
 
 public class MasterCricketController implements Initializable {
 
+    //==================================================================================================
+    // Constants
+    //==================================================================================================
     public final static int MIN_ROUNDS = 1;
     public final static int MAX_ROUNDS = 99;
     public final static int DEFAULT_ROUNDS = 25;
 
+
+    //==================================================================================================
+    // Dependencies
+    //==================================================================================================
     private BoardController boardController;
     private GamesRepository gamesRepository;
     private WelcomeController welcomeController;
 
 
+    //region JavaFX elements @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    //==================================================================================================
+    // JavaFX elements
+    //==================================================================================================
     @FXML
     private VBox newMasterPane;
-
-    @FXML
-    private TitledPane roundsGame01Pane2;
-
     @FXML
     private Spinner<Integer> masterRoundsBox;
-
-    @FXML
-    private RadioButton masterRadioRounds25;
-
-    @FXML
-    private ToggleGroup group01_21;
-
     @FXML
     private RadioButton masterRadioRoundsOther;
-
-    @FXML
-    private TitledPane playersGame01Pane2;
-
-    @FXML
-    private RadioButton masterRadioPlayers1;
-
     @FXML
     private ToggleGroup masterRadioGroupForPlayers;
-
-    @FXML
-    private RadioButton masterRadioPlayers2;
-
-    @FXML
-    private RadioButton masterRadioPlayers3;
-
-    @FXML
-    private RadioButton masterRadioPlayers4;
-
-    @FXML
-    private CheckBox masterDoubleOut;
-
     @FXML
     private TextField masterNamePlayer1;
-
     @FXML
     private TextField masterNamePlayer2;
-
     @FXML
     private TextField masterNamePlayer3;
-
     @FXML
     private TextField masterNamePlayer4;
-
-    @FXML
-    private TitledPane fieldsMasterPane;
-
     @FXML
     private Spinner<Integer> masterBoxField1;
-
     @FXML
     private Spinner<Integer> masterBoxField2;
-
     @FXML
     private Spinner<Integer> masterBoxField3;
-
     @FXML
     private Spinner<Integer> masterBoxField4;
-
     @FXML
     private Spinner<Integer> masterBoxField5;
-
     @FXML
     private Spinner<Integer> masterBoxField6;
-
     @FXML
     private CheckBox masterCheckBoxField7;
-
     @FXML
     private Spinner<Integer> masterBoxField7;
+    //endregion
 
-    @FXML
-    private Button masterBackButton;
 
-    @FXML
-    private Button masterLetsButton;
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
+    public void setBoardController(BoardController boardController) {
+        this.boardController = boardController;
+    }
 
+    public void setGamesRepository(GamesRepository gamesRepository) {
+        this.gamesRepository = gamesRepository;
+    }
+
+
+    //==================================================================================================
+    // Arrays od elements
+    //==================================================================================================
     private TextField[] masterPlayerNamesTextFields;
     private Spinner<Integer>[] masterFieldsSpinners;
 
 
-
+    //==================================================================================================
+    // Events Methods
+    //==================================================================================================
     @FXML
     void masterField7Toggle(ActionEvent event) {
         if (masterCheckBoxField7.isSelected())
@@ -142,22 +122,6 @@ public class MasterCricketController implements Initializable {
         this.welcomeController = welcomeController;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Method Initialize board view and games repository
      */
@@ -175,7 +139,6 @@ public class MasterCricketController implements Initializable {
         MasterCricket firstRound = new MasterCricket((MasterCricket) gamesRepository.getCurrentRound());
         gamesRepository.pushRound(firstRound);
         gamesRepository.getCurrentRound().displayRoundState();
-
         boardController.getMainStackPane().setDisable(false);
         boardController.toFront();
         boardController.getCricketsScoreTable().toFront();
@@ -183,13 +146,9 @@ public class MasterCricketController implements Initializable {
     }
 
 
-
-
-
-    /*Initialize*/
-    //////////////
-    //////////////
-
+    //==================================================================================================
+    // Initialize
+    //==================================================================================================
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initMasterCricketPlayerNamesTextFieldsArray();
@@ -200,7 +159,38 @@ public class MasterCricketController implements Initializable {
         setSpinnersFactoriesAndFilters();
     }
 
+    //==================================================================================================
+    // Public Methods
+    //==================================================================================================
 
+    /**
+     * Method creates VBoxes for players in cricketScoreTable at board view,
+     * VBoxes contains labels with name and amount of points and fields hits
+     */
+    public void removeAndCreatePlayersVBoxes() {
+        ObservableList<Node> children = boardController.getCricketsScoreTable().getChildren();
+        while (children.size() > 1)
+            children.remove(1);
+
+        int numberOfPlayers = ((MasterCricket) gamesRepository.getZeroRound()).getPlayers().size();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            VBox vBox = new VBox();
+            vBox.setAlignment(Pos.BOTTOM_CENTER);
+            vBox.setMinWidth(100);
+            for (int j = 0; j < 7; j++)
+                vBox.getChildren().add(createLabel(new String(""), false));
+
+            String playerName = ((MasterCricket) gamesRepository.getZeroRound()).getPlayers().get(i).getName();
+            vBox.getChildren().addAll(createLabel(playerName, false),
+                    createLabel(new String("0"), true));
+            boardController.getCricketsScoreTable().getChildren().add(vBox);
+        }
+    }
+
+
+    //==================================================================================================
+    // Private Methods
+    //==================================================================================================
 
     /**
      * Method defines number of rounds selected by radio buttons and returns it.
@@ -241,7 +231,6 @@ public class MasterCricketController implements Initializable {
         } else
             return textField.getText();
     }
-//
 
     /**
      * Method validate(in fields are unique) and sets(if values are unique) fields to hit in Criket.class
@@ -280,31 +269,6 @@ public class MasterCricketController implements Initializable {
             label.setText(String.valueOf(MasterCricket.getFieldsToThrow().get(i)));
         }
     }
-
-    /**
-     * Method creates VBoxes for players in cricketScoreTable at board view,
-     * VBoxes contains labels with name and amount of points and fields hits
-     */
-    public void removeAndCreatePlayersVBoxes() {
-        ObservableList<Node> children = boardController.getCricketsScoreTable().getChildren();
-        while (children.size() > 1)
-            children.remove(1);
-
-        int numberOfPlayers = ((MasterCricket) gamesRepository.getZeroRound()).getPlayers().size();
-        for (int i = 0; i < numberOfPlayers; i++) {
-            VBox vBox = new VBox();
-            vBox.setAlignment(Pos.BOTTOM_CENTER);
-            vBox.setMinWidth(100);
-            for (int j = 0; j < 7; j++)
-                vBox.getChildren().add(createLabel(new String(""), false));
-
-            String playerName = ((MasterCricket) gamesRepository.getZeroRound()).getPlayers().get(i).getName();
-            vBox.getChildren().addAll(createLabel(playerName, false),
-                    createLabel(new String("0"), true));
-            boardController.getCricketsScoreTable().getChildren().add(vBox);
-        }
-    }
-
 
 
     /**
@@ -419,7 +383,7 @@ public class MasterCricketController implements Initializable {
             int playersQuantity = Integer.parseInt(radioButtonText);
             // Disabling all players text fields
             for (int i = 0; i < 4; i++)
-               masterPlayerNamesTextFields[i].setDisable(true);
+                masterPlayerNamesTextFields[i].setDisable(true);
             // Setting active players text fields
             for (int i = 0; i < playersQuantity; i++)
                 masterPlayerNamesTextFields[i].setDisable(false);
@@ -437,13 +401,6 @@ public class MasterCricketController implements Initializable {
     }
 
 
-    public void setBoardController(BoardController boardController) {
-        this.boardController = boardController;
-    }
-
-    public void setGamesRepository(GamesRepository gamesRepository) {
-        this.gamesRepository = gamesRepository;
-    }
 }
 
 

@@ -21,12 +21,9 @@ import javafx.util.StringConverter;
 
 public class Game01Controller implements Initializable {
 
-    /*Dependencies*/
-    private GamesRepositoryImpl gamesRepository;
-    private WelcomeController welcomeController;
-    private BoardController boardController;
-
-    /*Final Values*/
+    //==================================================================================================
+    // Constants
+    //==================================================================================================
     public final static int MIN_POINTS = 100;
     public final static int MAX_POINTS = 999;
     public final static int DEFAULT_POINTS = 501;
@@ -35,52 +32,56 @@ public class Game01Controller implements Initializable {
     public final static int MAX_ROUNDS = 99;
     public final static int DEFAULT_ROUNDS = 25;
 
-    /*JavaFX elements*/
+
+    //==================================================================================================
+    // Dependencies
+    //==================================================================================================
+    private GamesRepositoryImpl gamesRepository;
+    private WelcomeController welcomeController;
+    private BoardController boardController;
+
+
+    //region JavaFX elements @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    //==================================================================================================
+    // JavaFX elements
+    //==================================================================================================
     @FXML
     private VBox newGame01Pane;
-
     @FXML
     private RadioButton game01RadioPoints501;
-
     @FXML
     private RadioButton game01RadioPointsOther;
-
     @FXML
     private Spinner<Integer> game01PointsSpinner;
-
     @FXML
     private Spinner<Integer> game01RoundsSpinner;
-
     @FXML
     private RadioButton game01RadioRoundsOther;
-
     @FXML
     private ToggleGroup radioPlayersGroup;
-
     @FXML
     private CheckBox game01DoubleOut;
-
     @FXML
     private TextField game01PlayerNameTextField1;
-
     @FXML
     private TextField game01PlayerNameTextField2;
-
     @FXML
     private TextField game01PlayerNameTextField3;
-
     @FXML
     private TextField game01PlayerNameTextField4;
+    //endregion
 
+
+    //==================================================================================================
+    // Arrays of elements
+    //==================================================================================================
     TextField[] game01PlayerNamesTextFields;
 
 
-
-
-
-    /*Setters & Getters*/
-    /////////////////////
-
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public void setGamesRepository(GamesRepositoryImpl gamesRepository) {
         this.gamesRepository = gamesRepository;
     }
@@ -94,12 +95,9 @@ public class Game01Controller implements Initializable {
     }
 
 
-
-
-
-    /*Events*/
-    //////////
-
+    //==================================================================================================
+    // Events Methods
+    //==================================================================================================
     public void toFront() {
         newGame01Pane.toFront();
     }
@@ -130,7 +128,9 @@ public class Game01Controller implements Initializable {
         boardController.getThrowField1().requestFocus();
     }
 
-
+    //==================================================================================================
+    // Initializing
+    //==================================================================================================
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         initGame01PlayersNamesArray();
@@ -142,17 +142,33 @@ public class Game01Controller implements Initializable {
     }
 
 
+    //==================================================================================================
+    // Public Methods
+    //==================================================================================================
+    /**
+     * Method creates VBoxes for players in game01PlayersTable at board view,
+     * VBoxes contains labels with name and amount of points
+     */
+    public void removeAndCreatePlayersVBoxes() {
+        while (boardController.getGame01PlayersTable().getChildren().size() > 1)
+            boardController.getGame01PlayersTable().getChildren().remove(1);
+
+        int numberOfPlayers = ((Game01) gamesRepository.getZeroRound()).getPlayers().size();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            VBox vBox = new VBox();
+            vBox.setAlignment(Pos.BOTTOM_CENTER);
+            vBox.setMinWidth(100);
+            String playerName = ((Game01) gamesRepository.getCurrentRound()).getPlayers().get(i).getName();
+            vBox.getChildren().addAll(createLabel(playerName, false),
+                    createLabel(String.valueOf(getStartingPoints()), true));
+            boardController.getGame01PlayersTable().getChildren().add(vBox);
+        }
+    }
 
 
-
-
-
-
-
-
-    /*Private Methods*/
-    ///////////////////
-
+    //==================================================================================================
+    // Private Methods
+    //==================================================================================================
     /**
      * Method defines number of rounds selected by radio buttons and returns it.
      */
@@ -216,30 +232,10 @@ public class Game01Controller implements Initializable {
     }
 
     /**
-     * Method creates VBoxes for players in game01PlayersTable at board view,
-     * VBoxes contains labels with name and amount of points
-     */
-    public void removeAndCreatePlayersVBoxes() {
-        while(boardController.getGame01PlayersTable().getChildren().size() >1 )
-            boardController.getGame01PlayersTable().getChildren().remove(1);
-
-        int numberOfPlayers = ((Game01)gamesRepository.getZeroRound()).getPlayers().size();
-        for (int i = 0; i < numberOfPlayers; i++) {
-            VBox vBox = new VBox();
-            vBox.setAlignment(Pos.BOTTOM_CENTER);
-            vBox.setMinWidth(100);
-            String playerName = ((Game01) gamesRepository.getCurrentRound()).getPlayers().get(i).getName();
-            vBox.getChildren().addAll(createLabel(playerName, false),
-                    createLabel(String.valueOf(getStartingPoints()), true));
-            boardController.getGame01PlayersTable().getChildren().add(vBox);
-        }
-    }
-
-    /**
      * Method created label for game01PlayersTable VBoxes
      *
      * @param labelText content of the label
-     * @param ifBold if text in label should be bolded
+     * @param ifBold    if text in label should be bolded
      * @return player label
      */
     private Label createLabel(String labelText, boolean ifBold) {
@@ -265,8 +261,6 @@ public class Game01Controller implements Initializable {
         ((Game01) gamesRepository.getZeroRound()).setPlayers(players);
         ((Game01) gamesRepository.getZeroRound()).setCurrentPlayer(players.get(0));
     }
-
-
 
 
     private void initGame01PlayersNamesArray() {

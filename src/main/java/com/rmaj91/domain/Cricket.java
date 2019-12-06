@@ -65,7 +65,6 @@ public class Cricket implements Playable, Serializable {
     }
 
 
-
     //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     //==================================================================================================
@@ -132,7 +131,6 @@ public class Cricket implements Playable, Serializable {
         Cricket.gamesRepository = gamesRepository;
     }
     //endregion
-
 
 
     //==================================================================================================
