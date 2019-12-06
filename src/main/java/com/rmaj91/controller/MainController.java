@@ -11,6 +11,7 @@ import com.rmaj91.utility.SoundPlayer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Slider;
@@ -22,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -175,7 +177,6 @@ public class MainController implements Initializable {
     }
 
     public void paneIconHoverIn(MouseEvent event) {
-
         ((Pane) event.getSource()).setStyle("-fx-background-color: white;");
     }
 
@@ -221,12 +222,6 @@ public class MainController implements Initializable {
             resizeButton.setCursor(Cursor.MOVE);
         });
         resizeButton.setOnMouseDragged((event) -> {
-//            double scaleX = xOffSet;
-            rootPane.setScaleX(0.8);
-            rootPane.setScaleY(0.8);
-
-//            stage.setX(event.getScreenX() - xOffSet);
-//            stage.setY(event.getScreenY() - yOffSet);
         });
         resizeButton.setOnMouseReleased((event) -> {
             resizeButton.setCursor(Cursor.SE_RESIZE);

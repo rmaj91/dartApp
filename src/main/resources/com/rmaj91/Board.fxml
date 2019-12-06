@@ -93,8 +93,61 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <StackPane layoutX="2.0" layoutY="4.0" maxHeight="369.0" maxWidth="500.0" prefHeight="369.0" prefWidth="500.0">
+                  <StackPane maxHeight="369.0" maxWidth="500.0" prefHeight="369.0" prefWidth="500.0">
                      <children>
+                        <HBox fx:id="cricketsScoreTable" minHeight="300.0" prefHeight="343.0" prefWidth="500.0" style="-fx-background-color: #333333;">
+                           <children>
+                              <VBox fx:id="cricketsFields" alignment="BOTTOM_CENTER" minWidth="40.0" prefHeight="200.0" prefWidth="40.0">
+                                 <children>
+                                    <Label text="20" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="19" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="18" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="17" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="16" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="15" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="25" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label textFill="WHITE">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
                         <AnchorPane fx:id="game01ScoreTable" maxWidth="500.0" prefHeight="369.0" prefWidth="500.0" style="-fx-background-color: #333333;">
                            <children>
                               <Label fx:id="averageLabel" layoutX="330.0" layoutY="6.0" text="Average: 0.0" textFill="WHITE">
@@ -117,62 +170,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <HBox fx:id="game01PlayersTable" alignment="BOTTOM_CENTER" minHeight="300.0" prefHeight="369.0" prefWidth="500.0">
-                                 <children>
-                                    <HBox fx:id="cricketsScoreTable" minHeight="300.0" prefHeight="343.0" prefWidth="500.0" style="-fx-background-color: #333333;">
-                                       <children>
-                                          <VBox fx:id="cricketsFields" alignment="BOTTOM_CENTER" minWidth="40.0" prefHeight="200.0" prefWidth="40.0">
-                                             <children>
-                                                <Label text="20" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="19" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="18" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="17" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="16" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="15" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="25" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label textFill="WHITE">
-                                                   <font>
-                                                      <Font size="22.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </HBox>
-                                 </children></HBox>
+                              <HBox fx:id="game01PlayersTable" alignment="BOTTOM_CENTER" minHeight="300.0" prefHeight="369.0" prefWidth="500.0" />
                            </children>
                         </AnchorPane>
                      </children>

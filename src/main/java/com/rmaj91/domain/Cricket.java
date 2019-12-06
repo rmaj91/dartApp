@@ -315,39 +315,56 @@ public class Cricket implements Playable, Serializable {
      */
     private ThrowValues parsethrowFieldNameIntoThrowValues(String fieldContent) {
 
-        // If regular integer
-        int value;
-        try {
-            value = Integer.parseInt(fieldContent);
-            if (value < 0)
-                return new ThrowValues(0, 1);
-            else
-                return new ThrowValues(value, 1);
-        } catch (Exception e) {
-        }
-
-        // Deleting digits and letters
-        String stringValue = fieldContent.replaceAll("[^0-9]", "");
-        String multiplierString = fieldContent.replaceAll("[^a-zA-Z]", "");
-        // If stringValue has digits, parse to int
-        if (!stringValue.equals("")) {
-            value = Integer.parseInt(stringValue);
-        } else
-            return new ThrowValues(0, 0);
-
-        // Defining multiplier
+        String fieldContentWithoutDigits = fieldContent.trim().replaceAll("[0-9]", "");
+        String fieldContentWithoutLetters = fieldContent.trim().replaceAll("[a-zA-Z]", "");
+        int fieldValue;
         int multiplier;
-        if (multiplierString.equalsIgnoreCase("single"))
+        if(fieldContent.equals("")){
+            fieldValue = 0;
+            multiplier = 0;
+        }
+        else if(fieldContentWithoutDigits.equals("")) {
+            fieldValue = Integer.parseInt(fieldContent);
             multiplier = 1;
-        else if (multiplierString.equalsIgnoreCase("double"))
-            multiplier = 2;
-        else if (multiplierString.equalsIgnoreCase("triple"))
-            multiplier = 3;
-            // if there's another word but not multipier nam
-        else
-            return new ThrowValues(0, 0);
+        } else if (isFieldContentMapped(fieldContent)) {
+            multiplier = getMultiplier(fieldContentWithoutDigits.trim());
+            fieldValue = getFieldValue(fieldContentWithoutLetters.trim());
+        } else {
+            fieldValue = 0;
+            multiplier = 0;
+        }
+        return new ThrowValues(fieldValue, multiplier);
 
-        return new ThrowValues(value, multiplier);
+    }
+
+    private int getFieldValue(String fieldContentNoLetters) {
+        int fieldValue;
+        if (!fieldContentNoLetters.equals(""))
+            fieldValue = Integer.parseInt(fieldContentNoLetters);
+        else
+            fieldValue = 25;
+        return fieldValue;
+    }
+
+    private int getMultiplier(String fieldContentNoDigits) {
+        int multiplier;
+        if (fieldContentNoDigits.equalsIgnoreCase("single"))
+            multiplier = 1;
+        else if (fieldContentNoDigits.equalsIgnoreCase("double"))
+            multiplier = 2;
+        else if (fieldContentNoDigits.equalsIgnoreCase("barrel"))
+            multiplier = 0;
+        else
+            multiplier = 3;
+        return multiplier;
+    }
+
+    private boolean isFieldContentMapped(String fieldContent) {
+        for (IndexMapper indexMapper : Utilities.filters.getIndexMapperList()) {
+            if (fieldContent.equalsIgnoreCase(indexMapper.getFieldName()))
+                return true;
+        }
+        return false;
     }
 
     private void checkIfWinner() {
