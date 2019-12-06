@@ -1,2 +1,2 @@
 # dartApp
-Application for dart players
+JavaFX Application for dart players
