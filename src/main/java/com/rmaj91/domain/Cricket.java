@@ -2,10 +2,8 @@ package com.rmaj91.domain;
 
 import com.rmaj91.controller.BoardController;
 import com.rmaj91.controller.CricketController;
-import com.rmaj91.controller.MainController;
 import com.rmaj91.interfaces.Playable;
 import com.rmaj91.repository.GamesRepositoryImpl;
-import com.rmaj91.utility.Filters;
 import com.rmaj91.utility.IndexMapper;
 import com.rmaj91.utility.SoundPlayer;
 import com.rmaj91.utility.Utilities;
@@ -253,25 +251,30 @@ public class Cricket implements Playable, Serializable {
     public void calculatePoints() {
         setPointAndHitsFromPreviousRound();
         for (int i = 0; i < 3; i++) {
-            ThrowValues throwValue = parsethrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
+            ThrowValues throwValue = parseThrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
             if (throwValue.getValue() == fieldsToThrow.get(currentFieldToThrowIndex)) {
-                int thrownFieldMultiplier = throwValue.getMulitplier();
-                int throwFieldsToAddPoints = getThrowFieldsToAddPoints(thrownFieldMultiplier);
-                int currentRoundHitsByIndex = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex);
-                int throwHitsToSet = thrownFieldMultiplier + currentRoundHitsByIndex;
-                currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, throwHitsToSet);
-                int currentThrowPointsToAdd = throwFieldsToAddPoints * throwValue.getValue();
 
-                checkIfWinner();
+                int currentThrowPointsToAdd = getThrowFieldsToAddPoints(throwValue) * throwValue.getValue();
                 if (isFieldClosed()) {
-                    if (currentFieldToThrowIndex < 6)
+                    if (currentFieldToThrowIndex < 6) {
                         currentFieldToThrowIndex++;
+                    }
                     currentThrowPointsToAdd = 0;
                 }
                 int pointsToAdd = currentPlayer.getPoints() + currentThrowPointsToAdd;
                 currentPlayer.setPoints(pointsToAdd);
+                checkIfWinner();
             }
         }
+    }
+
+    private int getThrowFieldsToAddPoints(ThrowValues throwValue) {
+        int thrownFieldMultiplier = throwValue.getMulitplier();
+        int throwFieldsToAddPoints = getThrowFieldsToAddPoints(thrownFieldMultiplier);
+        int currentRoundHitsByIndex = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex);
+        int throwHitsToSet = thrownFieldMultiplier + currentRoundHitsByIndex;
+        currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, throwHitsToSet);
+        return throwFieldsToAddPoints;
     }
 
 
@@ -313,7 +316,7 @@ public class Cricket implements Playable, Serializable {
      * @param fieldContent name of the dart board field
      * @return ThrowValues object, which containt field value and multiplier
      */
-    private ThrowValues parsethrowFieldNameIntoThrowValues(String fieldContent) {
+    private ThrowValues parseThrowFieldNameIntoThrowValues(String fieldContent) {
 
         String fieldContentWithoutDigits = fieldContent.trim().replaceAll("[0-9]", "");
         String fieldContentWithoutLetters = fieldContent.trim().replaceAll("[a-zA-Z]", "");

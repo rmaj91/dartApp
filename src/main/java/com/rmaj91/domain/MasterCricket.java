@@ -225,49 +225,52 @@ public class MasterCricket implements Playable, Serializable {
         getHitsFromPreviousRound();
         getPointsFromPreviousPlayer();
         setNewStaticCurrentFieldToThrow();
-
         for (int i = 0; i < 3; i++) {
-            ThrowValues throwValue = parsethrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
-
+            ThrowValues throwValue = parseThrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
             if (throwValue.getValue() == fieldsToThrow.get(currentFieldToThrowIndex)) {
 
-                int currentThrowHitsToTargetField = throwValue.getMulitplier();
-                int throwFieldsToAddPoints = getThrowFieldsToAddPoints(currentThrowHitsToTargetField);
-
-                int currentHitsByIndex = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex);
-                int throwHitsToAdd = currentThrowHitsToTargetField + currentHitsByIndex;
-                currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, throwHitsToAdd);
-
-                int currentThrowPointsToAdd = throwFieldsToAddPoints * throwValue.getValue();
-
-                checkIfWinner();
+                int currentThrowPointsToAdd = getThrowFieldsToAddPoints(throwValue) * throwValue.getValue();
                 if (isFieldClosed()) {
                     currentThrowPointsToAdd = 0;
-                    if (currentFieldToThrowIndex < 6)
+                    if (currentFieldToThrowIndex < 6) {
                         currentFieldToThrowIndex++;
+                    }
                 }
-                addPointToPlayers(currentThrowPointsToAdd);
-            } else {
-                int currentPlayerIndex = players.indexOf(currentPlayer);
-                int currentPoints = currentPlayer.getPointsByPlayerIndex(currentPlayerIndex);
+                addPointToOtherPlayers(currentThrowPointsToAdd);
+                checkIfWinner();
 
-                if (throwValue.getValue() == 25 && throwValue.getMulitplier() == 0)
-                    currentPlayer.setPointsByPlayerIndex(currentPlayerIndex, currentPoints + 25);
-                else {
-                    int newPoints = currentPoints + throwValue.getValue() * throwValue.getMulitplier();
-                    currentPlayer.setPointsByPlayerIndex(currentPlayerIndex, newPoints);
-                }
+            } else {
+                addPointsToCurrentPlayer(throwValue);
             }
         }
     }
 
 
 
+
     //==================================================================================================
     // Private Methods
     //==================================================================================================
+    private int getThrowFieldsToAddPoints(ThrowValues throwValue) {
+        int currentThrowHitsToTargetField = throwValue.getMulitplier();
+        int throwFieldsToAddPoints = getThrowFieldsToAddPoints(currentThrowHitsToTargetField);
+        int currentHitsByIndex = currentPlayer.getHittedFieldsByIndex(currentFieldToThrowIndex);
+        int throwHitsToAdd = currentThrowHitsToTargetField + currentHitsByIndex;
+        currentPlayer.setHittedFieldsbyIndex(currentFieldToThrowIndex, throwHitsToAdd);
+        return throwFieldsToAddPoints;
+    }
 
+    private void addPointsToCurrentPlayer(ThrowValues throwValue) {
+        int currentPlayerIndex = players.indexOf(currentPlayer);
+        int currentPoints = currentPlayer.getPointsByPlayerIndex(currentPlayerIndex);
 
+        if (throwValue.getValue() == 25 && throwValue.getMulitplier() == 0)
+            currentPlayer.setPointsByPlayerIndex(currentPlayerIndex, currentPoints + 25);
+        else {
+            int newPoints = currentPoints + throwValue.getValue() * throwValue.getMulitplier();
+            currentPlayer.setPointsByPlayerIndex(currentPlayerIndex, newPoints);
+        }
+    }
 
     private void restorePlayerFieldsHitsFromPreviousRound() {
         int indexOfCurrentPlayer = players.indexOf(currentPlayer);
@@ -293,7 +296,7 @@ public class MasterCricket implements Playable, Serializable {
         }
     }
 
-    private void addPointToPlayers(int currentThrowPointsToAdd) {
+    private void addPointToOtherPlayers(int currentThrowPointsToAdd) {
         for (int i = 0; i < numberOfPlayers; i++) {
             if (players.get(i).getHittedFieldsByIndex(currentFieldToThrowIndex) < 3) {
                 int currentSubroundPoints = currentPlayer.getPointsByPlayerIndex(i);
@@ -357,7 +360,7 @@ public class MasterCricket implements Playable, Serializable {
      * @param fieldContent name of the dart board field
      * @return ThrowValues object, which containt field value and multiplier
      */
-    private ThrowValues parsethrowFieldNameIntoThrowValues(String fieldContent) {
+    private ThrowValues parseThrowFieldNameIntoThrowValues(String fieldContent) {
 
         String fieldContentWithoutDigits = fieldContent.trim().replaceAll("[0-9]", "");
         String fieldContentWithoutLetters = fieldContent.trim().replaceAll("[a-zA-Z]", "");

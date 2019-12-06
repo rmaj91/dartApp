@@ -117,10 +117,10 @@ public class MainController implements Initializable {
     // Events Methods
     //==================================================================================================
     public void maximalizeIconClicked(MouseEvent event) {
-        if(stage.isFullScreen())
-            stage.setFullScreen(false);
-        else
-            stage.setFullScreen(true);
+//        if(stage.isFullScreen())
+//            stage.setFullScreen(false);
+//        else
+//            stage.setFullScreen(true);
     }
 
     public void minimalizeIconClicked(MouseEvent event) {
