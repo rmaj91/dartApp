@@ -10,8 +10,7 @@ import javafx.scene.input.MouseEvent;
 public interface Playable {
 
     /**
-     * The next() method moves game into next player/round (it depends on which player actually have turn). Could save
-     * thrown fields or not
+     * The next() method moves game into next player/round (it depends on which player actually have turn).
      */
     void NextButton();
 
@@ -29,13 +28,12 @@ public interface Playable {
     void throwDart(MouseEvent event);
 
     /**
-     * The displayRound() method displays state of the current round and player.
+     * The displayRound() method displays state of the current round and player on javafx view.
      */
     void displayRoundState();
 
     /**
-     * The setCurrentThrow() method is invoking while clicking on a throwTextFields. Method sets the current number of throw
-     * for current player
+     * The setCurrentThrow() method sets the current number of throw for current player.
      *
      * @param throwNumber This is the number of a throw
      */
@@ -48,13 +46,13 @@ public interface Playable {
     void saveThrowFields();
 
     /**
-     * This method calculates players points
+     * This method calculates player/players points
      */
     void calculatePoints();
 
 
     /**
-     * Inits board view and display current round
+     * Inits board view and display current round, used after loading game
      */
     void setBoardViewVisible();
 

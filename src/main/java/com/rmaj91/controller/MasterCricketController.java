@@ -193,7 +193,7 @@ public class MasterCricketController implements Initializable {
     //==================================================================================================
 
     /**
-     * Method defines number of rounds selected by radio buttons and returns it.
+     * Method gets number of rounds selected by radio buttons and returns it.
      */
     private int getMaxNumberOfRounds() {
         if (masterRadioRoundsOther.isSelected())
@@ -203,7 +203,7 @@ public class MasterCricketController implements Initializable {
     }
 
     /**
-     * Method defines number of players selected by radio buttons and returns it.
+     * Method gets number of players selected by radio buttons and returns it.
      */
     private int getNumberOfPlayers() {
         int playersQuantity = Integer.parseInt(((RadioButton) masterRadioGroupForPlayers.getSelectedToggle()).getText());
@@ -222,7 +222,7 @@ public class MasterCricketController implements Initializable {
     }
 
     /**
-     * Method takes text from textfield and if its empty returns "Player"+"player number"
+     * Method takes text from textfield and if its empty returns "Player"+"number"
      * else returns getText() value
      */
     private String getPlayerName(TextField textField) {
@@ -233,7 +233,7 @@ public class MasterCricketController implements Initializable {
     }
 
     /**
-     * Method validate(in fields are unique) and sets(if values are unique) fields to hit in Criket.class
+     * Method validate(in fields are unique) and sets(if values are unique) fields to throw in MasterCriket.class
      *
      * @return true if fields are unique or false if not
      */
@@ -289,7 +289,8 @@ public class MasterCricketController implements Initializable {
     }
 
     /**
-     * Method initialize players array in master cricket object at games repository with Player.class objects
+     * Method initialize players array in master cricket object at games repository with PlayerMasterCricket.class
+     * objects
      */
     private void initializeMasterCricketPlayersArray() {
         String[] playersNames = getPlayersNames(getNumberOfPlayers());

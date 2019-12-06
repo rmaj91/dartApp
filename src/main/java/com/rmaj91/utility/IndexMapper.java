@@ -1,8 +1,8 @@
 package com.rmaj91.utility;
 
 /**
- * IndexMapper class mapper for dart boards fields, it's mapps fields using radius and angle scope. The value
- * contained is String with name of a field eg. "DOUBLE 25".
+ * IndexMapper class mapps dart boards fields, it's mapps fields using radius and angle scope. The value
+ * contained is String name of a field eg. "DOUBLE 25".
  */
 public class IndexMapper {
 
@@ -37,7 +37,7 @@ public class IndexMapper {
      *
      * @param indexRadius index of radius scope
      * @param indexAngle  index of angle scope
-     * @return returns the fieldName eg. "DOUBLE 25"
+     * @return returns String fieldName eg. "DOUBLE 25"
      */
     public boolean hasFieldName(int indexRadius, int indexAngle) {
         if (indexRadius == 0 || indexRadius == 1 || indexRadius == 6)

@@ -1,7 +1,8 @@
 package com.rmaj91.domain;
 
 /**
- * The Point class Specifies two coordinate of point in cartesian coordinate system
+ * The Point class Specifies two coordinate of point in cartesian coordinate system, this class is used for
+ * drawing dart board and displaying board fields highlight
  */
 public class Point {
 

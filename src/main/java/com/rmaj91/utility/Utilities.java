@@ -2,7 +2,7 @@ package com.rmaj91.utility;
 
 /**
  * This class provides the utilities for calculating, cartesian cooridanes, angles, radius etc.
- * This class have private constructor. it's impossible to create object of this class.
+ * This class have private constructor.
  */
 public class Utilities {
 
@@ -35,11 +35,11 @@ public class Utilities {
     }
 
     /**
-     * This method calculates radius, method use arcus tangens function
+     * This method calculates angle, method use arcus tangens function
      *
      * @param xCoordinate Cartesian x coordinate
      * @param yCoordinate Cartesian y coordinate
-     * @return angle, starting in 1st quarter of  cartesian coordinate system
+     * @return angle, starting in 1st quarter of cartesian coordinate system ( from 0 to 360 degrees)
      */
     public static double getAngle(double xCoordinate, double yCoordinate) {
         double angle = Math.atan2(yCoordinate, xCoordinate);
@@ -97,7 +97,7 @@ public class Utilities {
      * This method checks in which scope is passed radius
      *
      * @param radius in pixels
-     * @return index number of radius scope of passed radius
+     * @return index number of radius scope of passed radius, 7 means out of board
      */
     public static int getRadiusScope(int radius) {
         for (RadiusScope radiusScope : filters.getRadiusMapperList()) {

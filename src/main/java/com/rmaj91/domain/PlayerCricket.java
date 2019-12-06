@@ -6,7 +6,9 @@ import com.rmaj91.repository.GamesRepositoryImpl;
 
 import java.io.Serializable;
 import java.util.Arrays;
-
+/**
+ * The PlayerCricket class provides player model of cricket dart game type
+ */
 public class PlayerCricket implements PlayerInterface, Serializable {
 
     //==================================================================================================

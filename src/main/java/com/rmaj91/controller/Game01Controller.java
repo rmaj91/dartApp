@@ -170,7 +170,7 @@ public class Game01Controller implements Initializable {
     // Private Methods
     //==================================================================================================
     /**
-     * Method defines number of rounds selected by radio buttons and returns it.
+     * Method gets number of rounds selected by radio buttons and returns it.
      */
     private int getRounds() {
         if (game01RadioRoundsOther.isSelected())
@@ -180,7 +180,7 @@ public class Game01Controller implements Initializable {
     }
 
     /**
-     * Method defines starting points selected by radio buttons and returns it.
+     * Method gets starting points selected by radio buttons and returns it.
      */
     private int getStartingPoints() {
         if (game01RadioPointsOther.isSelected())
@@ -192,7 +192,7 @@ public class Game01Controller implements Initializable {
     }
 
     /**
-     * Method defines number of players selected by radio buttons and returns it.
+     * Method gets number of players selected by radio buttons and returns it.
      */
     public int getNumberOfPlayers() {
         int numberOfPlayers = Integer.parseInt(((RadioButton) radioPlayersGroup.getSelectedToggle()).getText());
@@ -211,7 +211,7 @@ public class Game01Controller implements Initializable {
     }
 
     /**
-     * Method takes text from textfield and if its empty returns "Player"+"player number"
+     * Method takes text from textfield and if its empty returns "Player"+"number"
      * else returns getText() value
      */
     private String getPlayerName(TextField textField) {

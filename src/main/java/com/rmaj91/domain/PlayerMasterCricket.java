@@ -7,6 +7,9 @@ import com.rmaj91.repository.GamesRepositoryImpl;
 import java.io.Serializable;
 import java.util.Arrays;
 
+/**
+ * The PlayerMasterCricket class provides player model of master cricket dart game type
+ */
 public class PlayerMasterCricket implements Serializable, PlayerInterface {
 
     //==================================================================================================
@@ -24,7 +27,6 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
     private int[] hittedFields;
     private String[] throwFieldsContent;
     private int currentThrow;
-//    private int currentThrownFieldIndex;
 
 
     //==================================================================================================
@@ -64,10 +66,6 @@ public class PlayerMasterCricket implements Serializable, PlayerInterface {
     public void setHittedFields(int[] hittedFields) {
         this.hittedFields = hittedFields;
     }
-
-//    public void setCurrentThrownFieldIndex(int currentThrownFieldIndex) {
-//        this.currentThrownFieldIndex = currentThrownFieldIndex;
-//    }
 
     public void setPoints(int[] points) {
         this.points = points;

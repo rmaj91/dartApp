@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class provides list of mapped scopes, which are used for highlighting dart boards fields,
+ * This class provides lists of mapped scopes, which are used for highlighting dart boards fields,
  * determining of throwFields parameters and drawing dart board.
  */
 public class Filters {
@@ -137,6 +137,7 @@ public class Filters {
             indexMapperList.add(new IndexMapper(i, 19, "SINGLE 6"));
         }
     }
+
 
     private void radiusMapping() {
         radiusMapperList.add(new RadiusScope(0, 8));

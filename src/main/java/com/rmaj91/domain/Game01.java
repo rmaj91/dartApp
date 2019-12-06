@@ -2,7 +2,6 @@ package com.rmaj91.domain;
 
 import com.rmaj91.controller.BoardController;
 import com.rmaj91.controller.Game01Controller;
-import com.rmaj91.controller.MainController;
 import com.rmaj91.interfaces.Playable;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.IndexMapper;

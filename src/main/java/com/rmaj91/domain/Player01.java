@@ -85,11 +85,9 @@ public class Player01 implements PlayerInterface, Serializable {
     }
 
 
-
-
-
-    /*Getters & Setter*/
-
+    //==================================================================================================
+    // Assesors
+    //==================================================================================================
     public int getPoints() {
         return points;
     }
@@ -109,7 +107,6 @@ public class Player01 implements PlayerInterface, Serializable {
     public void setCurrentThrow(int currentThrow) {
         this.currentThrow = currentThrow;
     }
-
 
     public void setPoints(int points) {
         this.points = points;

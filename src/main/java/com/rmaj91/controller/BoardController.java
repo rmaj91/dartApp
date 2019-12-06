@@ -217,13 +217,9 @@ public class BoardController implements Initializable {
     public void boardHover2(MouseEvent event) {
         int hoverMouseRadiusIndex = Utilities.getRadiusScope(getRadius(getX(event), getY(event)));
         int hoverMouseAngleIndex = Utilities.getAngleScope(getAngle(getX(event), getY(event)));
-        // Checking if mouse leaves current field
-        if (hoverMouseRadiusIndex == currentRadiusIndex && hoverMouseAngleIndex == currentAngleIndex)
+        if (!ifMouseLeftCurrentField(hoverMouseRadiusIndex, hoverMouseAngleIndex))
             return;
-        // Saving new field indexes
-        currentRadiusIndex = hoverMouseRadiusIndex;
-        currentAngleIndex = hoverMouseAngleIndex;
-        // Clearing previous highlighting
+        saveNewFieldIndexes(hoverMouseRadiusIndex, hoverMouseAngleIndex);
         graphicsContext2DHighlight.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         filterPixelsAndDrawHighlight(event, hoverMouseRadiusIndex, hoverMouseAngleIndex);
     }
@@ -244,6 +240,15 @@ public class BoardController implements Initializable {
     //==================================================================================================
     // Private Methods
     //==================================================================================================
+    private void saveNewFieldIndexes(int hoverMouseRadiusIndex, int hoverMouseAngleIndex) {
+        currentRadiusIndex = hoverMouseRadiusIndex;
+        currentAngleIndex = hoverMouseAngleIndex;
+    }
+
+    private boolean ifMouseLeftCurrentField(int hoverMouseRadiusIndex, int hoverMouseAngleIndex) {
+        return hoverMouseRadiusIndex == currentRadiusIndex && hoverMouseAngleIndex == currentAngleIndex;
+    }
+
     private void initGraphicTools() {
         this.graphicsContext2DHighlight = canvas.getGraphicsContext2D();
         this.pixelWriterHighlight = graphicsContext2DHighlight.getPixelWriter();

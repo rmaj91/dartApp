@@ -1,7 +1,7 @@
 package com.rmaj91.utility;
 
 /**
- * AngleScope class provides container for angles scopes of dart board
+ * AngleScope class provides container for angles scope of dart board
  */
 public class AngleScope {
 
