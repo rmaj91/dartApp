@@ -1,4 +1,4 @@
-![SeeMainView](https://drive.google.com/file/d/14p7UXfmf7Q7Q1WVJDLoJl4G39B_vaGyH/view?usp=sharing)
+![SeeMainView](https://drive.google.com/open?id=1JIe0DAL19VuzGqJKsfI_9YYTFlYlt4MR)
 # dartApp
 ## JavaFX Application for dart players. The purpose of application is to count points. Players can define throws by writing in textFields or click od interactive dart board. Application includes 3 types of games:
 

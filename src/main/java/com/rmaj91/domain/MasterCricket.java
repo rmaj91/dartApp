@@ -227,7 +227,7 @@ public class MasterCricket implements Playable, Serializable {
         setNewStaticCurrentFieldToThrow();
         for (int i = 0; i < 3; i++) {
             ThrowValues throwValue = parseThrowFieldNameIntoThrowValues(currentPlayer.getThrowFieldContent(i));
-            if (throwValue.getValue() == fieldsToThrow.get(currentFieldToThrowIndex)) {
+            if (throwValue.getValue() == fieldsToThrow.get(currentFieldToThrowIndex) && throwValue.getMulitplier() != 0 ) {
 
                 int currentThrowPointsToAdd = getThrowFieldsToAddPoints(throwValue) * throwValue.getValue();
                 if (isFieldClosed()) {
@@ -263,13 +263,8 @@ public class MasterCricket implements Playable, Serializable {
     private void addPointsToCurrentPlayer(ThrowValues throwValue) {
         int currentPlayerIndex = players.indexOf(currentPlayer);
         int currentPoints = currentPlayer.getPointsByPlayerIndex(currentPlayerIndex);
-
-        if (throwValue.getValue() == 25 && throwValue.getMulitplier() == 0)
-            currentPlayer.setPointsByPlayerIndex(currentPlayerIndex, currentPoints + 25);
-        else {
-            int newPoints = currentPoints + throwValue.getValue() * throwValue.getMulitplier();
-            currentPlayer.setPointsByPlayerIndex(currentPlayerIndex, newPoints);
-        }
+        int newPoints = currentPoints + throwValue.getValue();
+        currentPlayer.setPointsByPlayerIndex(currentPlayerIndex, newPoints);
     }
 
     private void restorePlayerFieldsHitsFromPreviousRound() {
@@ -372,7 +367,7 @@ public class MasterCricket implements Playable, Serializable {
         }
         else if(fieldContentWithoutDigits.equals("")) {
             fieldValue = Integer.parseInt(fieldContent);
-            multiplier = 1;
+            multiplier = 0;
         } else if (isFieldContentMapped(fieldContent)) {
             multiplier = getMultiplier(fieldContentWithoutDigits.trim());
             fieldValue = getFieldValue(fieldContentWithoutLetters.trim());

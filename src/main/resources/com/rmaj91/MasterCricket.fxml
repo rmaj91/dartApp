@@ -91,7 +91,7 @@
                                     <Insets top="3.0" />
                                  </VBox.margin>
                               </TextField>
-                              <TextField fx:id="masterNamePlayer2" disable="true" promptText="Enter player name">
+                              <TextField fx:id="masterNamePlayer2" promptText="Enter player name">
                                  <VBox.margin>
                                     <Insets top="3.0" />
                                  </VBox.margin>

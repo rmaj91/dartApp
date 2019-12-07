@@ -204,6 +204,7 @@ public class Game01 implements Playable, Serializable {
     public void calculatePoints() {
         int currentPlayerIndex = players.indexOf(currentPlayer);
         int previousRoundPoints = ((Game01) gamesRepository.getPreviousRound()).players.get(currentPlayerIndex).getPoints();
+        currentPlayer.setPoints(previousRoundPoints);
         int currentRoundPoints = previousRoundPoints;
         int totalThrownValue = 0;
 
@@ -407,8 +408,7 @@ public class Game01 implements Playable, Serializable {
                 //clearThrowTextFields();
                 currentPlayer = players.get(currentPlayerIndex - 1);
             }
-        } else
-            return;
+        }
         gamesRepository.getCurrentRound().displayRoundState();
     }
 
