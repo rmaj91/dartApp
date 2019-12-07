@@ -132,6 +132,7 @@ public class Filters {
             indexMapperList.add(new IndexMapper(i, 13, "SINGLE 19"));
             indexMapperList.add(new IndexMapper(i, 14, "SINGLE 3"));
             indexMapperList.add(new IndexMapper(i, 15, "SINGLE 17"));
+            indexMapperList.add(new IndexMapper(i, 16, "SINGLE 2"));
             indexMapperList.add(new IndexMapper(i, 17, "SINGLE 15"));
             indexMapperList.add(new IndexMapper(i, 18, "SINGLE 10"));
             indexMapperList.add(new IndexMapper(i, 19, "SINGLE 6"));

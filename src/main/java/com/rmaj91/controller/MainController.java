@@ -108,7 +108,7 @@ public class MainController implements Initializable {
             closeApplication(e);
         });
         makeAppWindowDragable();
-        makeAppWindowResizable();
+        //makeAppWindowResizable();
         setVolumeSliderListener();
     }
 

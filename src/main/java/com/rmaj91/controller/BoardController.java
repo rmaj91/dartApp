@@ -214,10 +214,10 @@ public class BoardController implements Initializable {
      *
      * @param event Mouse event
      */
-    public void boardHover2(MouseEvent event) {
+    public void boardHover(MouseEvent event) {
         int hoverMouseRadiusIndex = Utilities.getRadiusScope(getRadius(getX(event), getY(event)));
         int hoverMouseAngleIndex = Utilities.getAngleScope(getAngle(getX(event), getY(event)));
-        if (!ifMouseLeftCurrentField(hoverMouseRadiusIndex, hoverMouseAngleIndex))
+        if (ifMouseDidntLeftCurrentField(hoverMouseRadiusIndex, hoverMouseAngleIndex))
             return;
         saveNewFieldIndexes(hoverMouseRadiusIndex, hoverMouseAngleIndex);
         graphicsContext2DHighlight.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -245,7 +245,7 @@ public class BoardController implements Initializable {
         currentAngleIndex = hoverMouseAngleIndex;
     }
 
-    private boolean ifMouseLeftCurrentField(int hoverMouseRadiusIndex, int hoverMouseAngleIndex) {
+    private boolean ifMouseDidntLeftCurrentField(int hoverMouseRadiusIndex, int hoverMouseAngleIndex) {
         return hoverMouseRadiusIndex == currentRadiusIndex && hoverMouseAngleIndex == currentAngleIndex;
     }
 
