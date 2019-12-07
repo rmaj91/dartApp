@@ -27,7 +27,7 @@ public class Main extends Application {
             AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("Main.fxml"));
             Scene scene = new Scene(root);
 //            scene.getStylesheets().add(getClass().getResource("css/main.css").toExternalForm());
-            primaryStage.getIcons().add(new Image("images/dartBoard.png"));
+//            primaryStage.getIcons().add(new Image("images/dartBoard.png"));
             primaryStage.setTitle("Dart Maju v.1.0.");
             primaryStage.setScene(scene);
             primaryStage.initStyle(StageStyle.UNDECORATED);

@@ -1,6 +1,6 @@
 ![SeeMainView](https://drive.google.com/file/d/14p7UXfmf7Q7Q1WVJDLoJl4G39B_vaGyH/view?usp=sharing)
 # dartApp
-## JavaFX Application for dart players. It includes 3 types of games:
+## JavaFX Application for dart players. The purpose of application is to count points. Players can define throws by writing in textFields or click od interactive dart board. Application includes 3 types of games:
 
 **Regular '01 game** which means players throw down points from setted amount eg 501 to 0. Player which do that first win. The             condition of win is that u have to have exacly 0 points (you cant overthrow, eg. throw 7 if u have 5 points) and if double out option is setted you have to finish with double field.( for example if u have 10 points u have to throw "double 5" field).
 
@@ -13,7 +13,8 @@ Player cant start throw to the next field if previous its not closed.
 
 **1. LINK()  (jdk/jre and jfx needed)**
 
-**2. [LINK](https://drive.google.com/open?id=1-7t7JiyAJ_P-Uzr4DI9asZcZwinO0a4Q)  (standalone app- jdk and jfx included)**
+**2. [LINK](https://drive.google.com/open?id=1I1IX5l-DC-1SeE0Q24Mbnd6naucKjAGi)  (standalone app- jdk and jfx included)**
+still some problems with resources, sound doesnt work in this version
 
 **1.You need** have **jfx13** with "PATH_TO_FX" environment variable setted to "...\javafx-sdk-13\lib" directory and java_home and path to **jdk11**. 
 On others versions of jdk and jfx it could not work.
