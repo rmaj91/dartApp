@@ -1,4 +1,4 @@
-![SeeMainView](https://drive.google.com/file/d/14p7UXfmf7Q7Q1WVJDLoJl4G39B_vaGyH/view?usp=sharing)
+![board](https://user-images.githubusercontent.com/55205387/70392428-4c32fc80-19e0-11ea-97cd-843ba82e63b6.png)
 # dartApp
 ## JavaFX Application for dart players. The purpose of application is to count points. Players can define throws by writing in textFields or click od interactive dart board. Application includes 3 types of games:
 
@@ -14,7 +14,7 @@ Player cant start throw to the next field if previous its not closed.
 **1. LINK()  (jdk/jre and jfx needed)**
 
 **2. [LINK](https://drive.google.com/open?id=1I1IX5l-DC-1SeE0Q24Mbnd6naucKjAGi)  (standalone app- jdk and jfx included)**
-still some problems with resources, sound doesnt work in this version
+still some problems with resources while deploying, sound doesnt work in this version
 
 **1.You need** have **jfx13** with "PATH_TO_FX" environment variable setted to "...\javafx-sdk-13\lib" directory and java_home and path to **jdk11**. 
 On others versions of jdk and jfx it could not work.
