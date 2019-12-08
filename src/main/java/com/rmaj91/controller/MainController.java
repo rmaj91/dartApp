@@ -5,9 +5,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
+import com.rmaj91.Main;
 import com.rmaj91.domain.*;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.SoundPlayer;
+import javafx.beans.property.Property;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -18,9 +20,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Scale;
@@ -67,7 +67,9 @@ public class MainController implements Initializable {
     @FXML
     private StackPane mainStackPane;
     @FXML
-    private AnchorPane rootPane;
+    private BorderPane rootPane;
+    @FXML
+    private HBox mainBottomPane;
 
 
     //==================================================================================================
@@ -75,6 +77,8 @@ public class MainController implements Initializable {
     //==================================================================================================
     private double xOffSet = 0;
     private double yOffSet = 0;
+    private double stageWidth;
+    private double stageHeight;
 
 
     //==================================================================================================
@@ -110,6 +114,25 @@ public class MainController implements Initializable {
         makeAppWindowDragable();
         //makeAppWindowResizable();
         setVolumeSliderListener();
+
+
+        makeAppWindowResizable();
+
+        mainStackPane.widthProperty().addListener((e) -> {
+            double scale1 = mainStackPane.getHeight() / 520;
+            double scale2 = mainStackPane.getWidth() / 1000;
+            double scale = scale1 > scale2 ? scale2 : scale1;
+            setScaleToBoardViewPanes(scale);
+        });
+
+
+        mainStackPane.heightProperty().addListener((e) -> {
+            double scale1 = mainStackPane.getHeight() / 520;
+            double scale2 = mainStackPane.getWidth() / 1000;
+            double scale = scale1 > scale2 ? scale2 : scale1;
+            setScaleToBoardViewPanes(scale);
+        });
+
     }
 
 
@@ -117,10 +140,10 @@ public class MainController implements Initializable {
     // Events Methods
     //==================================================================================================
     public void maximalizeIconClicked(MouseEvent event) {
-//        if(stage.isFullScreen())
-//            stage.setFullScreen(false);
-//        else
-//            stage.setFullScreen(true);
+        if (stage.isFullScreen())
+            stage.setFullScreen(false);
+        else
+            stage.setFullScreen(true);
     }
 
     public void minimalizeIconClicked(MouseEvent event) {
@@ -198,6 +221,17 @@ public class MainController implements Initializable {
     //==================================================================================================
     // Private Methods
     //==================================================================================================
+    private void setScaleToBoardViewPanes(double scale) {
+        boardController.getDrawedBoard().setScaleX(scale);
+        boardController.getDrawedBoard().setScaleY(scale);
+        boardController.getCanvas().setScaleX(scale);
+        boardController.getCanvas().setScaleY(scale);
+        boardController.getDartBoard().setScaleX(scale);
+        boardController.getDartBoard().setScaleY(scale);
+        boardController.getPointsAreaPane().setScaleX(scale);
+        boardController.getPointsAreaPane().setScaleY(scale);
+    }
+
     private void makeAppWindowDragable() {
         mainTopPane.setOnMousePressed((event) -> {
             xOffSet = event.getSceneX();
@@ -215,13 +249,23 @@ public class MainController implements Initializable {
         });
     }
 
-    public void makeAppWindowResizable(){
+    public void makeAppWindowResizable() {
         resizeButton.setOnMousePressed((event) -> {
-            xOffSet = event.getSceneX();
-            yOffSet = event.getSceneY();
+            xOffSet = event.getScreenX();
+            yOffSet = event.getScreenY();
             resizeButton.setCursor(Cursor.MOVE);
+            stageWidth = stage.getWidth();
+            stageHeight = stage.getHeight();
         });
         resizeButton.setOnMouseDragged((event) -> {
+            double screenX = event.getScreenX();
+            double screenY = event.getScreenY();
+            double totalHeight = stageHeight + screenY - yOffSet;
+            double totalWidth = stageWidth + screenX - xOffSet;
+            totalHeight = totalHeight > 600 ? totalHeight : 600;
+            totalWidth = totalWidth > 1000 ? totalWidth : 1000;
+            Main.stage.setWidth(totalWidth);
+            Main.stage.setHeight(totalHeight);
         });
         resizeButton.setOnMouseReleased((event) -> {
             resizeButton.setCursor(Cursor.SE_RESIZE);

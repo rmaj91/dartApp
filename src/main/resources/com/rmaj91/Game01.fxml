@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="newGame01Pane" alignment="CENTER" prefHeight="520.0" prefWidth="1000.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.Game01Controller">
+<VBox fx:id="newGame01Pane" alignment="CENTER" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.Game01Controller">
    <children>
       <VBox alignment="CENTER" maxWidth="300.0">
          <children>

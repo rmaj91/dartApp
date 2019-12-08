@@ -8,19 +8,19 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="mainStackPane" prefHeight="520.0" prefWidth="1000.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.BoardController">
+<StackPane fx:id="mainStackPane" alignment="CENTER_LEFT" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.BoardController">
    <children>
-      <HBox fx:id="gamePane" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #333333;">
+      <HBox fx:id="gamePane" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: #333333;" StackPane.alignment="CENTER">
          <children>
-            <StackPane fx:id="boardPane" prefHeight="500.0" prefWidth="500.0">
+            <StackPane fx:id="boardPane" HBox.hgrow="ALWAYS">
                <children>
-                  <ImageView fx:id="dartBoard" fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="dartBoard" fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
                      <image>
                         <Image url="@../../images/dartBoardNew.png" />
                      </image>
@@ -28,160 +28,226 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </ImageView>
-                  <Canvas fx:id="drawedBoard" height="500.0" width="500.0" />
-                  <Canvas fx:id="canvas" height="500.0" onMouseClicked="#dartBoardClicked" onMouseExited="#boardHoverOff" onMouseMoved="#boardHover" width="500.0">
+                  <Canvas fx:id="drawedBoard" height="500.0" width="500.0" StackPane.alignment="CENTER" />
+                  <Canvas fx:id="canvas" height="500.0" onMouseClicked="#dartBoardClicked" onMouseExited="#boardHoverOff" onMouseMoved="#boardHover" width="500.0" StackPane.alignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="CROSSHAIR" />
                      </cursor></Canvas>
                </children>
             </StackPane>
-            <AnchorPane fx:id="pointsAreaPane" minHeight="520.0" minWidth="500.0">
+            <StackPane fx:id="wrapper" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox fx:id="throwsPoints" alignment="CENTER_LEFT" layoutY="401.0" prefHeight="70.0" prefWidth="500.0">
-                     <children>
-                        <TextField fx:id="throwField1" alignment="CENTER" onMouseClicked="#onClickThrowField1" prefHeight="40.0" prefWidth="110.0" promptText="Enter Value">
-                           <HBox.margin>
-                              <Insets left="20.0" right="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Arial Bold" size="16.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </TextField>
-                        <TextField fx:id="throwField2" alignment="CENTER" onMouseClicked="#onClickThrowField2" prefHeight="40.0" prefWidth="110.0" promptText="Enter Value">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Arial Bold" size="16.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </TextField>
-                        <TextField fx:id="throwField3" alignment="CENTER" onMouseClicked="#onClickThrowField3" prefHeight="40.0" prefWidth="110.0" promptText="Enter Value">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Arial Bold" size="16.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </TextField>
-                        <Button fx:id="nextRoundButton" focusTraversable="false" maxWidth="0.0" minWidth="100.0" mnemonicParsing="false" onAction="#nextButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Next">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="16.0" />
-                           </HBox.margin>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <Button fx:id="backRoundButton" focusTraversable="false" layoutX="396.0" layoutY="471.0" minWidth="100.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Back">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <StackPane maxHeight="369.0" maxWidth="500.0" prefHeight="369.0" prefWidth="500.0">
-                     <children>
-                        <HBox fx:id="cricketsScoreTable" minHeight="300.0" prefHeight="343.0" prefWidth="500.0" style="-fx-background-color: #333333;">
+                  <BorderPane fx:id="pointsAreaPane" maxHeight="520.0" maxWidth="500.0" minHeight="520.0" minWidth="500.0" prefHeight="520.0">
+                     <center>
+                        <StackPane fx:id="Box2" alignment="CENTER_RIGHT" maxHeight="367.0" maxWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <VBox fx:id="cricketsFields" alignment="BOTTOM_CENTER" minWidth="40.0" prefHeight="200.0" prefWidth="40.0">
+                              <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                 <bottom>
+                                    <HBox fx:id="throwsPoints" alignment="BOTTOM_CENTER" BorderPane.alignment="CENTER_RIGHT" />
+                                 </bottom>
+                                 <center>
+                                    <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <HBox fx:id="cricketsScoreTable" alignment="BOTTOM_LEFT" style="-fx-background-color: #333333;" StackPane.alignment="CENTER_RIGHT">
+                                             <children>
+                                                <VBox fx:id="cricketsFields" alignment="BOTTOM_CENTER">
+                                                   <children>
+                                                      <Label text="20" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="19" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="18" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="17" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="16" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="15" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="25" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label textFill="WHITE">
+                                                         <font>
+                                                            <Font size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                             <StackPane.margin>
+                                                <Insets left="10.0" />
+                                             </StackPane.margin>
+                                          </HBox>
+                                          <StackPane fx:id="game01ScoreTable" style="-fx-background-color: #333333;" StackPane.alignment="BOTTOM_CENTER">
+                                             <children>
+                                                <Label fx:id="playerPointsLabel" alignment="CENTER" text="501" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="CENTER">
+                                                   <font>
+                                                      <Font name="System Bold" size="64.0" />
+                                                   </font>
+                                                   <StackPane.margin>
+                                                      <Insets top="50.0" />
+                                                   </StackPane.margin>
+                                                </Label>
+                                                <Label fx:id="doubleOut" text="Double out" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                   <StackPane.margin>
+                                                      <Insets right="20.0" />
+                                                   </StackPane.margin>
+                                                </Label>
+                                                <Label fx:id="playerNameLabel" alignment="CENTER" contentDisplay="CENTER" text="Player1" textAlignment="CENTER" textFill="WHITE" underline="true" StackPane.alignment="CENTER">
+                                                   <font>
+                                                      <Font size="64.0" />
+                                                   </font>
+                                                   <StackPane.margin>
+                                                      <Insets bottom="100.0" />
+                                                   </StackPane.margin>
+                                                </Label>
+                                             </children></StackPane>
+                                       </children>
+                                       <BorderPane.margin>
+                                          <Insets bottom="20.0" />
+                                       </BorderPane.margin>
+                                    </StackPane>
+                                 </center>
+                              </BorderPane>
+                              <HBox fx:id="game01PlayersTable" alignment="BOTTOM_CENTER" minHeight="300.0" prefHeight="369.0" prefWidth="500.0">
+                                 <StackPane.margin>
+                                    <Insets bottom="20.0" />
+                                 </StackPane.margin>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                     </center>
+                     <bottom>
+                        <HBox fx:id="Box3" alignment="CENTER" maxHeight="100.0" maxWidth="500.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="20" textFill="WHITE">
+                                    <TextField fx:id="throwField1" alignment="CENTER" minHeight="40.0" minWidth="115.0" onMouseClicked="#onClickThrowField1" promptText="Enter Value">
                                        <font>
-                                          <Font name="System Bold" size="22.0" />
+                                          <Font name="Arial Bold" size="16.0" />
                                        </font>
-                                    </Label>
-                                    <Label text="19" textFill="WHITE">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="throwField2" alignment="CENTER" minHeight="40.0" minWidth="115.0" onMouseClicked="#onClickThrowField2" promptText="Enter Value">
                                        <font>
-                                          <Font name="System Bold" size="22.0" />
+                                          <Font name="Arial Bold" size="16.0" />
                                        </font>
-                                    </Label>
-                                    <Label text="18" textFill="WHITE">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="throwField3" alignment="CENTER" minHeight="40.0" minWidth="115.0" onMouseClicked="#onClickThrowField3" promptText="Enter Value">
                                        <font>
-                                          <Font name="System Bold" size="22.0" />
+                                          <Font name="Arial Bold" size="16.0" />
                                        </font>
-                                    </Label>
-                                    <Label text="17" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="16" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="15" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="25" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label textFill="WHITE">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="22.0" />
-                                       </font>
-                                    </Label>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
                                  </children>
+                              </HBox>
+                              <VBox alignment="TOP_CENTER">
+                                 <children>
+                                    <Button fx:id="nextRoundButton" focusTraversable="false" maxWidth="0.0" minWidth="100.0" mnemonicParsing="false" onAction="#nextButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-radius: 20;" text="Next">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="backRoundButton" focusTraversable="false" minWidth="100.0" mnemonicParsing="false" onAction="#backButtonClicked" style="-fx-background-radius: 20;" text="Back">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </Button>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets right="20.0" />
+                                 </HBox.margin>
                               </VBox>
                            </children>
                         </HBox>
-                        <AnchorPane fx:id="game01ScoreTable" maxWidth="500.0" prefHeight="369.0" prefWidth="500.0" style="-fx-background-color: #333333;">
+                     </bottom>
+                     <top>
+                        <HBox fx:id="Box1" maxHeight="53.0" maxWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label fx:id="averageLabel" layoutX="330.0" layoutY="6.0" text="Average: 0.0" textFill="WHITE">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="playerNameLabel" alignment="CENTER" layoutX="173.0" layoutY="82.0" text="Player1" textAlignment="CENTER" textFill="WHITE">
-                                 <font>
-                                    <Font size="48.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="playerPointsLabel" alignment="CENTER" layoutX="198.0" layoutY="152.0" text="501" textAlignment="CENTER" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="64.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="doubleOut" layoutX="330.0" layoutY="41.0" text="Double out" textFill="WHITE">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <HBox fx:id="game01PlayersTable" alignment="BOTTOM_CENTER" minHeight="300.0" prefHeight="369.0" prefWidth="500.0" />
+                              <HBox HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label fx:id="roundsLabel" text="Round: 1/25" textFill="WHITE">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label fx:id="averageLabel" alignment="CENTER_RIGHT" text="Average: 0.0" textFill="WHITE">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
                            </children>
-                        </AnchorPane>
-                     </children>
-                  </StackPane>
-                  <Label fx:id="roundsLabel" text="Round: 1/25" textFill="WHITE">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
+                        </HBox>
+                     </top>
+                  </BorderPane>
                </children>
-            </AnchorPane>
+            </StackPane>
          </children>
       </HBox>
    </children>

@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -24,10 +26,16 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             MainController.setStage(primaryStage);
-            AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("Main.fxml"));
+            BorderPane root = (BorderPane) FXMLLoader.load(getClass().getResource("Main.fxml"));
             Scene scene = new Scene(root);
 //            scene.getStylesheets().add(getClass().getResource("css/main.css").toExternalForm());
 //            primaryStage.getIcons().add(new Image("images/dartBoard.png"));
+            stage=primaryStage;
+            stage.setMinWidth(1000);
+            stage.setMinHeight(600);
+
+
+
             primaryStage.setTitle("Dart Maju v.1.0.");
             primaryStage.setScene(scene);
             primaryStage.initStyle(StageStyle.UNDECORATED);

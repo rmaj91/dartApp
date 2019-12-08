@@ -126,6 +126,7 @@ public class Game01Controller implements Initializable {
         boardController.toFront();
         boardController.getGame01ScoreTable().toFront();
         boardController.getThrowField1().requestFocus();
+        boardController.getAverageLabel().setVisible(true);
     }
 
     //==================================================================================================

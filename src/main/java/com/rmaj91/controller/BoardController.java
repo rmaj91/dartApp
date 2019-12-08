@@ -10,12 +10,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
@@ -66,7 +64,7 @@ public class BoardController implements Initializable {
     @FXML
     private VBox cricketsFields;
     @FXML
-    private AnchorPane game01ScoreTable;
+    private StackPane game01ScoreTable;
     @FXML
     private Label averageLabel;
     @FXML
@@ -81,6 +79,15 @@ public class BoardController implements Initializable {
     private Canvas canvas;
     @FXML
     private Canvas drawedBoard;
+    @FXML
+    private ImageView dartBoard;
+    @FXML
+    private HBox gamePane;
+    @FXML
+    private StackPane boardPane;
+    @FXML
+    private BorderPane pointsAreaPane;
+
     //endregion
 
 
@@ -120,6 +127,10 @@ public class BoardController implements Initializable {
         return roundsLabel;
     }
 
+    public HBox getGamePane() {
+        return gamePane;
+    }
+
     public TextField getThrowField1() {
         return throwField1;
     }
@@ -132,7 +143,7 @@ public class BoardController implements Initializable {
         return throwField3;
     }
 
-    public AnchorPane getGame01ScoreTable() {
+    public StackPane getGame01ScoreTable() {
         return game01ScoreTable;
     }
 
@@ -146,6 +157,26 @@ public class BoardController implements Initializable {
 
     public HBox getGame01PlayersTable() {
         return game01PlayersTable;
+    }
+
+    public ImageView getDartBoard() {
+        return dartBoard;
+    }
+
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
+    public StackPane getBoardPane() {
+        return boardPane;
+    }
+
+    public Canvas getDrawedBoard() {
+        return drawedBoard;
+    }
+
+    public BorderPane getPointsAreaPane() {
+        return pointsAreaPane;
     }
 
     public void setSoundPlayer(SoundPlayer soundPlayer) {

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="newCricketPane" alignment="CENTER" prefHeight="520.0" prefWidth="1000.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.CricketController">
+<VBox fx:id="newCricketPane" alignment="CENTER" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.CricketController">
    <children>
       <VBox alignment="CENTER" maxWidth="300.0">
          <children>

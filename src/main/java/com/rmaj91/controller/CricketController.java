@@ -141,6 +141,7 @@ public class CricketController implements Initializable {
         boardController.toFront();
         boardController.getCricketsScoreTable().toFront();
         boardController.getThrowField1().requestFocus();
+        boardController.getAverageLabel().setVisible(false);
     }
 
 

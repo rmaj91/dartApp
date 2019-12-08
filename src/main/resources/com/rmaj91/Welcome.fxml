@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="mainStackPane" prefHeight="520.0" prefWidth="1000.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.WelcomeController">
+<StackPane fx:id="mainStackPane" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rmaj91.controller.WelcomeController">
    <children>
       <VBox fx:id="chooseGamePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #333333;">
          <children>

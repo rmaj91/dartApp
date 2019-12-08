@@ -190,6 +190,7 @@ public class MasterCricket implements Playable, Serializable {
         boardController.toFront();
         boardController.getCricketsScoreTable().toFront();
         boardController.getThrowField1().requestFocus();
+        boardController.getAverageLabel().setVisible(false);
     }
 
     @Override

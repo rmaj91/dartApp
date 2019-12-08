@@ -189,12 +189,13 @@ public class Cricket implements Playable, Serializable {
     @Override
     public void setBoardViewVisible() {
         cricketController.removeAndCreatePlayersVBoxes();
-        this.displayRoundState();
+        displayRoundState();
         boardController.getMainStackPane().setDisable(false);
         boardController.getGame01ScoreTable().toBack();
         boardController.toFront();
         boardController.getCricketsScoreTable().toFront();
         boardController.getThrowField1().requestFocus();
+        boardController.getAverageLabel().setVisible(false);
     }
 
     private void restorePlayerFieldsHitsFromPreviousRound() {

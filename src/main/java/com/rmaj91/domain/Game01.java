@@ -179,12 +179,13 @@ public class Game01 implements Playable, Serializable {
     @Override
     public void setBoardViewVisible() {
         game01Controller.removeAndCreatePlayersVBoxes();
-        this.displayRoundState();
+        displayRoundState();
         boardController.getMainStackPane().setDisable(false);
         boardController.getCricketsScoreTable().toBack();
         boardController.toFront();
         boardController.getGame01PlayersTable().toFront();
         boardController.getThrowField1().requestFocus();
+        boardController.getAverageLabel().setVisible(true);
     }
 
     @Override

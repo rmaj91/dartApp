@@ -1,10 +1,9 @@
 package com.rmaj91.utility;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This class provides audio player
@@ -64,12 +63,9 @@ public class SoundPlayer {
         try {
             String fileName = fieldName.toLowerCase().replaceAll("\\s", "");
             File file = null;
-            try {
-                file = new File(getClass().getClassLoader().getResource("sounds/" + fileName + ".wav").getFile());
-            } catch (NullPointerException e) {
-                file = new File(getClass().getClassLoader().getResource("sounds/throw.wav").getFile());
-            }
+            file = getFile(fileName);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+
             Clip clip = AudioSystem.getClip();
             previousClip = clip;
             clip.open(audioInputStream);
@@ -83,6 +79,16 @@ public class SoundPlayer {
         } catch (Exception exception) {
             System.out.println(exception);
         }
+    }
+
+    private File getFile(String fileName) {
+        File file;
+        try {
+            file = new File(getClass().getClassLoader().getResource("sounds/" + fileName + ".wav").getFile());
+        } catch (NullPointerException e) {
+            file = new File(getClass().getClassLoader().getResource("sounds/throw.wav").getFile());
+        }
+        return file;
     }
 
 }
