@@ -80,7 +80,7 @@ public class Game01Controller implements Initializable {
 
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public void setGamesRepository(GamesRepositoryImpl gamesRepository) {
         this.gamesRepository = gamesRepository;
@@ -110,7 +110,7 @@ public class Game01Controller implements Initializable {
      * Method Initialize board view and games repository
      */
     public void letsPlayButtonClicked() {
-        //Creating zero'th game
+        //Creating zero'th round
         gamesRepository.createNewGame(GameFactory.getGame("'01 Game"));
         Game01.setStaticVariables(isDoubleOut(), getNumberOfPlayers(), getRounds());
 

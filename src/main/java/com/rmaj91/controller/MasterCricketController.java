@@ -81,7 +81,7 @@ public class MasterCricketController implements Initializable {
 
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public void setBoardController(BoardController boardController) {
         this.boardController = boardController;
@@ -128,7 +128,7 @@ public class MasterCricketController implements Initializable {
     public void letsPlayButtonClicked() {
         if (!validFieldsToThrowIfUniqueAndSet())
             return;
-        //Creating zero'th game
+        //Creating zero'th round
         gamesRepository.createNewGame(GameFactory.getGame("Master Cricket"));
         MasterCricket.setStaticVariables(getNumberOfPlayers(), getMaxNumberOfRounds(), 0);
 

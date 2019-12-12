@@ -65,10 +65,10 @@ public class Game01 implements Playable, Serializable {
     }
 
 
-    //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //region Getters/Setters @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public static void setDoubleOut(boolean doubleOut) {
         Game01.doubleOut = doubleOut;
@@ -129,7 +129,7 @@ public class Game01 implements Playable, Serializable {
 
 
     //==================================================================================================
-    // Static Custom Assesor
+    // Static Custom Setter
     //==================================================================================================
     public static void setStaticVariables(boolean doubleOut, int numberOfPlayers, int numberOfRounds) {
         Game01.doubleOut = doubleOut;

@@ -45,7 +45,7 @@ public class WelcomeController implements Initializable {
 
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public void setMainController(MainController mainController) {
         this.mainController = mainController;

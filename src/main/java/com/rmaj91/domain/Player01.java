@@ -86,7 +86,7 @@ public class Player01 implements PlayerInterface, Serializable {
 
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public int getPoints() {
         return points;

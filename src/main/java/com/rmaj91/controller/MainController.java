@@ -82,7 +82,7 @@ public class MainController implements Initializable {
 
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public static void setStage(Stage stage) {
         MainController.stage = stage;

@@ -55,7 +55,7 @@ public class PlayerCricket implements PlayerInterface, Serializable {
 
 
     //==================================================================================================
-    // Custom Assesors
+    // Custom Getters/Setters
     //==================================================================================================
     public void setHittedFields(int[] hittedFields) {
         this.hittedFields = hittedFields;
@@ -88,10 +88,10 @@ public class PlayerCricket implements PlayerInterface, Serializable {
     }
 
 
-    //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //region Getters/Setters @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
 
     public static void setBoardController(BoardController boardController) {

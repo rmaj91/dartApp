@@ -98,10 +98,10 @@ public class BoardController implements Initializable {
     List<Point> pointList = new ArrayList<>();
 
 
-    //region Assesors @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //region Getters/Setters @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public HBox getCricketsScoreTable() {
         return cricketsScoreTable;
@@ -190,7 +190,7 @@ public class BoardController implements Initializable {
 
 
     //==================================================================================================
-    // Custom Assesors
+    // Custom Getters/Setters
     //==================================================================================================
     public TextField getThrowTextField(int index) {
         return throwTextFieldArray[index];

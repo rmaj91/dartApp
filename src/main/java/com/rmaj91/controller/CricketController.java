@@ -87,7 +87,7 @@ public class CricketController implements Initializable {
 
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public void setWelcomeController(WelcomeController welcomeController) {
         this.welcomeController = welcomeController;
@@ -126,7 +126,7 @@ public class CricketController implements Initializable {
     public void letsPlayButtonClicked() {
         if (!validFieldsToThrowIfUniqueAndSet())
             return;
-        //Creating zero'th game
+        //Creating zero'th round
         gamesRepository.createNewGame(GameFactory.getGame("Cricket"));
         Cricket.setStaticVariables(getNumberOfPlayers(), getMaxNumberOfRounds(), 0);
 

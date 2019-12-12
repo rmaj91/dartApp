@@ -31,7 +31,7 @@ public class SoundPlayer {
 
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public void setSoundsActive(boolean soundsActive) {
         this.soundsActive = soundsActive;

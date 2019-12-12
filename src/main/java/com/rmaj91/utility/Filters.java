@@ -18,7 +18,7 @@ public class Filters {
 
 
     //==================================================================================================
-    // Assesors
+    // Getters/Setters
     //==================================================================================================
     public List<AngleScope> getAngleMapperList() {
         return angleMapperList;
