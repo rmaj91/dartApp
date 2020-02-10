@@ -4,13 +4,13 @@ package com.rmaj91.interfaces;
  * The GamesRepository interface provides methods for GamesRepositoryImpl
  */
 public interface GamesRepository {
-    void pushRound(Playable round);
+    void pushRound(GamesInterface round);
 
-    Playable getCurrentRound();
+    GamesInterface getCurrentRound();
 
     boolean pullRound();
 
-    void createNewGame(Playable round);
+    void createNewGame(GamesInterface round);
 
     boolean saveGame();
 
@@ -20,9 +20,9 @@ public interface GamesRepository {
 
     boolean isEmpty();
 
-    int getNumberOfRound(Playable round);
+    int getNumberOfRound(GamesInterface round);
 
-    Playable getPreviousRound();
+    GamesInterface getPreviousRound();
 
-    Playable getZeroRound();
+    GamesInterface getZeroRound();
 }

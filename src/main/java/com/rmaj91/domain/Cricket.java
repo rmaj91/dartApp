@@ -2,7 +2,7 @@ package com.rmaj91.domain;
 
 import com.rmaj91.controller.BoardController;
 import com.rmaj91.controller.CricketController;
-import com.rmaj91.interfaces.Playable;
+import com.rmaj91.interfaces.GamesInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.IndexMapper;
 import com.rmaj91.utility.SoundPlayer;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import static com.rmaj91.utility.Utilities.getAngleIndex;
 import static com.rmaj91.utility.Utilities.getRadiusIndex;
 
-public class Cricket implements Playable, Serializable {
+public class Cricket implements GamesInterface, Serializable {
 
     //==================================================================================================
     // Static Dependencies

@@ -2,7 +2,7 @@ package com.rmaj91.domain;
 
 import com.rmaj91.controller.BoardController;
 import com.rmaj91.controller.Game01Controller;
-import com.rmaj91.interfaces.Playable;
+import com.rmaj91.interfaces.GamesInterface;
 import com.rmaj91.repository.GamesRepositoryImpl;
 import com.rmaj91.utility.IndexMapper;
 import com.rmaj91.utility.SoundPlayer;
@@ -23,7 +23,7 @@ import static com.rmaj91.utility.Utilities.getAngleIndex;
 import static com.rmaj91.utility.Utilities.getRadiusIndex;
 
 
-public class Game01 implements Playable, Serializable {
+public class Game01 implements GamesInterface, Serializable {
 
     //==================================================================================================
     // Static Dependencies

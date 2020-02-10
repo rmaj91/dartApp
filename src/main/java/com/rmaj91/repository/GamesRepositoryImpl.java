@@ -5,7 +5,7 @@ import com.rmaj91.domain.Cricket;
 import com.rmaj91.domain.Game01;
 import com.rmaj91.domain.MasterCricket;
 import com.rmaj91.interfaces.GamesRepository;
-import com.rmaj91.interfaces.Playable;
+import com.rmaj91.interfaces.GamesInterface;
 
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
@@ -20,7 +20,7 @@ public class GamesRepositoryImpl implements GamesRepository {
     //==================================================================================================
     // Games Collection
     //==================================================================================================
-    private List<Playable> gamesList;
+    private List<GamesInterface> gamesList;
 
 
     //==================================================================================================
@@ -35,19 +35,19 @@ public class GamesRepositoryImpl implements GamesRepository {
     // Public Methods from GamesRepository interface
     //==================================================================================================
     @Override
-    public void pushRound(Playable round) {
+    public void pushRound(GamesInterface round) {
         gamesList.add(round);
     }
 
     @Override
-    public Playable getCurrentRound() {
+    public GamesInterface getCurrentRound() {
         return gamesList.get(gamesList.size() - 1);
     }
 
     @Override
     public boolean pullRound() {
         if (gamesList.size() > 2) {
-            Playable round = gamesList.get(gamesList.size() - 1);
+            GamesInterface round = gamesList.get(gamesList.size() - 1);
             gamesList.remove(round);
             return true;
         } else
@@ -55,18 +55,18 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
     @Override
-    public void createNewGame(Playable round) {
+    public void createNewGame(GamesInterface round) {
         gamesList = new LinkedList<>();
         gamesList.add(round);
     }
 
     @Override
-    public int getNumberOfRound(Playable round) {
+    public int getNumberOfRound(GamesInterface round) {
         return gamesList.indexOf(round);
     }
 
     @Override
-    public Playable getPreviousRound() {
+    public GamesInterface getPreviousRound() {
         if (gamesList.size() == 1)
             return null;
         else
@@ -74,7 +74,7 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
     @Override
-    public Playable getZeroRound() {
+    public GamesInterface getZeroRound() {
         return gamesList.get(0);
     }
 
@@ -139,7 +139,7 @@ public class GamesRepositoryImpl implements GamesRepository {
         try {
             dataInputStream = new DataInputStream(inputStream);
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            gamesList = (List<Playable>) objectInputStream.readObject();
+            gamesList = (List<GamesInterface>) objectInputStream.readObject();
 
             String className = dataInputStream.readUTF();
             if (className.equals("com.rmaj91.domain.Game01"))
